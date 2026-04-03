@@ -1,101 +1,98 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Megaphone, Bell } from "lucide-react";
+import { getAnnouncements } from "@/features/comunicados/queries/get-announcements";
+import {
+  getNotifications,
+  getUnreadCount,
+} from "@/features/comunicados/queries/get-notifications";
+import { AnnouncementCard } from "@/features/comunicados/components/announcement-card";
+import { NotificationCard } from "@/features/comunicados/components/notification-card";
 
-const actividad = [
-  {
-    titulo: "Corte de agua programado",
-    fecha: "2 abr 2026",
-    autor: "Administracion",
-    extracto: "Se realizara mantenimiento en la red hidraulica el sabado 5 de abril de 8 AM a 2 PM.",
-    tipo: "Aviso",
-  },
-  {
-    titulo: "Nueva normativa de mascotas",
-    fecha: "30 mar 2026",
-    autor: "Consejo",
-    extracto: "Se aprobaron nuevas normas para el transito de mascotas en areas comunes.",
-    tipo: "Normativa",
-  },
-];
+export default async function ComunicadosPage() {
+  const [announcements, notifications, unreadCount] = await Promise.all([
+    getAnnouncements(),
+    getNotifications(),
+    getUnreadCount(),
+  ]);
 
-const anuncios = [
-  {
-    titulo: "Asamblea General Ordinaria",
-    fecha: "15 abr 2026",
-    autor: "Administracion",
-    extracto: "Se convoca a todos los propietarios a la asamblea anual. Salon comunal, 3:00 PM.",
-    tipo: "Evento",
-  },
-  {
-    titulo: "Inscripcion clases de yoga",
-    fecha: "10 abr 2026",
-    autor: "Bienestar",
-    extracto: "Abiertas inscripciones para clases de yoga los martes y jueves a las 7 AM.",
-    tipo: "Comunidad",
-  },
-];
-
-export default function ComunicadosPage() {
   return (
     <div className="mx-auto max-w-md p-4">
       <header className="mb-6">
         <h1 className="text-2xl font-bold">Comunicados</h1>
         <p className="text-muted-foreground text-sm">
-          Noticias y anuncios de tu conjunto
+          Noticias y notificaciones del conjunto
         </p>
       </header>
 
       <Tabs defaultValue="actividad">
         <TabsList className="w-full">
-          <TabsTrigger value="actividad" className="flex-1">
+          <TabsTrigger value="actividad" className="flex-1 gap-1.5">
+            <Bell className="h-3.5 w-3.5" />
             Actividad
+            {unreadCount > 0 && (
+              <Badge
+                variant="destructive"
+                className="ml-1 h-5 min-w-5 px-1 text-xs"
+              >
+                {unreadCount}
+              </Badge>
+            )}
           </TabsTrigger>
-          <TabsTrigger value="anuncios" className="flex-1">
-            Anuncios
+          <TabsTrigger value="anuncios" className="flex-1 gap-1.5">
+            <Megaphone className="h-3.5 w-3.5" />
+            Anuncios ({announcements.length})
           </TabsTrigger>
         </TabsList>
-
-        <TabsContent value="actividad" className="mt-4 space-y-3">
-          {actividad.map((item) => (
-            <Card key={item.titulo}>
-              <CardHeader className="pb-2">
-                <div className="flex items-start justify-between">
-                  <CardTitle className="text-sm">{item.titulo}</CardTitle>
-                  <Badge variant="outline">{item.tipo}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-2 text-xs">
-                  {item.extracto}
+        <TabsContent value="actividad" className="mt-4">
+          {notifications.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 py-12 text-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+                <Bell className="h-8 w-8 text-gray-400" />
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Sin notificaciones</p>
+                <p className="text-muted-foreground text-sm">
+                  Aqui veras la actividad de tu conjunto
                 </p>
-                <p className="text-muted-foreground text-xs">
-                  {item.autor} - {item.fecha}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {notifications.map((n) => (
+                <NotificationCard
+                  key={n.id}
+                  id={n.id}
+                  type={n.type}
+                  title={n.title}
+                  body={n.body}
+                  read={n.read}
+                  createdAt={n.created_at}
+                />
+              ))}
+            </div>
+          )}
         </TabsContent>
-
-        <TabsContent value="anuncios" className="mt-4 space-y-3">
-          {anuncios.map((item) => (
-            <Card key={item.titulo}>
-              <CardHeader className="pb-2">
-                <div className="flex items-start justify-between">
-                  <CardTitle className="text-sm">{item.titulo}</CardTitle>
-                  <Badge variant="secondary">{item.tipo}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-2 text-xs">
-                  {item.extracto}
+        <TabsContent value="anuncios" className="mt-4">
+          {announcements.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 py-12 text-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+                <Megaphone className="h-8 w-8 text-gray-400" />
+              </div>
+              <div>
+                <p className="font-medium text-gray-700">Sin comunicados</p>
+                <p className="text-muted-foreground text-sm">
+                  Los anuncios del conjunto apareceran aqui
                 </p>
-                <p className="text-muted-foreground text-xs">
-                  {item.autor} - {item.fecha}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {announcements.map((a) => (
+                <AnnouncementCard key={a.id} announcement={a} />
+              ))}
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>
