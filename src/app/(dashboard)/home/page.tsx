@@ -9,7 +9,6 @@ import {
   Receipt,
   AlertTriangle,
   Megaphone,
-  BarChart3,
   Bot,
   Bell,
 } from "lucide-react";
@@ -31,7 +30,7 @@ const quickActions: {
   { href: "/finanzas", label: "Mis Recibos", icon: Receipt, color: "bg-emerald-50", iconColor: "text-emerald-600" },
   { href: "/pqr", label: "Incidencias", icon: AlertTriangle, color: "bg-red-50", iconColor: "text-red-500" },
   { href: "/comunicados", label: "Comunicados", icon: Megaphone, color: "bg-purple-50", iconColor: "text-purple-600" },
-  { href: "/finanzas", label: "Financiero", icon: BarChart3, color: "bg-orange-50", iconColor: "text-orange-600" },
+  { href: "/folky", label: "Folky IA", icon: Bot, color: "bg-indigo-50", iconColor: "text-indigo-600" },
 ];
 
 export default async function HomePage() {

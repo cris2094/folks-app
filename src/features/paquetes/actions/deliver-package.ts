@@ -9,7 +9,7 @@ export async function deliverPackage(packageId: string, deliveredTo: string) {
 
   const { data: resident } = await supabase
     .from("residents")
-    .select("role")
+    .select("role, tenant_id")
     .eq("user_id", user.id)
     .eq("is_active", true)
     .limit(1)
@@ -19,6 +19,7 @@ export async function deliverPackage(packageId: string, deliveredTo: string) {
     return { error: "No autorizado" };
   }
 
+  // Scope to same tenant to prevent cross-tenant manipulation
   const { error } = await supabase
     .from("packages")
     .update({
@@ -26,7 +27,8 @@ export async function deliverPackage(packageId: string, deliveredTo: string) {
       delivered_at: new Date().toISOString(),
       delivered_to: deliveredTo,
     })
-    .eq("id", packageId);
+    .eq("id", packageId)
+    .eq("tenant_id", resident.tenant_id);
 
   if (error) return { error: error.message };
 
