@@ -4,7 +4,6 @@
 -- ============================================
 
 -- Enable necessary extensions
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ============================================
 -- ENUMS
@@ -27,19 +26,19 @@ CREATE TYPE notification_type AS ENUM ('package', 'payment', 'announcement', 'vi
 -- HELPER FUNCTIONS FOR RLS
 -- ============================================
 
-CREATE OR REPLACE FUNCTION auth.tenant_id() RETURNS uuid AS $$
+CREATE OR REPLACE FUNCTION public.tenant_id() RETURNS uuid AS $$
   SELECT COALESCE(
     (auth.jwt()->>'tenant_id')::uuid,
     '00000000-0000-0000-0000-000000000000'::uuid
   )
-$$ LANGUAGE sql STABLE;
+$$ LANGUAGE sql STABLE SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION auth.user_role() RETURNS text AS $$
+CREATE OR REPLACE FUNCTION public.user_role() RETURNS text AS $$
   SELECT COALESCE(
     auth.jwt()->>'user_role',
     'residente'
   )
-$$ LANGUAGE sql STABLE;
+$$ LANGUAGE sql STABLE SECURITY DEFINER;
 
 -- ============================================
 -- TABLES
@@ -47,7 +46,7 @@ $$ LANGUAGE sql STABLE;
 
 -- Tenants (conjuntos residenciales)
 CREATE TABLE tenants (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
   slug text UNIQUE NOT NULL,
   logo_url text,
@@ -66,7 +65,7 @@ CREATE TABLE tenants (
 
 -- Units (apartamentos/casas)
 CREATE TABLE units (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   tower text NOT NULL,
   apartment text NOT NULL,
@@ -80,7 +79,7 @@ CREATE TABLE units (
 
 -- Residents (residentes vinculados a unidades)
 CREATE TABLE residents (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   unit_id uuid NOT NULL REFERENCES units(id) ON DELETE CASCADE,
   user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
@@ -98,7 +97,7 @@ CREATE TABLE residents (
 
 -- Vehicles
 CREATE TABLE vehicles (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   unit_id uuid NOT NULL REFERENCES units(id) ON DELETE CASCADE,
   resident_id uuid NOT NULL REFERENCES residents(id) ON DELETE CASCADE,
@@ -113,7 +112,7 @@ CREATE TABLE vehicles (
 
 -- Pets
 CREATE TABLE pets (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   unit_id uuid NOT NULL REFERENCES units(id) ON DELETE CASCADE,
   resident_id uuid NOT NULL REFERENCES residents(id) ON DELETE CASCADE,
@@ -126,7 +125,7 @@ CREATE TABLE pets (
 
 -- Zones (zonas sociales)
 CREATE TABLE zones (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   name text NOT NULL,
   description text,
@@ -143,7 +142,7 @@ CREATE TABLE zones (
 
 -- Reservations
 CREATE TABLE reservations (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   zone_id uuid NOT NULL REFERENCES zones(id) ON DELETE CASCADE,
   unit_id uuid NOT NULL REFERENCES units(id) ON DELETE CASCADE,
@@ -160,7 +159,7 @@ CREATE TABLE reservations (
 
 -- Reservation guests
 CREATE TABLE reservation_guests (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   reservation_id uuid NOT NULL REFERENCES reservations(id) ON DELETE CASCADE,
   full_name text NOT NULL,
   document_number text,
@@ -169,7 +168,7 @@ CREATE TABLE reservation_guests (
 
 -- Payments
 CREATE TABLE payments (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   unit_id uuid NOT NULL REFERENCES units(id) ON DELETE CASCADE,
   concept payment_concept NOT NULL DEFAULT 'admin_fee',
@@ -187,7 +186,7 @@ CREATE TABLE payments (
 
 -- Packages
 CREATE TABLE packages (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   unit_id uuid NOT NULL REFERENCES units(id) ON DELETE CASCADE,
   description text NOT NULL,
@@ -203,7 +202,7 @@ CREATE TABLE packages (
 
 -- Announcements
 CREATE TABLE announcements (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   title text NOT NULL,
   body text NOT NULL,
@@ -217,7 +216,7 @@ CREATE TABLE announcements (
 
 -- Notifications
 CREATE TABLE notifications (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   type notification_type NOT NULL,
@@ -230,7 +229,7 @@ CREATE TABLE notifications (
 
 -- Tickets (PQR)
 CREATE TABLE tickets (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   unit_id uuid NOT NULL REFERENCES units(id) ON DELETE CASCADE,
   resident_id uuid NOT NULL REFERENCES residents(id) ON DELETE CASCADE,
@@ -247,7 +246,7 @@ CREATE TABLE tickets (
 
 -- Ticket messages (chat)
 CREATE TABLE ticket_messages (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   ticket_id uuid NOT NULL REFERENCES tickets(id) ON DELETE CASCADE,
   sender_id uuid NOT NULL REFERENCES residents(id),
   message text NOT NULL,
@@ -257,7 +256,7 @@ CREATE TABLE ticket_messages (
 
 -- Visitors
 CREATE TABLE visitors (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
   unit_id uuid NOT NULL REFERENCES units(id) ON DELETE CASCADE,
   authorized_by uuid NOT NULL REFERENCES residents(id),
@@ -320,112 +319,112 @@ ALTER TABLE visitors ENABLE ROW LEVEL SECURITY;
 
 -- Tenants: users can see their own tenant
 CREATE POLICY "tenant_select" ON tenants
-  FOR SELECT USING (id = auth.tenant_id());
+  FOR SELECT USING (id = public.tenant_id());
 
 -- Super admin can see all tenants
 CREATE POLICY "tenant_super_admin" ON tenants
-  FOR ALL USING (auth.user_role() = 'super_admin');
+  FOR ALL USING (public.user_role() = 'super_admin');
 
 -- Units: filtered by tenant
 CREATE POLICY "units_tenant" ON units
-  FOR SELECT USING (tenant_id = auth.tenant_id());
+  FOR SELECT USING (tenant_id = public.tenant_id());
 
 CREATE POLICY "units_admin_manage" ON units
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'super_admin'));
 
 -- Residents: filtered by tenant, residents see their unit only
 CREATE POLICY "residents_select_own" ON residents
   FOR SELECT USING (
-    tenant_id = auth.tenant_id() AND (
+    tenant_id = public.tenant_id() AND (
       user_id = auth.uid() OR
-      auth.user_role() IN ('admin', 'portero', 'super_admin')
+      public.user_role() IN ('admin', 'portero', 'super_admin')
     )
   );
 
 CREATE POLICY "residents_admin_manage" ON residents
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'super_admin'));
 
 -- Vehicles: same pattern
 CREATE POLICY "vehicles_select" ON vehicles
-  FOR SELECT USING (tenant_id = auth.tenant_id());
+  FOR SELECT USING (tenant_id = public.tenant_id());
 
 CREATE POLICY "vehicles_admin_manage" ON vehicles
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'super_admin'));
 
 -- Pets: same pattern
 CREATE POLICY "pets_select" ON pets
-  FOR SELECT USING (tenant_id = auth.tenant_id());
+  FOR SELECT USING (tenant_id = public.tenant_id());
 
 CREATE POLICY "pets_admin_manage" ON pets
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'super_admin'));
 
 -- Zones: all residents can see, admin manages
 CREATE POLICY "zones_select" ON zones
-  FOR SELECT USING (tenant_id = auth.tenant_id());
+  FOR SELECT USING (tenant_id = public.tenant_id());
 
 CREATE POLICY "zones_admin_manage" ON zones
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'super_admin'));
 
 -- Reservations: residents see own, admin sees all
 CREATE POLICY "reservations_select" ON reservations
   FOR SELECT USING (
-    tenant_id = auth.tenant_id() AND (
+    tenant_id = public.tenant_id() AND (
       resident_id IN (SELECT id FROM residents WHERE user_id = auth.uid()) OR
-      auth.user_role() IN ('admin', 'super_admin')
+      public.user_role() IN ('admin', 'super_admin')
     )
   );
 
 CREATE POLICY "reservations_insert" ON reservations
-  FOR INSERT WITH CHECK (tenant_id = auth.tenant_id());
+  FOR INSERT WITH CHECK (tenant_id = public.tenant_id());
 
 CREATE POLICY "reservations_admin_manage" ON reservations
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'super_admin'));
 
 -- Reservation guests: via reservation access
 CREATE POLICY "reservation_guests_select" ON reservation_guests
   FOR SELECT USING (
     reservation_id IN (
-      SELECT id FROM reservations WHERE tenant_id = auth.tenant_id()
+      SELECT id FROM reservations WHERE tenant_id = public.tenant_id()
     )
   );
 
 CREATE POLICY "reservation_guests_insert" ON reservation_guests
   FOR INSERT WITH CHECK (
     reservation_id IN (
-      SELECT id FROM reservations WHERE tenant_id = auth.tenant_id()
+      SELECT id FROM reservations WHERE tenant_id = public.tenant_id()
     )
   );
 
 -- Payments: residents see own unit, admin sees all
 CREATE POLICY "payments_select" ON payments
   FOR SELECT USING (
-    tenant_id = auth.tenant_id() AND (
+    tenant_id = public.tenant_id() AND (
       unit_id IN (SELECT unit_id FROM residents WHERE user_id = auth.uid()) OR
-      auth.user_role() IN ('admin', 'super_admin')
+      public.user_role() IN ('admin', 'super_admin')
     )
   );
 
 CREATE POLICY "payments_admin_manage" ON payments
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'super_admin'));
 
 -- Packages: residents see own unit, portero and admin manage
 CREATE POLICY "packages_select" ON packages
   FOR SELECT USING (
-    tenant_id = auth.tenant_id() AND (
+    tenant_id = public.tenant_id() AND (
       unit_id IN (SELECT unit_id FROM residents WHERE user_id = auth.uid()) OR
-      auth.user_role() IN ('admin', 'portero', 'super_admin')
+      public.user_role() IN ('admin', 'portero', 'super_admin')
     )
   );
 
 CREATE POLICY "packages_portero_manage" ON packages
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'portero', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'portero', 'super_admin'));
 
 -- Announcements: all can see, admin creates
 CREATE POLICY "announcements_select" ON announcements
-  FOR SELECT USING (tenant_id = auth.tenant_id());
+  FOR SELECT USING (tenant_id = public.tenant_id());
 
 CREATE POLICY "announcements_admin_manage" ON announcements
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'super_admin'));
 
 -- Notifications: users see own only
 CREATE POLICY "notifications_select" ON notifications
@@ -437,47 +436,47 @@ CREATE POLICY "notifications_update" ON notifications
 -- Tickets: residents see own, admin sees all
 CREATE POLICY "tickets_select" ON tickets
   FOR SELECT USING (
-    tenant_id = auth.tenant_id() AND (
+    tenant_id = public.tenant_id() AND (
       resident_id IN (SELECT id FROM residents WHERE user_id = auth.uid()) OR
-      auth.user_role() IN ('admin', 'super_admin')
+      public.user_role() IN ('admin', 'super_admin')
     )
   );
 
 CREATE POLICY "tickets_insert" ON tickets
-  FOR INSERT WITH CHECK (tenant_id = auth.tenant_id());
+  FOR INSERT WITH CHECK (tenant_id = public.tenant_id());
 
 CREATE POLICY "tickets_admin_manage" ON tickets
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'super_admin'));
 
 -- Ticket messages: via ticket access
 CREATE POLICY "ticket_messages_select" ON ticket_messages
   FOR SELECT USING (
     ticket_id IN (
-      SELECT id FROM tickets WHERE tenant_id = auth.tenant_id()
+      SELECT id FROM tickets WHERE tenant_id = public.tenant_id()
     )
   );
 
 CREATE POLICY "ticket_messages_insert" ON ticket_messages
   FOR INSERT WITH CHECK (
     ticket_id IN (
-      SELECT id FROM tickets WHERE tenant_id = auth.tenant_id()
+      SELECT id FROM tickets WHERE tenant_id = public.tenant_id()
     )
   );
 
 -- Visitors: residents see own unit, portero and admin manage
 CREATE POLICY "visitors_select" ON visitors
   FOR SELECT USING (
-    tenant_id = auth.tenant_id() AND (
+    tenant_id = public.tenant_id() AND (
       unit_id IN (SELECT unit_id FROM residents WHERE user_id = auth.uid()) OR
-      auth.user_role() IN ('admin', 'portero', 'super_admin')
+      public.user_role() IN ('admin', 'portero', 'super_admin')
     )
   );
 
 CREATE POLICY "visitors_insert" ON visitors
-  FOR INSERT WITH CHECK (tenant_id = auth.tenant_id());
+  FOR INSERT WITH CHECK (tenant_id = public.tenant_id());
 
 CREATE POLICY "visitors_admin_manage" ON visitors
-  FOR ALL USING (tenant_id = auth.tenant_id() AND auth.user_role() IN ('admin', 'portero', 'super_admin'));
+  FOR ALL USING (tenant_id = public.tenant_id() AND public.user_role() IN ('admin', 'portero', 'super_admin'));
 
 -- ============================================
 -- UPDATED_AT TRIGGER
