@@ -13,8 +13,13 @@ export default async function PaquetesPage() {
   return (
     <div className="mx-auto max-w-md p-4">
       <header className="mb-6">
-        <h1 className="text-2xl font-bold">Paqueteria</h1>
-        <p className="text-muted-foreground text-sm">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50">
+            <Package className="h-4 w-4 text-amber-600" />
+          </div>
+          <h1 className="text-2xl font-bold">Paqueteria</h1>
+        </div>
+        <p className="text-muted-foreground text-sm mt-1 ml-10">
           Tus paquetes y correspondencia
         </p>
       </header>
@@ -25,7 +30,7 @@ export default async function PaquetesPage() {
           <p className="mt-1 text-xs text-white/70">
             Muestra este codigo al guarda de seguridad
           </p>
-          <div className="mt-3 flex h-24 w-24 items-center justify-center rounded-xl bg-white">
+          <div className="mt-3 flex h-28 w-28 items-center justify-center rounded-2xl bg-white shadow-inner">
             <p className="text-2xl font-bold text-gray-900">QR</p>
           </div>
           <p className="mt-2 font-mono text-sm tracking-wider">
@@ -63,7 +68,7 @@ export default async function PaquetesPage() {
               ))}
             </div>
           )}
-          <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border border-amber-600 py-2.5 text-sm font-medium text-amber-600 transition-colors hover:bg-amber-50">
+          <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border border-amber-600 py-2.5 text-sm font-medium text-amber-600 transition-all hover:bg-amber-50 hover:shadow-sm">
             <Plus className="h-4 w-4" />
             Aviso de llegada
           </button>
@@ -71,7 +76,9 @@ export default async function PaquetesPage() {
         <TabsContent value="entregados" className="mt-4">
           {delivered.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-8 text-center">
-              <Package className="h-8 w-8 text-gray-400" />
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-50">
+                <Package className="h-7 w-7 text-gray-300" />
+              </div>
               <p className="text-muted-foreground text-sm">Sin entregas recientes</p>
             </div>
           ) : (

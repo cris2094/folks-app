@@ -230,3 +230,132 @@ export interface Visitor {
   left_at: string | null;
   created_at: string;
 }
+
+// ============================================
+// Financial Dashboard (MOD-006)
+// ============================================
+
+export type ExpenseCategory =
+  | "maintenance"
+  | "security"
+  | "utilities"
+  | "cleaning"
+  | "insurance"
+  | "payroll"
+  | "legal"
+  | "reserve_fund"
+  | "extraordinary"
+  | "other";
+
+export type ExpenseStatus = "pending" | "approved" | "rejected" | "paid";
+
+export type BudgetPeriodStatus = "draft" | "approved" | "active" | "closed";
+
+export type UtilityType =
+  | "agua"
+  | "energia"
+  | "gas"
+  | "internet"
+  | "telefono"
+  | "aseo";
+
+export type ReserveMovementType = "income" | "expense";
+
+export interface Expense {
+  id: string;
+  tenant_id: string;
+  category: ExpenseCategory;
+  subcategory: string | null;
+  description: string;
+  amount_cop: number;
+  expense_date: string;
+  vendor: string | null;
+  receipt_url: string | null;
+  status: ExpenseStatus;
+  requested_by: string | null;
+  approved_by: string | null;
+  second_approved_by: string | null;
+  approved_at: string | null;
+  paid_at: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UtilityBill {
+  id: string;
+  tenant_id: string;
+  utility_type: UtilityType;
+  provider: string | null;
+  bill_period: string | null;
+  amount_cop: number;
+  due_date: string | null;
+  paid_at: string | null;
+  receipt_url: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface BudgetPeriod {
+  id: string;
+  tenant_id: string;
+  name: string;
+  start_date: string;
+  end_date: string;
+  total_income_cop: number;
+  total_expense_cop: number;
+  status: BudgetPeriodStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BudgetItem {
+  id: string;
+  budget_period_id: string;
+  tenant_id: string;
+  category: ExpenseCategory;
+  description: string;
+  budgeted_cop: number;
+  executed_cop: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ReserveFundMovement {
+  id: string;
+  tenant_id: string;
+  type: ReserveMovementType;
+  amount_cop: number;
+  description: string;
+  reference_id: string | null;
+  movement_date: string;
+  balance_after_cop: number | null;
+  created_at: string;
+}
+
+export interface PortfolioUnit {
+  tenant_id: string;
+  unit_id: string;
+  tower: string;
+  apartment: string;
+  admin_fee_cop: number;
+  overdue_count: number;
+  pending_count: number;
+  overdue_total: number;
+  pending_total: number;
+  oldest_overdue_date: string | null;
+  overdue_0_30: number;
+  overdue_31_60: number;
+  overdue_61_90: number;
+  overdue_90_plus: number;
+}
+
+export interface FinancialSummary {
+  totalIncome: number;
+  totalExpenses: number;
+  balance: number;
+  collectionRate: number;
+  totalOverdue: number;
+  overdueUnitsCount: number;
+  reserveFundBalance: number;
+}

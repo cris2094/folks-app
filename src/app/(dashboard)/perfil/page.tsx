@@ -2,7 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { User } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  FileText,
+  Building2,
+  Home,
+  LogOut,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
 import { logout } from "@/features/auth/actions/logout";
 import Link from "next/link";
@@ -11,61 +19,72 @@ export default async function PerfilPage() {
   const data = await getCurrentUser();
   const resident = data?.resident;
 
+  const fullName = resident?.full_name ?? data?.user?.email ?? "Usuario";
+
+  // Avatar initials
+  const initials = fullName
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase())
+    .join("");
+
   return (
     <div className="mx-auto max-w-md p-4">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold">Mi Perfil</h1>
-        <p className="text-muted-foreground text-sm">
-          Informacion de tu cuenta
-        </p>
-      </header>
+      {/* Avatar header */}
+      <div className="mb-6 flex flex-col items-center gap-3 pt-2">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-amber-600 text-2xl font-bold text-white shadow-lg shadow-amber-600/25">
+          {initials || "U"}
+        </div>
+        <div className="text-center">
+          <h1 className="text-xl font-bold text-gray-900">{fullName}</h1>
+          <Badge variant="secondary" className="mt-1">
+            {resident?.is_owner ? "Propietario" : resident?.role ?? "Residente"}
+          </Badge>
+        </div>
+      </div>
 
       <Card className="mb-4">
         <CardHeader className="pb-2">
-          <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-amber-100">
-              <User className="h-7 w-7 text-amber-600" />
-            </div>
-            <div>
-              <CardTitle className="text-base">
-                {resident?.full_name ?? data?.user?.email ?? "Usuario"}
-              </CardTitle>
-              <Badge variant="secondary">
-                {resident?.is_owner ? "Propietario" : resident?.role ?? "Residente"}
-              </Badge>
-            </div>
-          </div>
+          <CardTitle className="text-sm text-gray-500">Informacion Personal</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <Separator />
-          <div className="space-y-2">
-            <InfoRow
-              label="Correo"
-              value={resident?.email ?? data?.user?.email ?? "-"}
-            />
-            <InfoRow
-              label="Telefono"
-              value={resident?.phone ?? "-"}
-            />
-            <InfoRow
-              label="Documento"
-              value={
-                resident
-                  ? `${resident.document_type.toUpperCase()} ${resident.document_number}`
-                  : "-"
-              }
-            />
-          </div>
+        <CardContent className="space-y-1">
+          <Separator className="mb-2" />
+          <InfoRow
+            icon={Mail}
+            label="Correo"
+            value={resident?.email ?? data?.user?.email ?? "-"}
+          />
+          <InfoRow
+            icon={Phone}
+            label="Telefono"
+            value={resident?.phone ?? "-"}
+          />
+          <InfoRow
+            icon={FileText}
+            label="Documento"
+            value={
+              resident
+                ? `${resident.document_type.toUpperCase()} ${resident.document_number}`
+                : "-"
+            }
+          />
         </CardContent>
       </Card>
 
-      <Card className="mb-4">
+      <Card className="mb-6">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Conjunto Residencial</CardTitle>
+          <CardTitle className="text-sm text-gray-500">Conjunto Residencial</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
-          <InfoRow label="Nombre" value={resident?.tenant?.name ?? "-"} />
+        <CardContent className="space-y-1">
+          <Separator className="mb-2" />
           <InfoRow
+            icon={Building2}
+            label="Nombre"
+            value={resident?.tenant?.name ?? "-"}
+          />
+          <InfoRow
+            icon={Home}
             label="Unidad"
             value={
               resident?.unit
@@ -78,7 +97,12 @@ export default async function PerfilPage() {
 
       <div className="space-y-2">
         <form action={logout}>
-          <Button variant="outline" className="w-full text-red-600" type="submit">
+          <Button
+            variant="outline"
+            className="w-full h-11 rounded-xl border-red-200 text-red-600 font-medium hover:bg-red-50 hover:border-red-300 transition-all"
+            type="submit"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
             Cerrar sesion
           </Button>
         </form>
@@ -97,11 +121,24 @@ export default async function PerfilPage() {
   );
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
+function InfoRow({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+}) {
   return (
-    <div className="flex justify-between text-sm">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-medium">{value}</span>
+    <div className="flex items-center gap-3 py-2">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-50">
+        <Icon className="h-4 w-4 text-gray-400" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="text-sm font-medium truncate">{value}</p>
+      </div>
     </div>
   );
 }

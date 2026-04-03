@@ -41,18 +41,39 @@ export default async function HomePage() {
     getAnnouncements(),
   ]);
 
-  const name = data?.resident?.full_name?.split(" ")[0] ?? "Residente";
+  const fullName = data?.resident?.full_name ?? "";
+  const name = fullName.split(" ")[0] || "Residente";
   const tenantName = data?.resident?.tenant?.name ?? "tu conjunto";
+  const unit = data?.resident?.unit;
   const recentAnnouncements = announcements.slice(0, 3);
+
+  // Avatar initials
+  const initials = fullName
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase())
+    .join("");
 
   return (
     <div className="mx-auto max-w-md">
       {/* Header con gradiente */}
       <div className="bg-gradient-to-br from-brand-dark to-brand-dark-lighter px-4 pb-8 pt-6 text-white">
         <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-white/70">Bienvenido a {tenantName}</p>
-            <h1 className="text-2xl font-bold">Hola, {name}</h1>
+          <div className="flex items-center gap-3">
+            {/* Avatar */}
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20 text-sm font-bold backdrop-blur-sm">
+              {initials || "U"}
+            </div>
+            <div>
+              <p className="text-sm text-white/70">Bienvenido a {tenantName}</p>
+              <h1 className="text-2xl font-bold">Hola, {name}</h1>
+              {unit && (
+                <p className="text-xs text-white/50">
+                  {unit.tower} - Apto {unit.apartment}
+                </p>
+              )}
+            </div>
           </div>
           <Link href="/comunicados" className="relative">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm">
@@ -85,12 +106,12 @@ export default async function HomePage() {
             <Link
               key={action.href + action.label}
               href={action.href}
-              className="flex flex-col items-center gap-1.5 rounded-xl p-2 transition-colors hover:bg-gray-100"
+              className="flex flex-col items-center gap-1.5 rounded-xl p-2 transition-all hover:bg-gray-50 hover:shadow-sm"
             >
               <div
-                className={`flex h-12 w-12 items-center justify-center rounded-xl ${action.color}`}
+                className={`flex h-14 w-14 items-center justify-center rounded-xl shadow-sm ${action.color}`}
               >
-                <action.icon className={`h-5 w-5 ${action.iconColor}`} />
+                <action.icon className={`h-6 w-6 ${action.iconColor}`} />
               </div>
               <span className="text-center text-[10px] font-medium leading-tight text-gray-700">
                 {action.label}

@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Mail } from "lucide-react";
 import Link from "next/link";
 import { loginWithEmail, loginWithGoogle } from "@/features/auth/actions/login";
+import { PasswordInput } from "@/features/auth/components/password-input";
 
 export default async function LoginPage({
   searchParams,
@@ -15,7 +16,7 @@ export default async function LoginPage({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-xl font-bold text-gray-900">Iniciar Sesión</h2>
+        <h2 className="text-xl font-bold text-gray-900">Iniciar Sesion</h2>
         <p className="text-muted-foreground mt-1 text-sm">
           Ingresa a tu conjunto residencial
         </p>
@@ -57,21 +58,24 @@ export default async function LoginPage({
 
       <div className="flex items-center gap-3">
         <Separator className="flex-1" />
-        <span className="text-muted-foreground text-xs">o con email</span>
+        <span className="text-xs text-gray-300">o con email</span>
         <Separator className="flex-1" />
       </div>
 
       <form action={loginWithEmail} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Correo electronico</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="tu@correo.com"
-            required
-            className="h-11 rounded-xl"
-          />
+          <div className="relative">
+            <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="tu@correo.com"
+              required
+              className="h-11 w-full rounded-xl border border-input bg-transparent pl-10 pr-3 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            />
+          </div>
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
@@ -83,19 +87,13 @@ export default async function LoginPage({
               Olvidaste tu contrasena?
             </Link>
           </div>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            required
-            className="h-11 rounded-xl"
-          />
+          <PasswordInput id="password" name="password" required />
         </div>
         <Button
-          className="w-full h-11 rounded-xl bg-amber-600 font-medium hover:bg-amber-700"
+          className="w-full h-12 rounded-xl bg-amber-600 font-semibold text-base hover:bg-amber-700 shadow-md shadow-amber-600/25 transition-all hover:shadow-lg hover:shadow-amber-600/30"
           type="submit"
         >
-          Ingresar →
+          Ingresar
         </Button>
       </form>
 
