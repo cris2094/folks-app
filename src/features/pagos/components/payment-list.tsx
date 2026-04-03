@@ -18,14 +18,14 @@ function formatMonth(dateStr: string): string {
 export function PaymentList({ payments }: { payments: PaymentWithUnit[] }) {
   if (payments.length === 0) {
     return (
-      <p className="py-8 text-center text-sm text-gray-400">
+      <p className="py-8 text-center text-[13px] text-gray-400">
         No hay recibos
       </p>
     );
   }
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-1.5">
       {payments.map((p) => {
         const isPaid = p.status === "paid";
         const total = Number(p.amount_cop) + Number(p.late_fee_cop);
@@ -35,31 +35,38 @@ export function PaymentList({ payments }: { payments: PaymentWithUnit[] }) {
         return (
           <button
             key={p.id}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors hover:bg-gray-50 active:bg-gray-100"
+            className="flex w-full items-center gap-3 rounded-[16px] p-4 text-left transition-colors hover:bg-gray-50 active:bg-gray-100"
           >
             {/* Green circle icon */}
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-100">
-              <CheckCircle className="h-4 w-4 text-green-600" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-50 shadow-apple-sm">
+              <CheckCircle className="h-[18px] w-[18px] text-green-500" strokeWidth={1.5} />
             </div>
 
             {/* Info */}
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-gray-900">{monthYear}</p>
-              <p className="text-xs text-gray-500">{concept}</p>
+              <p className="text-[15px] font-semibold tracking-tight text-gray-900">
+                {monthYear}
+              </p>
+              <p className="text-[12px] text-gray-500">{concept}</p>
             </div>
 
             {/* Amount + status */}
             <div className="shrink-0 text-right">
-              <p className="text-sm font-semibold text-gray-900">
+              <p className="text-[15px] font-semibold tracking-tight text-gray-900">
                 ${total.toLocaleString("es-CO")}
               </p>
               {isPaid && (
-                <p className="text-xs text-green-600">Pagado</p>
+                <p className="text-[11px] font-medium text-green-500">
+                  Pagado
+                </p>
               )}
             </div>
 
             {/* Chevron */}
-            <ChevronRight className="h-4 w-4 shrink-0 text-gray-300" />
+            <ChevronRight
+              className="h-4 w-4 shrink-0 text-gray-300"
+              strokeWidth={1.5}
+            />
           </button>
         );
       })}

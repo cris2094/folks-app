@@ -6,16 +6,16 @@ export default function AutorizarVisitantePage() {
   return (
     <div className="mx-auto max-w-md">
       {/* Header Apple-style */}
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-lg">
-        <div className="flex items-center justify-between px-4 pb-2 pt-4">
+      <header className="sticky top-0 z-10 bg-[#F5F5F7]/80 backdrop-blur-lg">
+        <div className="flex items-center justify-between px-5 pb-2 pt-14">
           <Link
             href="/visitantes"
-            className="flex items-center gap-0.5 text-sm font-medium text-amber-600"
+            className="flex items-center gap-0.5 text-[15px] font-medium text-amber-500"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-5 w-5" strokeWidth={2} />
             Visitantes
           </Link>
-          <h1 className="text-lg font-bold text-gray-900">
+          <h1 className="text-[17px] font-bold tracking-tight text-gray-900">
             Autorizar Acceso
           </h1>
           <div className="w-8" />

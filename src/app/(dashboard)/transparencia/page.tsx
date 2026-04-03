@@ -52,16 +52,18 @@ export default async function TransparenciaPage() {
   return (
     <div className="mx-auto max-w-md">
       {/* Header */}
-      <header className="bg-white px-4 pb-4 pt-4">
+      <header className="px-5 pb-4 pt-14">
         <div className="flex items-center justify-between">
           <Link
             href="/home"
-            className="flex items-center gap-1 text-sm font-medium text-amber-600"
+            className="flex items-center gap-0.5 text-[15px] font-medium text-amber-500"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-5 w-5" strokeWidth={2} />
             Inicio
           </Link>
-          <h1 className="text-lg font-bold text-gray-900">Transparencia</h1>
+          <h1 className="text-[17px] font-bold tracking-tight text-gray-900">
+            Transparencia
+          </h1>
           <div className="w-12" />
         </div>
       </header>

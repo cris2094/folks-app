@@ -33,14 +33,14 @@ const serviceItems: {
     href: "/finanzas",
     label: "Recibos",
     icon: Receipt,
-    bgColor: "bg-amber-100",
+    bgColor: "bg-amber-50",
     iconColor: "text-amber-600",
   },
   {
     href: "/paquetes",
     label: "Paquetes",
     icon: Package,
-    bgColor: "bg-green-100",
+    bgColor: "bg-green-50",
     iconColor: "text-green-600",
     notification: true,
   },
@@ -48,28 +48,28 @@ const serviceItems: {
     href: "/incidencias",
     label: "Incidencias",
     icon: AlertCircle,
-    bgColor: "bg-red-100",
+    bgColor: "bg-red-50",
     iconColor: "text-red-600",
   },
   {
     href: "/propiedad",
     label: "Mi Propiedad",
     icon: Home,
-    bgColor: "bg-blue-100",
+    bgColor: "bg-blue-50",
     iconColor: "text-blue-600",
   },
   {
     href: "/vecinos",
     label: "Vecinos",
     icon: Users,
-    bgColor: "bg-cyan-100",
+    bgColor: "bg-cyan-50",
     iconColor: "text-cyan-600",
   },
   {
     href: "/admin",
     label: "Admin",
     icon: Headphones,
-    bgColor: "bg-emerald-100",
+    bgColor: "bg-emerald-50",
     iconColor: "text-emerald-600",
   },
   {
@@ -83,7 +83,7 @@ const serviceItems: {
     href: "/zonas",
     label: "Reservas",
     icon: Calendar,
-    bgColor: "bg-amber-100",
+    bgColor: "bg-amber-50",
     iconColor: "text-amber-600",
   },
 ];
@@ -105,24 +105,30 @@ export default async function HomePage() {
     paymentSummary.totalPending + paymentSummary.totalOverdue;
 
   return (
-    <div className="mx-auto max-w-md bg-white">
-      {/* ── Header ── */}
-      <div className="px-4 pb-3 pt-4">
+    <div className="mx-auto max-w-md">
+      {/* -- Header -- */}
+      <div className="px-5 pb-3 pt-14">
         <div className="flex items-center justify-between">
           {/* Izquierda: logo + ubicacion */}
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-50">
-              <Building2 className="h-4 w-4 text-amber-500" />
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-50 shadow-apple-sm">
+              <Building2
+                className="h-[18px] w-[18px] text-amber-500"
+                strokeWidth={1.5}
+              />
             </div>
             <div>
-              <p className="text-[10px] font-medium uppercase tracking-widest text-gray-400">
+              <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-gray-400">
                 MI HOGAR
               </p>
               <button className="flex items-center gap-1">
-                <span className="text-lg font-semibold text-gray-900">
+                <span className="text-[17px] font-semibold tracking-tight text-gray-900">
                   {unitLabel}
                 </span>
-                <ChevronDown className="h-4 w-4 text-gray-400" />
+                <ChevronDown
+                  className="h-4 w-4 text-gray-400"
+                  strokeWidth={1.5}
+                />
               </button>
             </div>
           </div>
@@ -130,8 +136,11 @@ export default async function HomePage() {
           {/* Derecha: bell + settings */}
           <div className="flex items-center gap-2">
             <Link href="/comunicados" className="relative">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
-                <Bell className="h-[18px] w-[18px] text-gray-600" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-apple-sm">
+                <Bell
+                  className="h-[18px] w-[18px] text-gray-500"
+                  strokeWidth={1.5}
+                />
               </div>
               {unreadCount > 0 && (
                 <Badge
@@ -143,59 +152,67 @@ export default async function HomePage() {
               )}
             </Link>
             <Link href="/configuracion">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
-                <Settings className="h-[18px] w-[18px] text-gray-600" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-apple-sm">
+                <Settings
+                  className="h-[18px] w-[18px] text-gray-500"
+                  strokeWidth={1.5}
+                />
               </div>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* ── Card Asistente Folky ── */}
-      <div className="px-4 pt-1">
-        <div className="rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 p-4 shadow-md">
+      {/* -- Card Asistente Folky -- */}
+      <div className="px-5 pt-2">
+        <div className="rounded-[20px] border border-amber-200/30 bg-gradient-to-r from-amber-400 to-amber-500 p-4 shadow-apple">
           <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500 shadow-sm">
-              <Sparkles className="h-5 w-5 text-white" />
+              <Sparkles className="h-5 w-5 text-white" strokeWidth={1.5} />
             </div>
             <div className="flex-1">
-              <h2 className="text-lg font-bold text-white">
+              <h2 className="text-[17px] font-bold tracking-tight text-white">
                 Hola, {name}!
               </h2>
-              <p className="mt-0.5 text-sm leading-snug text-white/90">
+              <p className="mt-0.5 text-[15px] leading-snug text-white/90">
                 Soy tu asistente virtual.{"\n"}Te ayudo a revisar tus paquetes o
                 pagos?
               </p>
             </div>
           </div>
-          <button className="mt-3 flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm transition-colors hover:bg-gray-50">
+          <button className="mt-3 flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-gray-800 shadow-apple-sm transition-colors hover:bg-gray-50">
             <span className="text-base">🎙</span>
             Hablar ahora
           </button>
         </div>
       </div>
 
-      {/* ── Servicios grid 4x2 ── */}
-      <div className="px-4 pb-2 pt-6">
-        <p className="mb-3 text-sm font-semibold text-gray-900">Servicios</p>
-        <div className="grid grid-cols-4 gap-y-4 gap-x-3">
+      {/* -- Servicios grid 4x2 -- */}
+      <div className="px-5 pb-2 pt-7">
+        <p className="mb-4 text-[15px] font-semibold tracking-tight text-gray-900">
+          Servicios
+        </p>
+        <div className="grid grid-cols-4 gap-x-4 gap-y-5">
           {serviceItems.map((item) => (
             <Link
               key={item.href + item.label}
               href={item.href}
-              className="flex flex-col items-center gap-1.5"
+              className="flex flex-col items-center gap-2"
             >
               <div className="relative">
                 <div
-                  className={`flex h-14 w-14 items-center justify-center rounded-2xl ${item.bgColor}`}
+                  className={`flex h-14 w-14 items-center justify-center rounded-2xl shadow-apple-sm ${item.bgColor}`}
                 >
-                  <item.icon className={`h-6 w-6 ${item.iconColor}`} />
+                  <item.icon
+                    className={`h-6 w-6 ${item.iconColor}`}
+                    strokeWidth={1.5}
+                  />
                 </div>
                 {item.notification && (
-                  <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-white bg-red-500" />
+                  <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-[#F5F5F7] bg-red-500" />
                 )}
               </div>
-              <span className="text-center text-[10px] font-medium leading-tight text-gray-600">
+              <span className="text-center text-[11px] font-medium leading-tight text-gray-500">
                 {item.label}
               </span>
             </Link>
@@ -203,21 +220,24 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* ── Cards horizontales ── */}
-      <div className="px-4 pb-6 pt-4">
+      {/* -- Cards horizontales -- */}
+      <div className="px-5 pb-6 pt-5">
         <div className="grid grid-cols-2 gap-3">
           {/* Proximo Pago */}
           <Link href="/finanzas" className="block">
-            <div className="rounded-2xl bg-white p-3 shadow-sm ring-1 ring-gray-100">
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100">
-                  <Wallet className="h-4 w-4 text-amber-600" />
+            <div className="rounded-[20px] border border-gray-100 bg-white p-4 shadow-apple-sm">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50">
+                  <Wallet
+                    className="h-[18px] w-[18px] text-amber-600"
+                    strokeWidth={1.5}
+                  />
                 </div>
-                <span className="text-xs font-medium text-gray-500">
+                <span className="text-[11px] font-medium text-gray-500">
                   Proximo Pago
                 </span>
               </div>
-              <p className="mt-2 text-lg font-bold text-gray-900">
+              <p className="mt-3 text-[20px] font-bold tracking-tight text-gray-900">
                 ${totalPending.toLocaleString("es-CO")}
               </p>
               <p className="mt-0.5 text-[11px] text-gray-400">
@@ -228,14 +248,14 @@ export default async function HomePage() {
 
           {/* Tu Reserva */}
           <Link href="/zonas" className="block">
-            <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
+            <div className="overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-apple-sm">
               <div className="h-20 w-full bg-gradient-to-br from-cyan-400 to-blue-400">
                 <div className="flex h-full items-center justify-center">
                   <span className="text-2xl">🏊</span>
                 </div>
               </div>
-              <div className="p-3">
-                <p className="text-xs font-semibold text-gray-900">
+              <div className="p-3.5">
+                <p className="text-[13px] font-semibold tracking-tight text-gray-900">
                   Piscina Sur
                 </p>
                 <p className="mt-0.5 text-[11px] text-gray-400">

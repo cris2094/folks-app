@@ -167,15 +167,15 @@ export default async function TicketDetailPage({
     : ticket.assigned?.full_name;
 
   return (
-    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col bg-gray-50">
+    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col">
       {/* Header */}
-      <header className="bg-white px-4 pb-4 pt-4">
+      <header className="px-5 pb-4 pt-14">
         <div className="flex items-center justify-between">
           <Link
             href="/pqr"
-            className="flex items-center gap-1 text-sm font-medium text-amber-600"
+            className="flex items-center gap-0.5 text-[15px] font-medium text-amber-500"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-5 w-5" strokeWidth={2} />
             Incidencias
           </Link>
           <span

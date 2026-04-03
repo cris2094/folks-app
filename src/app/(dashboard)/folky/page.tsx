@@ -69,12 +69,12 @@ export default function FolkyPage() {
   return (
     <div className="mx-auto flex h-[100dvh] max-w-md flex-col bg-white">
       {/* Header */}
-      <header className="flex items-center gap-3 border-b px-4 py-3">
+      <header className="flex items-center gap-3 border-b border-gray-100/50 px-5 py-3">
         <Link
           href="/home"
-          className="flex items-center gap-1 text-sm font-medium text-amber-600"
+          className="flex items-center gap-0.5 text-[15px] font-medium text-amber-500"
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft className="h-5 w-5" strokeWidth={2} />
           Inicio
         </Link>
         <div className="flex flex-1 items-center gap-2">

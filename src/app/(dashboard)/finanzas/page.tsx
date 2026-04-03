@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 import { getMyPayments } from "@/features/pagos/queries/get-my-payments";
 import { getPaymentSummary } from "@/features/pagos/queries/get-payment-summary";
 import { PaymentSummaryCard } from "@/features/pagos/components/payment-summary-card";
@@ -11,16 +12,19 @@ export default async function FinanzasPage() {
   ]);
 
   return (
-    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col bg-white px-4 pb-8 pt-4">
+    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col px-5 pb-8 pt-14">
       {/* Header */}
       <header className="mb-6">
         <Link
           href="/home"
-          className="inline-flex items-center gap-1 text-sm font-medium text-amber-600"
+          className="inline-flex items-center gap-0.5 text-[15px] font-medium text-amber-500"
         >
-          &lt; Inicio
+          <ChevronLeft className="h-5 w-5" strokeWidth={2} />
+          Inicio
         </Link>
-        <h1 className="mt-2 text-3xl font-bold text-gray-900">Recibos</h1>
+        <h1 className="mt-2 text-[28px] font-bold tracking-tight text-gray-900">
+          Recibos
+        </h1>
       </header>
 
       {/* Card de pago principal */}
@@ -30,7 +34,7 @@ export default async function FinanzasPage() {
 
       {/* Historial de pagos */}
       <section>
-        <h2 className="mb-3 text-lg font-semibold text-gray-900">
+        <h2 className="mb-3 text-[17px] font-semibold tracking-tight text-gray-900">
           Historial de Pagos
         </h2>
         <PaymentList payments={payments} />
