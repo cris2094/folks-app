@@ -32,9 +32,7 @@ const quickActions: {
 export default async function HomePage() {
   const data = await getCurrentUser();
   const name = data?.resident?.full_name?.split(" ")[0] ?? "Residente";
-  const tenantName = (data?.resident as Record<string, unknown>)?.tenant
-    ? ((data?.resident as Record<string, unknown>).tenant as { name: string })?.name
-    : "tu conjunto";
+  const tenantName = data?.resident?.tenant?.name ?? "tu conjunto";
 
   return (
     <div className="mx-auto max-w-md p-4">

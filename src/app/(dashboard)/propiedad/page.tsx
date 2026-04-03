@@ -2,6 +2,18 @@ import { getUserUnits } from "@/features/propiedad/queries/get-user-units";
 import { UnitCard } from "@/features/propiedad/components/unit-card";
 import { Building2 } from "lucide-react";
 
+interface UserUnit {
+  id: string;
+  is_owner: boolean;
+  unit: {
+    id: string;
+    tower: string;
+    apartment: string;
+    admin_fee_cop: number;
+    parking_spot: string | null;
+  }[];
+}
+
 export default async function PropiedadPage() {
   const userUnits = await getUserUnits();
 
@@ -28,17 +40,21 @@ export default async function PropiedadPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {userUnits.map((item: any) => (
-            <UnitCard
-              key={item.id}
-              unitId={item.unit.id}
-              tower={item.unit.tower}
-              apartment={item.unit.apartment}
-              isOwner={item.is_owner}
-              adminFee={item.unit.admin_fee_cop}
-              parkingSpot={item.unit.parking_spot}
-            />
-          ))}
+          {(userUnits as UserUnit[]).map((item) => {
+            const unit = Array.isArray(item.unit) ? item.unit[0] : item.unit;
+            if (!unit) return null;
+            return (
+              <UnitCard
+                key={item.id}
+                unitId={unit.id}
+                tower={unit.tower}
+                apartment={unit.apartment}
+                isOwner={item.is_owner}
+                adminFee={unit.admin_fee_cop}
+                parkingSpot={unit.parking_spot}
+              />
+            );
+          })}
         </div>
       )}
     </div>

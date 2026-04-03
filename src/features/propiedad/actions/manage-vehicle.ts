@@ -49,6 +49,8 @@ export async function addVehicle(unitId: string, residentId: string, formData: F
 
 export async function removeVehicle(vehicleId: string) {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "No autenticado" };
 
   const { error } = await supabase
     .from("vehicles")

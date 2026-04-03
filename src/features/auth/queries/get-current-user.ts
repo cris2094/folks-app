@@ -1,8 +1,34 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import type { User } from "@supabase/supabase-js";
 
-export async function getCurrentUser() {
+export interface ResidentProfile {
+  id: string;
+  full_name: string;
+  email: string | null;
+  phone: string | null;
+  role: string;
+  is_owner: boolean;
+  document_type: string;
+  document_number: string;
+  tenant_id: string;
+  unit: { id: string; tower: string; apartment: string } | null;
+  tenant: {
+    id: string;
+    name: string;
+    slug: string;
+    logo_url: string | null;
+    primary_color: string;
+  } | null;
+}
+
+export interface CurrentUserData {
+  user: User;
+  resident: ResidentProfile | null;
+}
+
+export async function getCurrentUser(): Promise<CurrentUserData | null> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -10,7 +36,6 @@ export async function getCurrentUser() {
 
   if (!user) return null;
 
-  // Get resident profile linked to this user
   const { data: resident } = await supabase
     .from("residents")
     .select(
@@ -45,6 +70,6 @@ export async function getCurrentUser() {
 
   return {
     user,
-    resident,
+    resident: resident as ResidentProfile | null,
   };
 }

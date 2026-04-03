@@ -6,6 +6,8 @@ import { revalidatePath } from "next/cache";
 
 export async function addPet(unitId: string, residentId: string, formData: FormData) {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "No autenticado" };
 
   const { data: resident } = await supabase
     .from("residents")
@@ -43,6 +45,8 @@ export async function addPet(unitId: string, residentId: string, formData: FormD
 
 export async function removePet(petId: string) {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "No autenticado" };
 
   const { error } = await supabase.from("pets").delete().eq("id", petId);
 

@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { registerWithEmail } from "@/features/auth/actions/registro";
+import { loginWithGoogle } from "@/features/auth/actions/login";
 
 export default async function RegistroPage({
   searchParams,
@@ -32,9 +33,11 @@ export default async function RegistroPage({
             Revisa tu correo para confirmar tu cuenta.
           </p>
         )}
-        <Button variant="outline" className="w-full">
-          Registrarse con Google
-        </Button>
+        <form action={loginWithGoogle}>
+          <Button variant="outline" className="w-full" type="submit">
+            Registrarse con Google
+          </Button>
+        </form>
         <div className="flex items-center gap-2">
           <Separator className="flex-1" />
           <span className="text-muted-foreground text-xs">o</span>
@@ -52,6 +55,10 @@ export default async function RegistroPage({
           <div className="space-y-1">
             <Label htmlFor="password">Contrasena</Label>
             <Input id="password" name="password" type="password" placeholder="Minimo 8 caracteres" required />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="confirmPassword">Confirmar contrasena</Label>
+            <Input id="confirmPassword" name="confirmPassword" type="password" placeholder="Repite tu contrasena" required />
           </div>
           <Button className="w-full" type="submit">
             Crear cuenta

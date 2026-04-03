@@ -8,9 +8,7 @@ import { logout } from "@/features/auth/actions/logout";
 
 export default async function PerfilPage() {
   const data = await getCurrentUser();
-  const resident = data?.resident as Record<string, unknown> | null;
-  const unit = resident?.unit as { tower: string; apartment: string } | null;
-  const tenant = resident?.tenant as { name: string } | null;
+  const resident = data?.resident;
 
   return (
     <div className="mx-auto max-w-md p-4">
@@ -29,10 +27,10 @@ export default async function PerfilPage() {
             </div>
             <div>
               <CardTitle className="text-base">
-                {(resident?.full_name as string) ?? data?.user?.email ?? "Usuario"}
+                {resident?.full_name ?? data?.user?.email ?? "Usuario"}
               </CardTitle>
               <Badge variant="secondary">
-                {(resident?.is_owner as boolean) ? "Propietario" : (resident?.role as string) ?? "Residente"}
+                {resident?.is_owner ? "Propietario" : resident?.role ?? "Residente"}
               </Badge>
             </div>
           </div>
@@ -42,17 +40,17 @@ export default async function PerfilPage() {
           <div className="space-y-2">
             <InfoRow
               label="Correo"
-              value={(resident?.email as string) ?? data?.user?.email ?? "-"}
+              value={resident?.email ?? data?.user?.email ?? "-"}
             />
             <InfoRow
               label="Telefono"
-              value={(resident?.phone as string) ?? "-"}
+              value={resident?.phone ?? "-"}
             />
             <InfoRow
               label="Documento"
               value={
                 resident
-                  ? `${(resident.document_type as string)?.toUpperCase()} ${resident.document_number as string}`
+                  ? `${resident.document_type.toUpperCase()} ${resident.document_number}`
                   : "-"
               }
             />
@@ -65,11 +63,13 @@ export default async function PerfilPage() {
           <CardTitle className="text-sm">Conjunto Residencial</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          <InfoRow label="Nombre" value={tenant?.name ?? "-"} />
+          <InfoRow label="Nombre" value={resident?.tenant?.name ?? "-"} />
           <InfoRow
             label="Unidad"
             value={
-              unit ? `${unit.tower} - Apto ${unit.apartment}` : "Sin vincular"
+              resident?.unit
+                ? `${resident.unit.tower} - Apto ${resident.unit.apartment}`
+                : "Sin vincular"
             }
           />
         </CardContent>
