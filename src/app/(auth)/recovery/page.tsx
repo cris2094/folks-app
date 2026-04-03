@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { resetPassword } from "@/features/auth/actions/recovery";
 
 export default async function RecoveryPage({
@@ -13,40 +13,53 @@ export default async function RecoveryPage({
   const { error, success } = await searchParams;
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Recuperar contrasena</CardTitle>
-        <p className="text-muted-foreground text-sm">
-          Ingresa tu correo y te enviaremos un enlace para restablecer tu
-          contrasena
+    <div className="space-y-6">
+      <Link
+        href="/login"
+        className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+      >
+        <ArrowLeft className="h-4 w-4" /> Volver
+      </Link>
+
+      <div className="text-center">
+        <h2 className="text-xl font-bold text-gray-900">
+          Recuperar contrasena
+        </h2>
+        <p className="text-muted-foreground mt-1 text-sm">
+          Te enviaremos un enlace a tu correo
         </p>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {error && (
-          <p className="rounded-md bg-red-50 p-3 text-center text-sm text-red-600">
-            {error}
-          </p>
-        )}
-        {success && (
-          <p className="rounded-md bg-green-50 p-3 text-center text-sm text-green-600">
-            Revisa tu correo para restablecer tu contrasena.
-          </p>
-        )}
-        <form action={resetPassword} className="space-y-3">
-          <div className="space-y-1">
-            <Label htmlFor="email">Correo electronico</Label>
-            <Input id="email" name="email" type="email" placeholder="tu@correo.com" required />
-          </div>
-          <Button className="w-full" type="submit">
-            Enviar enlace
-          </Button>
-        </form>
-        <p className="text-muted-foreground text-center text-xs">
-          <Link href="/login" className="text-primary underline">
-            Volver al inicio de sesion
-          </Link>
-        </p>
-      </CardContent>
-    </Card>
+      </div>
+
+      {error && (
+        <div className="rounded-xl bg-red-50 p-3 text-center text-sm text-red-600">
+          {error}
+        </div>
+      )}
+      {success && (
+        <div className="rounded-xl bg-green-50 p-3 text-center text-sm text-green-600">
+          Revisa tu correo para restablecer tu contrasena.
+        </div>
+      )}
+
+      <form action={resetPassword} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="email">Correo electronico</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="tu@correo.com"
+            required
+            className="h-11 rounded-xl"
+          />
+        </div>
+        <Button
+          className="w-full h-11 rounded-xl bg-blue-600 font-medium hover:bg-blue-700"
+          type="submit"
+        >
+          Enviar enlace
+        </Button>
+      </form>
+    </div>
   );
 }
