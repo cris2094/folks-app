@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Clock, Users, DollarSign, Calendar } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function ZoneDetailPage({
@@ -47,11 +48,24 @@ export default async function ZoneDetailPage({
         <ArrowLeft className="h-4 w-4" /> Volver
       </Link>
 
+      {zone.photo_url && (
+        <div className="relative mb-4 h-48 w-full overflow-hidden rounded-xl">
+          <Image
+            src={zone.photo_url}
+            alt={zone.name}
+            fill
+            className="object-cover"
+          />
+        </div>
+      )}
+
       <header className="mb-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-cyan-50 text-3xl">
-            {zone.icon ?? "🏊"}
-          </div>
+          {!zone.photo_url && (
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-cyan-50 text-3xl">
+              {zone.icon ?? "🏊"}
+            </div>
+          )}
           <div>
             <h1 className="text-xl font-bold">{zone.name}</h1>
             {zone.description && (

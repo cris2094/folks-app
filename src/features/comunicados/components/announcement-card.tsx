@@ -46,7 +46,7 @@ export function AnnouncementCard({
   };
 
   return (
-    <Card className={announcement.is_pinned ? "border-blue-200 bg-blue-50/30" : ""}>
+    <Card className={announcement.is_pinned ? "border-amber-200 bg-amber-50/30" : ""}>
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-50">
@@ -57,7 +57,7 @@ export function AnnouncementCard({
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
                   {announcement.is_pinned && (
-                    <Pin className="h-3 w-3 text-blue-500" />
+                    <Pin className="h-3 w-3 text-amber-500" />
                   )}
                   <p className="truncate text-sm font-semibold">
                     {announcement.title}

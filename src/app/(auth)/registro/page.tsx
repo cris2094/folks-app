@@ -95,7 +95,7 @@ export default async function RegistroPage({
           />
         </div>
         <Button
-          className="w-full h-11 rounded-xl bg-blue-600 font-medium hover:bg-blue-700"
+          className="w-full h-11 rounded-xl bg-amber-600 font-medium hover:bg-amber-700"
           type="submit"
         >
           Crear cuenta
@@ -104,7 +104,7 @@ export default async function RegistroPage({
 
       <p className="text-muted-foreground text-center text-sm">
         Ya tienes cuenta?{" "}
-        <Link href="/login" className="font-medium text-blue-600 hover:underline">
+        <Link href="/login" className="font-medium text-amber-600 hover:underline">
           Inicia sesion
         </Link>
       </p>

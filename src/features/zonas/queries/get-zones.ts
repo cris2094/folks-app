@@ -6,6 +6,7 @@ export interface ZoneListItem {
   name: string;
   description: string | null;
   icon: string | null;
+  photo_url: string | null;
   price_cop: number;
   max_duration_hours: number;
   max_guests: number;
@@ -22,7 +23,7 @@ export async function getZones(): Promise<ZoneListItem[]> {
 
   const { data } = await supabase
     .from("zones")
-    .select("id, name, description, icon, price_cop, max_duration_hours, max_guests, max_reservations_per_month, is_active")
+    .select("id, name, description, icon, photo_url, price_cop, max_duration_hours, max_guests, max_reservations_per_month, is_active")
     .eq("is_active", true)
     .order("name");
 

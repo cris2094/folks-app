@@ -16,8 +16,8 @@ const typeConfig: Record<
   payment: { icon: Receipt, color: "text-green-600", bg: "bg-green-50" },
   announcement: {
     icon: Megaphone,
-    color: "text-blue-600",
-    bg: "bg-blue-50",
+    color: "text-amber-600",
+    bg: "bg-amber-50",
   },
   visitor: { icon: DoorOpen, color: "text-purple-600", bg: "bg-purple-50" },
   reservation: { icon: Waves, color: "text-cyan-600", bg: "bg-cyan-50" },
@@ -55,7 +55,7 @@ export function NotificationCard({
   };
 
   return (
-    <Card className={!read ? "border-l-4 border-l-blue-500 bg-blue-50/20" : ""}>
+    <Card className={!read ? "border-l-4 border-l-amber-500 bg-amber-50/20" : ""}>
       <CardContent className="p-3">
         <div className="flex items-start gap-3">
           <div
@@ -79,7 +79,7 @@ export function NotificationCard({
             </p>
           </div>
           {!read && (
-            <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-500" />
+            <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-amber-500" />
           )}
         </div>
       </CardContent>

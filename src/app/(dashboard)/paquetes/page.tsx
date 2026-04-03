@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Package } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Package, Plus } from "lucide-react";
 import { getMyPackages } from "@/features/paquetes/queries/get-my-packages";
 import { PackageCard } from "@/features/paquetes/components/package-card";
 
@@ -17,6 +18,21 @@ export default async function PaquetesPage() {
           Tus paquetes y correspondencia
         </p>
       </header>
+
+      <Card className="mb-6 border-0 bg-gradient-to-br from-brand-dark to-brand-dark-lighter text-white shadow-lg">
+        <CardContent className="flex flex-col items-center p-5">
+          <p className="text-sm font-semibold">Codigo de Recogida</p>
+          <p className="mt-1 text-xs text-white/70">
+            Muestra este codigo al guarda de seguridad
+          </p>
+          <div className="mt-3 flex h-24 w-24 items-center justify-center rounded-xl bg-white">
+            <p className="text-2xl font-bold text-gray-900">QR</p>
+          </div>
+          <p className="mt-2 font-mono text-sm tracking-wider">
+            {Math.random().toString(36).substring(2, 6).toUpperCase()}-{Math.random().toString(36).substring(2, 6).toUpperCase()}
+          </p>
+        </CardContent>
+      </Card>
 
       <Tabs defaultValue="pendientes">
         <TabsList className="w-full">
@@ -47,6 +63,10 @@ export default async function PaquetesPage() {
               ))}
             </div>
           )}
+          <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border border-amber-600 py-2.5 text-sm font-medium text-amber-600 transition-colors hover:bg-amber-50">
+            <Plus className="h-4 w-4" />
+            Aviso de llegada
+          </button>
         </TabsContent>
         <TabsContent value="entregados" className="mt-4">
           {delivered.length === 0 ? (

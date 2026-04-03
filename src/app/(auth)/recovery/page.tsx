@@ -54,7 +54,7 @@ export default async function RecoveryPage({
           />
         </div>
         <Button
-          className="w-full h-11 rounded-xl bg-blue-600 font-medium hover:bg-blue-700"
+          className="w-full h-11 rounded-xl bg-amber-600 font-medium hover:bg-amber-700"
           type="submit"
         >
           Enviar enlace

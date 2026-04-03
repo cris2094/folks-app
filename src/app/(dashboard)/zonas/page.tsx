@@ -8,7 +8,7 @@ export default async function ZonasPage() {
   return (
     <div className="mx-auto max-w-md p-4">
       <header className="mb-6">
-        <h1 className="text-2xl font-bold">Zonas Sociales</h1>
+        <h1 className="text-2xl font-bold">Zonas Comunes</h1>
         <p className="text-sm text-muted-foreground">
           Reserva espacios comunes
         </p>
@@ -31,6 +31,7 @@ export default async function ZonasPage() {
               id={zone.id}
               name={zone.name}
               icon={zone.icon}
+              photoUrl={zone.photo_url}
               priceCop={Number(zone.price_cop)}
               maxGuests={zone.max_guests}
               maxDurationHours={zone.max_duration_hours}

@@ -37,8 +37,8 @@ export default async function UnitDetailPage({
 
       <header className="mb-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
-            <Building2 className="h-6 w-6 text-blue-600" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50">
+            <Building2 className="h-6 w-6 text-amber-600" />
           </div>
           <div>
             <h1 className="text-xl font-bold">

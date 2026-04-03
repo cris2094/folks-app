@@ -84,7 +84,7 @@ export default async function PqrPage() {
           <div>
             <p className="font-medium text-gray-700">Sin solicitudes</p>
             <p className="text-muted-foreground text-sm">
-              Tus peticiones y reclamos aparaceran aqui
+              Tus peticiones y reclamos aparecerán aqui
             </p>
           </div>
         </div>

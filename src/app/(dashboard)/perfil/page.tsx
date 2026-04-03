@@ -22,8 +22,8 @@ export default async function PerfilPage() {
       <Card className="mb-4">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
-              <User className="h-7 w-7 text-blue-600" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-amber-100">
+              <User className="h-7 w-7 text-amber-600" />
             </div>
             <div>
               <CardTitle className="text-base">

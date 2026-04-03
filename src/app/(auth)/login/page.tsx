@@ -15,7 +15,7 @@ export default async function LoginPage({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-xl font-bold text-gray-900">Iniciar sesion</h2>
+        <h2 className="text-xl font-bold text-gray-900">Iniciar Sesión</h2>
         <p className="text-muted-foreground mt-1 text-sm">
           Ingresa a tu conjunto residencial
         </p>
@@ -78,7 +78,7 @@ export default async function LoginPage({
             <Label htmlFor="password">Contrasena</Label>
             <Link
               href="/recovery"
-              className="text-xs text-blue-600 hover:underline"
+              className="text-xs text-amber-600 hover:underline"
             >
               Olvidaste tu contrasena?
             </Link>
@@ -92,16 +92,16 @@ export default async function LoginPage({
           />
         </div>
         <Button
-          className="w-full h-11 rounded-xl bg-blue-600 font-medium hover:bg-blue-700"
+          className="w-full h-11 rounded-xl bg-amber-600 font-medium hover:bg-amber-700"
           type="submit"
         >
-          Iniciar sesion
+          Ingresar →
         </Button>
       </form>
 
       <p className="text-muted-foreground text-center text-sm">
         No tienes cuenta?{" "}
-        <Link href="/registro" className="font-medium text-blue-600 hover:underline">
+        <Link href="/registro" className="font-medium text-amber-600 hover:underline">
           Registrate
         </Link>
       </p>

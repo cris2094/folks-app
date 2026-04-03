@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Building2 } from "lucide-react";
+import { Calendar, Building2, CheckCircle, Clock } from "lucide-react";
 import type { PaymentWithUnit } from "../queries/get-my-payments";
 
 const statusConfig: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
@@ -37,24 +37,32 @@ export function PaymentList({ payments }: { payments: PaymentWithUnit[] }) {
           <Card key={p.id}>
             <CardContent className="p-3">
               <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm font-medium">
-                    {conceptLabels[p.concept] ?? p.concept}
-                  </p>
-                  {p.description && (
-                    <p className="text-muted-foreground text-xs">{p.description}</p>
+                <div className="flex gap-2">
+                  {p.status === "paid" && (
+                    <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
                   )}
-                  <div className="mt-1 flex gap-3 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      Vence: {p.due_date}
-                    </span>
-                    {unit && (
-                      <span className="flex items-center gap-1">
-                        <Building2 className="h-3 w-3" />
-                        {unit.tower} - {unit.apartment}
-                      </span>
+                  {p.status === "overdue" && (
+                    <Clock className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
+                  )}
+                  <div>
+                    <p className="text-sm font-medium">
+                      {conceptLabels[p.concept] ?? p.concept}
+                    </p>
+                    {p.description && (
+                      <p className="text-muted-foreground text-xs">{p.description}</p>
                     )}
+                    <div className="mt-1 flex gap-3 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        Vence: {p.due_date}
+                      </span>
+                      {unit && (
+                        <span className="flex items-center gap-1">
+                          <Building2 className="h-3 w-3" />
+                          {unit.tower} - {unit.apartment}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="text-right">

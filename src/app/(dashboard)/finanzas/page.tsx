@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Receipt } from "lucide-react";
+import { ArrowLeft, Receipt } from "lucide-react";
+import Link from "next/link";
 import { getMyPayments } from "@/features/pagos/queries/get-my-payments";
 import { getPaymentSummary } from "@/features/pagos/queries/get-payment-summary";
 import { PaymentSummaryCard } from "@/features/pagos/components/payment-summary-card";
@@ -17,14 +18,31 @@ export default async function FinanzasPage() {
   return (
     <div className="mx-auto max-w-md p-4">
       <header className="mb-6">
-        <h1 className="text-2xl font-bold">Mis Recibos</h1>
-        <p className="text-muted-foreground text-sm">
+        <div className="flex items-center gap-2">
+          <Link href="/home" className="text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          <h1 className="text-2xl font-bold">Estado de Cuenta</h1>
+        </div>
+        <p className="text-muted-foreground text-sm mt-1">
           Pagos de administracion y servicios
         </p>
       </header>
 
       <div className="mb-4">
         <PaymentSummaryCard summary={summary} />
+      </div>
+
+      <div className="mb-4">
+        <Link
+          href="/finanzas"
+          className="flex w-full items-center justify-center gap-2 rounded-full bg-amber-600 py-3 font-semibold text-white transition-colors hover:bg-amber-700"
+        >
+          Realizar Pago Seguro ✓
+        </Link>
+        <p className="mt-1 text-center text-xs text-muted-foreground">
+          Pagos procesados por PSE / Tarjeta
+        </p>
       </div>
 
       <Tabs defaultValue="pendientes">
