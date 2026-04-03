@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { User } from "lucide-react";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
 import { logout } from "@/features/auth/actions/logout";
+import Link from "next/link";
 
 export default async function PerfilPage() {
   const data = await getCurrentUser();
@@ -81,6 +82,16 @@ export default async function PerfilPage() {
             Cerrar sesion
           </Button>
         </form>
+      </div>
+
+      <div className="mt-6 flex justify-center gap-4 text-xs text-gray-400">
+        <Link href="/privacidad" className="hover:text-gray-600 hover:underline">
+          Politica de Privacidad
+        </Link>
+        <span>|</span>
+        <Link href="/terminos" className="hover:text-gray-600 hover:underline">
+          Terminos y Condiciones
+        </Link>
       </div>
     </div>
   );
