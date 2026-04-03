@@ -3,6 +3,11 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function getZoneReservations(zoneId: string, date: string) {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return [];
+
   const { data } = await supabase
     .from("reservations")
     .select("id, start_time, end_time, status")

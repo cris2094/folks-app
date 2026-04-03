@@ -107,7 +107,7 @@ export default async function ZoneDetailPage({
       <Separator className="my-4" />
 
       <p className="text-center text-sm text-muted-foreground">
-        Flujo de reserva completo disponible en Sprint 1.2+
+        Formulario de reserva proximamente
       </p>
     </div>
   );

@@ -3,23 +3,23 @@ import { createClient } from "@/lib/supabase/server";
 import { reservationSchema } from "../schemas/zonas";
 import { revalidatePath } from "next/cache";
 
-export async function createReservation(
-  unitId: string,
-  residentId: string,
-  formData: FormData,
-) {
+export async function createReservation(formData: FormData) {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return { error: "No autenticado" };
 
+  // Derive resident from authenticated user — don't trust client input
   const { data: resident } = await supabase
     .from("residents")
-    .select("tenant_id")
-    .eq("id", residentId)
+    .select("id, tenant_id, unit_id")
+    .eq("user_id", user.id)
+    .eq("is_active", true)
+    .limit(1)
     .single();
-  if (!resident) return { error: "Residente no encontrado" };
+
+  if (!resident) return { error: "No tienes un residente vinculado" };
 
   const parsed = reservationSchema.safeParse({
     zone_id: formData.get("zone_id"),
@@ -37,8 +37,8 @@ export async function createReservation(
   const { error } = await supabase.from("reservations").insert({
     ...parsed.data,
     tenant_id: resident.tenant_id,
-    unit_id: unitId,
-    resident_id: residentId,
+    unit_id: resident.unit_id,
+    resident_id: resident.id,
     status: "confirmed",
   });
 

@@ -9,12 +9,26 @@ export async function cancelReservation(reservationId: string) {
   } = await supabase.auth.getUser();
   if (!user) return { error: "No autenticado" };
 
-  const { error } = await supabase
+  // Get user's resident IDs for ownership check
+  const { data: residents } = await supabase
+    .from("residents")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("is_active", true);
+
+  if (!residents?.length) return { error: "Sin residente vinculado" };
+  const residentIds = residents.map((r) => r.id);
+
+  // Only cancel if reservation belongs to user's residents
+  const { data, error } = await supabase
     .from("reservations")
     .update({ status: "cancelled" })
-    .eq("id", reservationId);
+    .eq("id", reservationId)
+    .in("resident_id", residentIds)
+    .select("id")
+    .single();
 
-  if (error) return { error: error.message };
+  if (error || !data) return { error: "Reservacion no encontrada o no autorizado" };
 
   revalidatePath("/zonas");
   return { success: true };

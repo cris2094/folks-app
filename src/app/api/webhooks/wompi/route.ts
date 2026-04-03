@@ -40,7 +40,17 @@ function verifySignature(event: WompiEvent): boolean {
 }
 
 export async function POST(request: Request) {
-  const event: WompiEvent = await request.json();
+  let event: WompiEvent;
+  try {
+    event = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  // Basic payload validation
+  if (!event?.signature?.properties?.length || !event?.signature?.checksum || !event?.timestamp) {
+    return NextResponse.json({ error: "Malformed event" }, { status: 400 });
+  }
 
   // Verify signature
   if (!verifySignature(event)) {
