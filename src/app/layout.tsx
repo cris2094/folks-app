@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Folks",
-  description: "Gestion inteligente de copropiedades",
+  title: "Irawa",
+  description: "Gestión Residencial Inteligente",
+  icons: {
+    icon: "/images/irawa-logo.jpg",
+    apple: "/images/irawa-logo.jpg",
+  },
 };
 
 export default function RootLayout({

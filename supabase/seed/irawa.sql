@@ -78,3 +78,11 @@ INSERT INTO zones (tenant_id, name, description, icon, price_cop, max_duration_h
 
   ('a0000000-0000-0000-0000-000000000001', 'Parque de Mascotas', 'Area cercada para mascotas', '🐕', 0, 2, 4, 30, true,
    '{"lunes":{"open":"06:00","close":"21:00"},"martes":{"open":"06:00","close":"21:00"},"miercoles":{"open":"06:00","close":"21:00"},"jueves":{"open":"06:00","close":"21:00"},"viernes":{"open":"06:00","close":"21:00"},"sabado":{"open":"06:00","close":"21:00"},"domingo":{"open":"06:00","close":"21:00"}}');
+
+-- ============================================
+-- Usuario admin de prueba
+-- Email: admin@irawa.com / Password: 1234
+-- NOTA: Este usuario se crea via Supabase Auth, no directamente en la tabla
+-- Para crearlo, usa la consola de Supabase, el signup de la app,
+-- o la API route temporal: GET /api/seed-admin
+-- ============================================

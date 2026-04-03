@@ -22,11 +22,11 @@ export function PqrTabs({
   return (
     <>
       {/* Tabs pill */}
-      <div className="bg-white px-4 pb-4">
+      <div className="px-4 pb-4">
         <div className="flex rounded-full bg-gray-100 p-1">
           <button
             onClick={() => setActiveTab("en_proceso")}
-            className={`flex-1 rounded-full py-2 text-center text-sm font-medium transition-colors ${
+            className={`flex-1 rounded-full py-2 text-center text-sm font-medium transition-all ${
               activeTab === "en_proceso"
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-500"
@@ -36,7 +36,7 @@ export function PqrTabs({
           </button>
           <button
             onClick={() => setActiveTab("cerradas")}
-            className={`flex-1 rounded-full py-2 text-center text-sm font-medium transition-colors ${
+            className={`flex-1 rounded-full py-2 text-center text-sm font-medium transition-all ${
               activeTab === "cerradas"
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-500"

@@ -3,9 +3,9 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   // TODO: Make dynamic per tenant (fetch tenant branding from DB/cookie)
   return {
-    name: "Folks - Tu Conjunto",
-    short_name: "Folks",
-    description: "Gestion de tu conjunto residencial",
+    name: "Irawa",
+    short_name: "Irawa",
+    description: "Gestión Residencial Inteligente",
     start_url: "/home",
     display: "standalone",
     background_color: "#ffffff",

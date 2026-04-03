@@ -1,22 +1,22 @@
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import {
   Building2,
   Package,
   Receipt,
-  AlertTriangle,
+  AlertCircle,
+  Home,
   Users,
-  Headset,
+  Headphones,
   Scale,
-  CalendarCheck,
+  Calendar,
   Bell,
   Settings,
   ChevronDown,
-  Mic,
-  Star,
+  Sparkles,
   Wallet,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
 import { getUnreadCount } from "@/features/comunicados/queries/get-notifications";
 import { getPaymentSummary } from "@/features/pagos/queries/get-payment-summary";
@@ -47,14 +47,14 @@ const serviceItems: {
   {
     href: "/incidencias",
     label: "Incidencias",
-    icon: AlertTriangle,
+    icon: AlertCircle,
     bgColor: "bg-red-100",
     iconColor: "text-red-600",
   },
   {
     href: "/propiedad",
     label: "Mi Propiedad",
-    icon: Building2,
+    icon: Home,
     bgColor: "bg-blue-100",
     iconColor: "text-blue-600",
   },
@@ -62,13 +62,13 @@ const serviceItems: {
     href: "/vecinos",
     label: "Vecinos",
     icon: Users,
-    bgColor: "bg-sky-100",
-    iconColor: "text-sky-600",
+    bgColor: "bg-cyan-100",
+    iconColor: "text-cyan-600",
   },
   {
     href: "/admin",
     label: "Admin",
-    icon: Headset,
+    icon: Headphones,
     bgColor: "bg-emerald-100",
     iconColor: "text-emerald-600",
   },
@@ -76,13 +76,13 @@ const serviceItems: {
     href: "/legal",
     label: "Temas Legales",
     icon: Scale,
-    bgColor: "bg-gray-200",
+    bgColor: "bg-gray-100",
     iconColor: "text-gray-600",
   },
   {
     href: "/zonas",
     label: "Reservas",
-    icon: CalendarCheck,
+    icon: Calendar,
     bgColor: "bg-amber-100",
     iconColor: "text-amber-600",
   },
@@ -99,37 +99,39 @@ export default async function HomePage() {
   const name = fullName.split(" ")[0] || "Residente";
   const unit = data?.resident?.unit;
 
-  const unitLabel = unit
-    ? `${unit.tower}, ${unit.apartment}`
-    : "Sin unidad";
+  const unitLabel = unit ? `${unit.tower}, ${unit.apartment}` : "Sin unidad";
 
-  const totalPending = paymentSummary.totalPending + paymentSummary.totalOverdue;
+  const totalPending =
+    paymentSummary.totalPending + paymentSummary.totalOverdue;
 
   return (
-    <div className="mx-auto max-w-md">
-      {/* Header blanco */}
-      <div className="bg-white px-4 pb-2 pt-4">
+    <div className="mx-auto max-w-md bg-white">
+      {/* ── Header ── */}
+      <div className="px-4 pb-3 pt-4">
         <div className="flex items-center justify-between">
+          {/* Izquierda: logo + ubicacion */}
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50">
-              <Building2 className="h-4 w-4 text-amber-600" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-50">
+              <Building2 className="h-4 w-4 text-amber-500" />
             </div>
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+              <p className="text-[10px] font-medium uppercase tracking-widest text-gray-400">
                 MI HOGAR
               </p>
               <button className="flex items-center gap-1">
-                <span className="text-sm font-bold text-gray-900">
+                <span className="text-lg font-semibold text-gray-900">
                   {unitLabel}
                 </span>
-                <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
+                <ChevronDown className="h-4 w-4 text-gray-400" />
               </button>
             </div>
           </div>
+
+          {/* Derecha: bell + settings */}
           <div className="flex items-center gap-2">
             <Link href="/comunicados" className="relative">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
-                <Bell className="h-4.5 w-4.5 text-gray-600" />
+                <Bell className="h-[18px] w-[18px] text-gray-600" />
               </div>
               {unreadCount > 0 && (
                 <Badge
@@ -142,40 +144,41 @@ export default async function HomePage() {
             </Link>
             <Link href="/configuracion">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
-                <Settings className="h-4.5 w-4.5 text-gray-600" />
+                <Settings className="h-[18px] w-[18px] text-gray-600" />
               </div>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Card Asistente Folky */}
-      <div className="px-4 pt-3">
-        <div className="rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 p-4 shadow-md">
+      {/* ── Card Asistente Folky ── */}
+      <div className="px-4 pt-1">
+        <div className="rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 p-4 shadow-md">
           <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500 shadow-sm">
-              <Star className="h-5 w-5 text-white" />
+              <Sparkles className="h-5 w-5 text-white" />
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-bold text-white">
                 Hola, {name}!
               </h2>
               <p className="mt-0.5 text-sm leading-snug text-white/90">
-                Soy tu asistente virtual. Te ayudo a revisar tus paquetes o pagos?
+                Soy tu asistente virtual.{"\n"}Te ayudo a revisar tus paquetes o
+                pagos?
               </p>
             </div>
           </div>
           <button className="mt-3 flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm transition-colors hover:bg-gray-50">
-            <Mic className="h-4 w-4 text-amber-600" />
+            <span className="text-base">🎙</span>
             Hablar ahora
           </button>
         </div>
       </div>
 
-      {/* Servicios - Grid 4x2 */}
-      <div className="px-4 pt-6 pb-2">
+      {/* ── Servicios grid 4x2 ── */}
+      <div className="px-4 pb-2 pt-6">
         <p className="mb-3 text-sm font-semibold text-gray-900">Servicios</p>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-4 gap-y-4 gap-x-3">
           {serviceItems.map((item) => (
             <Link
               key={item.href + item.label}
@@ -200,12 +203,12 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Cards horizontales */}
-      <div className="px-4 pt-4 pb-6">
+      {/* ── Cards horizontales ── */}
+      <div className="px-4 pb-6 pt-4">
         <div className="grid grid-cols-2 gap-3">
           {/* Proximo Pago */}
           <Link href="/finanzas" className="block">
-            <div className="rounded-2xl bg-white p-3 ring-1 ring-gray-100 shadow-sm">
+            <div className="rounded-2xl bg-white p-3 shadow-sm ring-1 ring-gray-100">
               <div className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100">
                   <Wallet className="h-4 w-4 text-amber-600" />
@@ -225,7 +228,7 @@ export default async function HomePage() {
 
           {/* Tu Reserva */}
           <Link href="/zonas" className="block">
-            <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-gray-100 shadow-sm">
+            <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
               <div className="h-20 w-full bg-gradient-to-br from-cyan-400 to-blue-400">
                 <div className="flex h-full items-center justify-center">
                   <span className="text-2xl">🏊</span>

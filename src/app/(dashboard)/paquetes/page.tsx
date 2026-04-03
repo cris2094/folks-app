@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft, Package, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 
 interface HistoryItem {
   id: string;
@@ -35,52 +35,57 @@ const historyItems: HistoryItem[] = [
   },
 ];
 
+// Barcode bars pattern
+const barWidths = [
+  3, 1, 2, 1, 3, 1, 1, 2, 3, 1, 2, 1, 1, 3, 1, 2, 1, 3, 2, 1, 1, 2, 3, 1,
+  2, 1, 3, 1, 1, 2, 3, 1, 2, 1, 1, 3, 1, 2, 1, 3, 2, 1, 1, 2, 3, 1,
+];
+const barHeights = [
+  32, 28, 36, 24, 32, 28, 36, 24, 32, 28, 36, 24, 32, 28, 36, 24, 32, 28, 36,
+  24, 32, 28, 36, 24, 32, 28, 36, 24, 32, 28, 36, 24, 32, 28, 36, 24, 32, 28,
+  36, 24, 32, 28, 36, 24, 32, 28,
+];
+
 export default function PaquetesPage() {
   return (
-    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col bg-gray-50">
+    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col bg-white">
       {/* Header */}
-      <header className="bg-white px-4 pb-4 pt-4">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/home"
-            className="flex items-center gap-1 text-sm font-medium text-amber-600"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Inicio
-          </Link>
-          <h1 className="text-lg font-bold text-gray-900">Paqueteria</h1>
-          <div className="w-12" />
-        </div>
+      <header className="px-4 pb-2 pt-4">
+        <Link
+          href="/home"
+          className="inline-flex items-center gap-1 text-sm font-medium text-amber-600"
+        >
+          &lt; Inicio
+        </Link>
+        <h1 className="mt-2 text-3xl font-bold text-gray-900">Paqueteria</h1>
       </header>
 
       {/* Pending notice */}
-      <div className="px-4 pt-4">
+      <div className="px-4 pt-3">
         <p className="text-sm text-gray-600">
           Tienes{" "}
-          <span className="font-semibold text-gray-900">
-            1 paquete pendiente
-          </span>{" "}
-          por recoger en porteria.
+          <span className="font-bold text-gray-900">1 paquete</span>{" "}
+          pendiente por recoger en porteria.
         </p>
       </div>
 
       {/* Main package card */}
       <div className="px-4 pt-4">
-        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 p-5 shadow-lg">
+        <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-5 shadow-lg">
           {/* Header row */}
           <div className="flex items-center justify-between">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-amber-900/60">
-              Entregado por
+            <p className="text-xs font-semibold uppercase tracking-wider text-white/70">
+              ENTREGADO POR
             </p>
-            <span className="rounded-full bg-white/30 px-2.5 py-0.5 text-[11px] font-bold text-white">
+            <span className="rounded-full bg-white px-3 py-0.5 text-xs font-bold text-amber-600">
               HOY
             </span>
           </div>
 
           {/* Carrier info */}
           <div className="mt-2 flex items-center gap-2">
-            <span className="text-lg">{"\uD83D\uDCE6"}</span>
-            <p className="text-lg font-bold text-white">Servientrega</p>
+            <span className="text-2xl">{"\uD83D\uDCE6"}</span>
+            <p className="text-2xl font-bold text-white">Servientrega</p>
           </div>
           <p className="mt-0.5 text-sm text-white/80">Caja Mediana</p>
           <p className="mt-1 text-xs text-white/70">
@@ -88,36 +93,36 @@ export default function PaquetesPage() {
           </p>
 
           {/* Divider */}
-          <div className="my-4 border-t border-white/30" />
+          <div className="my-4 border-t border-white/20" />
 
           {/* Barcode section */}
-          <p className="text-center text-xs font-medium text-white/80">
+          <p className="text-center text-sm text-white/80">
             Muestra este codigo en porteria
           </p>
 
-          {/* Barcode placeholder */}
-          <div className="mx-auto mt-3 flex h-16 w-48 items-center justify-center rounded-lg bg-white/95">
-            <div className="flex items-end gap-[2px]">
-              {[4, 2, 6, 3, 5, 1, 4, 6, 2, 5, 3, 7, 2, 4, 6, 3, 5, 1, 4, 2, 6, 3, 5, 7, 2, 4, 3, 5, 6, 2].map(
-                (h, i) => (
-                  <div
-                    key={i}
-                    className="bg-gray-900"
-                    style={{
-                      width: i % 3 === 0 ? "2px" : "1px",
-                      height: `${h * 5 + 8}px`,
-                    }}
-                  />
-                )
-              )}
+          {/* Barcode visual */}
+          <div className="mx-auto mt-3 flex h-20 w-56 items-center justify-center rounded-xl bg-white p-3">
+            <div className="flex items-end gap-[1px]">
+              {barWidths.map((w, i) => (
+                <div
+                  key={i}
+                  className="bg-gray-900"
+                  style={{
+                    width: `${w}px`,
+                    height: `${barHeights[i]}px`,
+                  }}
+                />
+              ))}
             </div>
           </div>
-          <p className="mt-2 text-center font-mono text-lg font-bold tracking-[0.2em] text-white">
+
+          {/* Code */}
+          <p className="mt-2 text-center font-mono text-lg font-bold tracking-widest text-white">
             A84H-902K
           </p>
 
           {/* Confirm button */}
-          <button className="mt-4 w-full rounded-full border-2 border-white py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10">
+          <button className="mt-4 w-full rounded-full border-2 border-white py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10">
             Confirmar entrega
           </button>
         </div>
@@ -132,17 +137,20 @@ export default function PaquetesPage() {
               key={item.id}
               className="flex items-center gap-3 rounded-xl bg-white p-3 ring-1 ring-gray-100"
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-50">
-                <CheckCircle className="h-5 w-5 text-green-500" />
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100">
+                <CheckCircle className="h-5 w-5 text-gray-400" />
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-gray-900">
-                    {item.carrier}
-                  </p>
-                  <span className="text-[11px] text-gray-400">{item.date}</span>
-                </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-gray-900">
+                  {item.carrier}
+                </p>
                 <p className="text-xs text-gray-500">{item.description}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-gray-400">{item.date}</p>
+                <span className="text-xs font-medium text-green-600">
+                  {item.status}
+                </span>
               </div>
             </div>
           ))}
@@ -151,7 +159,7 @@ export default function PaquetesPage() {
 
       {/* Footer */}
       <div className="pb-24 pt-6 text-center">
-        <p className="text-[10px] font-medium tracking-wider text-gray-400">
+        <p className="text-xs font-medium tracking-wider text-gray-300">
           <span className="mr-1">{"\u2726"}</span>
           POTENCIADO POR FOLKS
         </p>

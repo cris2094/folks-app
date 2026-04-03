@@ -1,4 +1,3 @@
-import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { getMyPayments } from "@/features/pagos/queries/get-my-payments";
 import { getPaymentSummary } from "@/features/pagos/queries/get-payment-summary";
@@ -12,17 +11,16 @@ export default async function FinanzasPage() {
   ]);
 
   return (
-    <div className="mx-auto max-w-md px-4 pb-8 pt-4">
+    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col bg-white px-4 pb-8 pt-4">
       {/* Header */}
       <header className="mb-6">
         <Link
           href="/home"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="inline-flex items-center gap-1 text-sm font-medium text-amber-600"
         >
-          <ArrowLeft className="h-4 w-4" />
-          Inicio
+          &lt; Inicio
         </Link>
-        <h1 className="mt-2 text-2xl font-bold">Recibos</h1>
+        <h1 className="mt-2 text-3xl font-bold text-gray-900">Recibos</h1>
       </header>
 
       {/* Card de pago principal */}
@@ -39,7 +37,8 @@ export default async function FinanzasPage() {
       </section>
 
       {/* Footer */}
-      <p className="mt-8 text-center text-xs text-gray-400">
+      <p className="mt-8 text-center text-xs text-gray-300">
+        <span className="mr-1">{"\u2726"}</span>
         POTENCIADO POR FOLKS
       </p>
     </div>

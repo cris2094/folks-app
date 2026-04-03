@@ -9,7 +9,6 @@ import {
   LayoutGrid,
   Phone,
   Package,
-  AlertTriangle,
   MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
@@ -17,12 +16,12 @@ import { loginWithEmail } from "@/features/auth/actions/login";
 
 export function LoginForm({ error }: { error?: string }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {error && (
-        <div className="rounded-2xl bg-red-50 p-3 text-center text-sm text-red-600">
+        <div className="rounded-xl bg-red-50 p-3 text-center text-sm text-red-600">
           {error}
         </div>
       )}
@@ -35,7 +34,7 @@ export function LoginForm({ error }: { error?: string }) {
           type="text"
           placeholder="Correo electrónico o Documento"
           required
-          className="h-12 w-full rounded-2xl border border-gray-200 bg-white px-4 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-400 focus:ring-2 focus:ring-gray-200"
+          className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
         />
 
         {/* Password input */}
@@ -45,13 +44,13 @@ export function LoginForm({ error }: { error?: string }) {
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
             required
-            className="h-12 w-full rounded-2xl border border-gray-200 bg-white px-4 pr-12 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-400 focus:ring-2 focus:ring-gray-200"
+            className="h-12 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 pr-12 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
           />
           <button
             type="button"
             tabIndex={-1}
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
             aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
           >
             {showPassword ? (
@@ -69,7 +68,7 @@ export function LoginForm({ error }: { error?: string }) {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-amber-600 accent-amber-600"
+              className="h-4 w-4 rounded border-gray-300 text-amber-500 accent-amber-500"
             />
             <span className="text-sm text-gray-600">Recordarme</span>
           </label>
@@ -85,13 +84,13 @@ export function LoginForm({ error }: { error?: string }) {
         <div className="flex items-center gap-3">
           <button
             type="submit"
-            className="flex-1 h-12 rounded-2xl bg-gray-900 text-sm font-semibold text-white transition-colors hover:bg-gray-800 active:bg-black"
+            className="h-12 flex-1 rounded-xl bg-gray-900 text-sm font-semibold text-white transition-colors hover:bg-gray-800 active:bg-black"
           >
             Ingresar
           </button>
           <button
             type="button"
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-500 transition-colors hover:bg-gray-100"
             aria-label="Ingreso biométrico"
           >
             <ScanFace className="h-5 w-5" />
@@ -105,16 +104,16 @@ export function LoginForm({ error }: { error?: string }) {
       {/* Virtual assistant card */}
       <button
         type="button"
-        className="flex w-full items-center gap-3 rounded-2xl bg-green-50/70 p-4 text-left transition-colors hover:bg-green-50"
+        className="flex w-full items-center gap-3 rounded-2xl bg-green-50 p-4 text-left transition-colors hover:bg-green-100/60"
       >
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500">
           <MessageCircle className="h-5 w-5 text-white" />
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-gray-900">
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-bold text-gray-900">
             ¿Necesita ayuda para entrar?
           </p>
-          <p className="text-xs text-gray-500 leading-snug">
+          <p className="text-sm leading-snug text-gray-600">
             Toque aquí para hablar o escribir con el asistente virtual Irawa.
           </p>
         </div>
@@ -123,35 +122,35 @@ export function LoginForm({ error }: { error?: string }) {
 
       {/* Quick access section */}
       <div>
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">
-          Accesos Rápidos
+        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400 mt-6">
+          ACCESOS RAPIDOS
         </p>
         <div className="grid grid-cols-4 gap-3">
           <QuickAccessButton
-            icon={<LayoutGrid className="h-5 w-5 text-blue-600" />}
+            icon={<LayoutGrid className="h-6 w-6 text-white" />}
             label="Pase Visitas"
-            bgColor="bg-blue-100"
+            bgColor="bg-blue-500"
           />
           <QuickAccessButton
-            icon={<Phone className="h-5 w-5 text-green-600" />}
+            icon={<Phone className="h-6 w-6 text-white" />}
             label="Llamar Portería"
-            bgColor="bg-green-100"
+            bgColor="bg-green-500"
           />
           <QuickAccessButton
-            icon={<Package className="h-5 w-5 text-amber-600" />}
+            icon={<Package className="h-6 w-6 text-white" />}
             label="Mis Paquetes"
-            bgColor="bg-amber-100"
+            bgColor="bg-amber-500"
           />
           <QuickAccessButton
-            icon={<AlertTriangle className="h-5 w-5 text-red-600" />}
             label="SOS Ayuda"
-            bgColor="bg-red-100"
+            bgColor="bg-red-500"
+            isSOS
           />
         </div>
       </div>
 
       {/* Footer */}
-      <p className="pt-2 text-center text-xs text-gray-300">
+      <p className="mt-8 text-center text-xs text-gray-300">
         Potenciado por Folks
       </p>
     </div>
@@ -162,22 +161,28 @@ function QuickAccessButton({
   icon,
   label,
   bgColor,
+  isSOS = false,
 }: {
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   label: string;
   bgColor: string;
+  isSOS?: boolean;
 }) {
   return (
     <button
       type="button"
-      className="flex flex-col items-center gap-2 rounded-2xl bg-white border border-gray-100 p-3 transition-colors hover:bg-gray-50"
+      className="flex flex-col items-center gap-1.5"
     >
       <div
-        className={`flex h-10 w-10 items-center justify-center rounded-xl ${bgColor}`}
+        className={`flex h-14 w-14 items-center justify-center rounded-2xl ${bgColor}`}
       >
-        {icon}
+        {isSOS ? (
+          <span className="text-sm font-bold text-white">SOS</span>
+        ) : (
+          icon
+        )}
       </div>
-      <span className="text-[11px] font-medium text-gray-700 leading-tight text-center">
+      <span className="text-[10px] text-gray-500 leading-tight text-center">
         {label}
       </span>
     </button>
