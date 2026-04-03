@@ -14,6 +14,7 @@ import type {
 } from "@/types/database";
 import type { CommitmentWithUnit } from "@/features/asambleas/queries/get-assembly-detail";
 import { AiPipelineStatus } from "./ai-pipeline-status";
+import { GenerateMinutesButton } from "./generate-minutes-button";
 import { CommitmentsBoard } from "./commitments-board";
 
 /** Attendee with joined unit data from the query */
@@ -61,28 +62,27 @@ export function AssemblyDetailTabs({
           <AiPipelineStatus assembly={assembly} />
 
           {assembly.minutes_html ? (
-            <Card size="sm">
-              <CardContent>
-                <div
-                  className="prose prose-sm max-w-none"
-                  dangerouslySetInnerHTML={{
-                    __html: assembly.minutes_html,
-                  }}
-                />
-              </CardContent>
-            </Card>
+            <>
+              <Card size="sm">
+                <CardContent>
+                  <div
+                    className="prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{
+                      __html: assembly.minutes_html,
+                    }}
+                  />
+                </CardContent>
+              </Card>
+              <GenerateMinutesButton
+                assemblyId={assembly.id}
+                hasMinutes
+              />
+            </>
           ) : (
-            <Card size="sm">
-              <CardContent className="flex flex-col items-center gap-2 py-8 text-center">
-                <p className="text-sm text-muted-foreground">
-                  Acta pendiente de generacion
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Sube el audio de la asamblea para generar el acta
-                  automaticamente con IA
-                </p>
-              </CardContent>
-            </Card>
+            <GenerateMinutesButton
+              assemblyId={assembly.id}
+              hasMinutes={false}
+            />
           )}
         </div>
       </TabsContent>
