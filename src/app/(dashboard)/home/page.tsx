@@ -1,177 +1,248 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import {
   Building2,
-  Waves,
   Package,
-  DoorOpen,
   Receipt,
-  Megaphone,
+  AlertTriangle,
+  Users,
+  Headset,
+  Scale,
+  CalendarCheck,
   Bell,
-  Pin,
+  Settings,
+  ChevronDown,
+  Mic,
+  Star,
+  Wallet,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
 import { getUnreadCount } from "@/features/comunicados/queries/get-notifications";
 import { getPaymentSummary } from "@/features/pagos/queries/get-payment-summary";
-import { getAnnouncements } from "@/features/comunicados/queries/get-announcements";
-import { PaymentHeroCard } from "@/features/pagos/components/payment-hero-card";
 
-const quickActions: {
+const serviceItems: {
   href: string;
   label: string;
   icon: LucideIcon;
-  color: string;
+  bgColor: string;
   iconColor: string;
+  notification?: boolean;
 }[] = [
-  { href: "/propiedad", label: "Mi Propiedad", icon: Building2, color: "bg-amber-50", iconColor: "text-amber-600" },
-  { href: "/zonas", label: "Reservar Zona", icon: Waves, color: "bg-cyan-50", iconColor: "text-cyan-600" },
-  { href: "/paquetes", label: "Paquetes", icon: Package, color: "bg-amber-50", iconColor: "text-amber-600" },
-  { href: "/visitantes", label: "Visitantes", icon: DoorOpen, color: "bg-green-50", iconColor: "text-green-600" },
-  { href: "/finanzas", label: "Mis Recibos", icon: Receipt, color: "bg-emerald-50", iconColor: "text-emerald-600" },
-  { href: "/comunicados", label: "Comunicados", icon: Megaphone, color: "bg-purple-50", iconColor: "text-purple-600" },
+  {
+    href: "/finanzas",
+    label: "Recibos",
+    icon: Receipt,
+    bgColor: "bg-amber-100",
+    iconColor: "text-amber-600",
+  },
+  {
+    href: "/paquetes",
+    label: "Paquetes",
+    icon: Package,
+    bgColor: "bg-green-100",
+    iconColor: "text-green-600",
+    notification: true,
+  },
+  {
+    href: "/incidencias",
+    label: "Incidencias",
+    icon: AlertTriangle,
+    bgColor: "bg-red-100",
+    iconColor: "text-red-600",
+  },
+  {
+    href: "/propiedad",
+    label: "Mi Propiedad",
+    icon: Building2,
+    bgColor: "bg-blue-100",
+    iconColor: "text-blue-600",
+  },
+  {
+    href: "/vecinos",
+    label: "Vecinos",
+    icon: Users,
+    bgColor: "bg-sky-100",
+    iconColor: "text-sky-600",
+  },
+  {
+    href: "/admin",
+    label: "Admin",
+    icon: Headset,
+    bgColor: "bg-emerald-100",
+    iconColor: "text-emerald-600",
+  },
+  {
+    href: "/legal",
+    label: "Temas Legales",
+    icon: Scale,
+    bgColor: "bg-gray-200",
+    iconColor: "text-gray-600",
+  },
+  {
+    href: "/zonas",
+    label: "Reservas",
+    icon: CalendarCheck,
+    bgColor: "bg-amber-100",
+    iconColor: "text-amber-600",
+  },
 ];
 
 export default async function HomePage() {
-  const [data, unreadCount, paymentSummary, announcements] = await Promise.all([
+  const [data, unreadCount, paymentSummary] = await Promise.all([
     getCurrentUser(),
     getUnreadCount(),
     getPaymentSummary(),
-    getAnnouncements(),
   ]);
 
   const fullName = data?.resident?.full_name ?? "";
   const name = fullName.split(" ")[0] || "Residente";
-  const tenantName = data?.resident?.tenant?.name ?? "tu conjunto";
   const unit = data?.resident?.unit;
-  const recentAnnouncements = announcements.slice(0, 3);
 
-  // Avatar initials
-  const initials = fullName
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase())
-    .join("");
+  const unitLabel = unit
+    ? `${unit.tower}, ${unit.apartment}`
+    : "Sin unidad";
+
+  const totalPending = paymentSummary.totalPending + paymentSummary.totalOverdue;
 
   return (
     <div className="mx-auto max-w-md">
-      {/* Header con gradiente */}
-      <div className="bg-gradient-to-br from-brand-dark to-brand-dark-lighter px-4 pb-8 pt-6 text-white">
+      {/* Header blanco */}
+      <div className="bg-white px-4 pb-2 pt-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* Avatar */}
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20 text-sm font-bold backdrop-blur-sm">
-              {initials || "U"}
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50">
+              <Building2 className="h-4 w-4 text-amber-600" />
             </div>
             <div>
-              <p className="text-sm text-white/70">Bienvenido a {tenantName}</p>
-              <h1 className="text-2xl font-bold">Hola, {name}</h1>
-              {unit && (
-                <p className="text-xs text-white/50">
-                  {unit.tower} - Apto {unit.apartment}
-                </p>
-              )}
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                MI HOGAR
+              </p>
+              <button className="flex items-center gap-1">
+                <span className="text-sm font-bold text-gray-900">
+                  {unitLabel}
+                </span>
+                <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
+              </button>
             </div>
           </div>
-          <Link href="/comunicados" className="relative">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm">
-              <Bell className="h-5 w-5" />
-            </div>
-            {unreadCount > 0 && (
-              <Badge
-                variant="destructive"
-                className="absolute -right-1 -top-1 h-5 min-w-5 px-1 text-xs"
-              >
-                {unreadCount}
-              </Badge>
-            )}
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/comunicados" className="relative">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
+                <Bell className="h-4.5 w-4.5 text-gray-600" />
+              </div>
+              {unreadCount > 0 && (
+                <Badge
+                  variant="destructive"
+                  className="absolute -right-0.5 -top-0.5 h-4 min-w-4 px-1 text-[10px]"
+                >
+                  {unreadCount}
+                </Badge>
+              )}
+            </Link>
+            <Link href="/configuracion">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
+                <Settings className="h-4.5 w-4.5 text-gray-600" />
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Payment hero */}
-      <div className="px-4 -mt-4">
-        <PaymentHeroCard summary={paymentSummary} />
+      {/* Card Asistente Folky */}
+      <div className="px-4 pt-3">
+        <div className="rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 p-4 shadow-md">
+          <div className="flex items-start gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500 shadow-sm">
+              <Star className="h-5 w-5 text-white" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-lg font-bold text-white">
+                Hola, {name}!
+              </h2>
+              <p className="mt-0.5 text-sm leading-snug text-white/90">
+                Soy tu asistente virtual. Te ayudo a revisar tus paquetes o pagos?
+              </p>
+            </div>
+          </div>
+          <button className="mt-3 flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm transition-colors hover:bg-gray-50">
+            <Mic className="h-4 w-4 text-amber-600" />
+            Hablar ahora
+          </button>
+        </div>
       </div>
 
-      {/* Quick actions grid */}
-      <div className="px-4 pt-6 pb-4">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
-          Acceso rapido
-        </p>
-        <div className="grid grid-cols-3 gap-3">
-          {quickActions.map((action) => (
+      {/* Servicios - Grid 4x2 */}
+      <div className="px-4 pt-6 pb-2">
+        <p className="mb-3 text-sm font-semibold text-gray-900">Servicios</p>
+        <div className="grid grid-cols-4 gap-3">
+          {serviceItems.map((item) => (
             <Link
-              key={action.href + action.label}
-              href={action.href}
-              className="flex flex-col items-center gap-1.5 rounded-xl p-2 transition-all hover:bg-gray-50 hover:shadow-sm"
+              key={item.href + item.label}
+              href={item.href}
+              className="flex flex-col items-center gap-1.5"
             >
-              <div
-                className={`flex h-14 w-14 items-center justify-center rounded-xl shadow-sm ${action.color}`}
-              >
-                <action.icon className={`h-6 w-6 ${action.iconColor}`} />
+              <div className="relative">
+                <div
+                  className={`flex h-14 w-14 items-center justify-center rounded-2xl ${item.bgColor}`}
+                >
+                  <item.icon className={`h-6 w-6 ${item.iconColor}`} />
+                </div>
+                {item.notification && (
+                  <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-white bg-red-500" />
+                )}
               </div>
-              <span className="text-center text-[10px] font-medium leading-tight text-gray-700">
-                {action.label}
+              <span className="text-center text-[10px] font-medium leading-tight text-gray-600">
+                {item.label}
               </span>
             </Link>
           ))}
         </div>
       </div>
 
-      {/* Comunicados */}
-      {recentAnnouncements.length > 0 && (
-        <div className="px-4 pb-6">
-          <div className="mb-3 flex items-center justify-between">
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Comunicados
-            </p>
-            <Link
-              href="/comunicados"
-              className="text-xs font-medium text-brand-dark hover:underline"
-            >
-              Ver todos
-            </Link>
-          </div>
-          <div className="flex flex-col gap-3">
-            {recentAnnouncements.map((a) => (
-              <Link key={a.id} href="/comunicados">
-                <Card
-                  size="sm"
-                  className="transition-shadow hover:shadow-md"
-                >
-                  <CardContent className="flex items-start gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-purple-50">
-                      <Megaphone className="h-4 w-4 text-purple-600" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <p className="truncate text-sm font-medium text-gray-900">
-                          {a.title}
-                        </p>
-                        {a.is_pinned && (
-                          <Badge
-                            variant="secondary"
-                            className="shrink-0 gap-1 text-[10px]"
-                          >
-                            <Pin className="h-2.5 w-2.5" />
-                            Fijado
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="mt-0.5 line-clamp-2 text-xs text-gray-500">
-                        {a.body}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
+      {/* Cards horizontales */}
+      <div className="px-4 pt-4 pb-6">
+        <div className="grid grid-cols-2 gap-3">
+          {/* Proximo Pago */}
+          <Link href="/finanzas" className="block">
+            <div className="rounded-2xl bg-white p-3 ring-1 ring-gray-100 shadow-sm">
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100">
+                  <Wallet className="h-4 w-4 text-amber-600" />
+                </div>
+                <span className="text-xs font-medium text-gray-500">
+                  Proximo Pago
+                </span>
+              </div>
+              <p className="mt-2 text-lg font-bold text-gray-900">
+                ${totalPending.toLocaleString("es-CO")}
+              </p>
+              <p className="mt-0.5 text-[11px] text-gray-400">
+                Vence en 5 dias
+              </p>
+            </div>
+          </Link>
+
+          {/* Tu Reserva */}
+          <Link href="/zonas" className="block">
+            <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-gray-100 shadow-sm">
+              <div className="h-20 w-full bg-gradient-to-br from-cyan-400 to-blue-400">
+                <div className="flex h-full items-center justify-center">
+                  <span className="text-2xl">🏊</span>
+                </div>
+              </div>
+              <div className="p-3">
+                <p className="text-xs font-semibold text-gray-900">
+                  Piscina Sur
+                </p>
+                <p className="mt-0.5 text-[11px] text-gray-400">
+                  Hoy, 3:00 PM
+                </p>
+              </div>
+            </div>
+          </Link>
         </div>
-      )}
+      </div>
     </div>
   );
 }

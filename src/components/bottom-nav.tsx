@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, CreditCard, CalendarDays, Package } from "lucide-react";
+import { Home, CreditCard, ClipboardList, MessageCircle, User } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 const navItems: { href: string; label: string; icon: LucideIcon }[] = [
   { href: "/home", label: "Inicio", icon: Home },
   { href: "/finanzas", label: "Pagos", icon: CreditCard },
-  { href: "/zonas", label: "Reservas", icon: CalendarDays },
-  { href: "/paquetes", label: "Paquetes", icon: Package },
+  { href: "/tramites", label: "Tramites", icon: ClipboardList },
+  { href: "/social", label: "Social", icon: MessageCircle },
+  { href: "/perfil", label: "Perfil", icon: User },
 ];
 
 export function BottomNav() {
@@ -25,19 +26,16 @@ export function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1.5 text-xs transition-colors ${
+              className={`flex flex-col items-center gap-0.5 px-2 py-1.5 text-[10px] transition-colors ${
                 isActive
                   ? "font-semibold text-amber-600"
-                  : "text-gray-500 hover:text-gray-700"
+                  : "text-gray-400 hover:text-gray-600"
               }`}
             >
               <item.icon
                 className={`h-5 w-5 ${isActive ? "text-amber-600" : ""}`}
               />
               {item.label}
-              {isActive && (
-                <span className="absolute -top-0 h-0.5 w-8 rounded-full bg-amber-600" />
-              )}
             </Link>
           );
         })}

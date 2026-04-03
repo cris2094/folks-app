@@ -1,177 +1,299 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Clock, CheckCircle, Star, MessageSquare } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+"use client";
 
-interface TicketItem {
+import { useState } from "react";
+import Link from "next/link";
+import {
+  ChevronLeft,
+  Plus,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Calendar,
+} from "lucide-react";
+
+type TabValue = "en_proceso" | "cerradas";
+
+interface IncidentStep {
+  label: string;
+  completed: boolean;
+  active: boolean;
+}
+
+interface Incident {
   id: string;
-  category: string;
-  subject: string;
-  status: string;
-  rating: number | null;
-  created_at: string;
-  resolved_at: string | null;
+  title: string;
+  description: string;
+  badge: string;
+  badgeColor: string;
+  badgeBg: string;
+  timeAgo: string;
+  tab: TabValue;
+  steps: IncidentStep[];
+  scheduled?: {
+    date: string;
+    time: string;
+  };
 }
 
-const statusConfig: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline"; icon: typeof Clock }> = {
-  open: { label: "Abierto", variant: "destructive", icon: AlertTriangle },
-  in_progress: { label: "En proceso", variant: "secondary", icon: Clock },
-  resolved: { label: "Resuelto", variant: "default", icon: CheckCircle },
-  rated: { label: "Calificado", variant: "outline", icon: Star },
-};
+const incidents: Incident[] = [
+  {
+    id: "1",
+    title: "Fuga de agua en pasillo",
+    description:
+      "Se detecto una fuga de agua en el pasillo del piso 3, cerca del apartamento 302.",
+    badge: "EN REVISION",
+    badgeColor: "text-amber-700",
+    badgeBg: "bg-amber-100",
+    timeAgo: "Hace 2 dias",
+    tab: "en_proceso",
+    steps: [
+      { label: "Reportado", completed: true, active: false },
+      { label: "Revision", completed: false, active: true },
+      { label: "Resuelto", completed: false, active: false },
+    ],
+  },
+  {
+    id: "2",
+    title: "Luz fundida en parqueadero",
+    description:
+      "La luminaria del sector B del parqueadero lleva 3 dias sin funcionar.",
+    badge: "PROGRAMADO",
+    badgeColor: "text-blue-700",
+    badgeBg: "bg-blue-100",
+    timeAgo: "Hace 5 dias",
+    tab: "en_proceso",
+    steps: [
+      { label: "Reportado", completed: true, active: false },
+      { label: "Revision", completed: true, active: false },
+      { label: "Resuelto", completed: false, active: false },
+    ],
+    scheduled: {
+      date: "Jueves, 18 Nov",
+      time: "10:00 AM",
+    },
+  },
+  {
+    id: "3",
+    title: "Ascensor con ruido extraño",
+    description: "El ascensor del bloque A presenta un ruido inusual al subir.",
+    badge: "RESUELTO",
+    badgeColor: "text-green-700",
+    badgeBg: "bg-green-100",
+    timeAgo: "Hace 2 semanas",
+    tab: "cerradas",
+    steps: [
+      { label: "Reportado", completed: true, active: false },
+      { label: "Revision", completed: true, active: false },
+      { label: "Resuelto", completed: true, active: false },
+    ],
+  },
+  {
+    id: "4",
+    title: "Filtracion en techo lobby",
+    description: "Mancha de humedad en el techo del lobby principal.",
+    badge: "RESUELTO",
+    badgeColor: "text-green-700",
+    badgeBg: "bg-green-100",
+    timeAgo: "Hace 3 semanas",
+    tab: "cerradas",
+    steps: [
+      { label: "Reportado", completed: true, active: false },
+      { label: "Revision", completed: true, active: false },
+      { label: "Resuelto", completed: true, active: false },
+    ],
+  },
+  {
+    id: "5",
+    title: "Puerta de acceso danada",
+    description: "La puerta principal del conjunto no cierra correctamente.",
+    badge: "RESUELTO",
+    badgeColor: "text-green-700",
+    badgeBg: "bg-green-100",
+    timeAgo: "Hace 1 mes",
+    tab: "cerradas",
+    steps: [
+      { label: "Reportado", completed: true, active: false },
+      { label: "Revision", completed: true, active: false },
+      { label: "Resuelto", completed: true, active: false },
+    ],
+  },
+  {
+    id: "6",
+    title: "Basura en zona verde",
+    description: "Acumulacion de basura en la zona verde del bloque C.",
+    badge: "RESUELTO",
+    badgeColor: "text-green-700",
+    badgeBg: "bg-green-100",
+    timeAgo: "Hace 1 mes",
+    tab: "cerradas",
+    steps: [
+      { label: "Reportado", completed: true, active: false },
+      { label: "Revision", completed: true, active: false },
+      { label: "Resuelto", completed: true, active: false },
+    ],
+  },
+  {
+    id: "7",
+    title: "Ruido excesivo piso 5",
+    description: "Quejas por ruido en horario nocturno del apartamento 502.",
+    badge: "RESUELTO",
+    badgeColor: "text-green-700",
+    badgeBg: "bg-green-100",
+    timeAgo: "Hace 2 meses",
+    tab: "cerradas",
+    steps: [
+      { label: "Reportado", completed: true, active: false },
+      { label: "Revision", completed: true, active: false },
+      { label: "Resuelto", completed: true, active: false },
+    ],
+  },
+];
 
-const categoryLabels: Record<string, string> = {
-  maintenance: "Mantenimiento",
-  noise: "Ruido",
-  security: "Seguridad",
-  billing: "Facturacion",
-  suggestion: "Sugerencia",
-  other: "Otro",
-};
+export default function PqrPage() {
+  const [activeTab, setActiveTab] = useState<TabValue>("en_proceso");
 
-async function getMyTickets(): Promise<TicketItem[]> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return [];
-
-  const { data: residents } = await supabase
-    .from("residents")
-    .select("id")
-    .eq("user_id", user.id)
-    .eq("is_active", true);
-
-  if (!residents?.length) return [];
-  const residentIds = residents.map((r) => r.id);
-
-  const { data } = await supabase
-    .from("tickets")
-    .select("id, category, subject, status, rating, created_at, resolved_at")
-    .in("resident_id", residentIds)
-    .order("created_at", { ascending: false })
-    .limit(30);
-
-  return (data as TicketItem[]) ?? [];
-}
-
-function formatDate(date: string) {
-  return new Date(date).toLocaleDateString("es-CO", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-export default async function PqrPage() {
-  const tickets = await getMyTickets();
-
-  const active = tickets.filter((t) => t.status === "open" || t.status === "in_progress");
-  const closed = tickets.filter((t) => t.status === "resolved" || t.status === "rated");
+  const enProceso = incidents.filter((i) => i.tab === "en_proceso");
+  const cerradas = incidents.filter((i) => i.tab === "cerradas");
+  const filtered = activeTab === "en_proceso" ? enProceso : cerradas;
 
   return (
-    <div className="mx-auto max-w-md p-4">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold">PQR</h1>
-        <p className="text-muted-foreground text-sm">
-          Peticiones, quejas y reclamos
-        </p>
+    <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col bg-gray-50">
+      {/* Header */}
+      <header className="bg-white px-4 pb-4 pt-4">
+        <div className="flex items-center justify-between">
+          <Link
+            href="/home"
+            className="flex items-center gap-1 text-sm font-medium text-amber-600"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Inicio
+          </Link>
+          <h1 className="text-lg font-bold text-gray-900">Incidencias</h1>
+          <button className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-white shadow-sm">
+            <Plus className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Tabs pill */}
+        <div className="mt-4 flex rounded-full bg-gray-100 p-1">
+          <button
+            onClick={() => setActiveTab("en_proceso")}
+            className={`flex-1 rounded-full py-2 text-center text-sm font-medium transition-colors ${
+              activeTab === "en_proceso"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-500"
+            }`}
+          >
+            En Proceso ({enProceso.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("cerradas")}
+            className={`flex-1 rounded-full py-2 text-center text-sm font-medium transition-colors ${
+              activeTab === "cerradas"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-500"
+            }`}
+          >
+            Cerradas ({cerradas.length})
+          </button>
+        </div>
       </header>
 
-      {tickets.length === 0 ? (
-        <div className="flex flex-col items-center gap-3 py-12 text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-            <MessageSquare className="h-8 w-8 text-gray-400" />
-          </div>
-          <div>
-            <p className="font-medium text-gray-700">Sin solicitudes</p>
-            <p className="text-muted-foreground text-sm">
-              Tus peticiones y reclamos aparecerán aqui
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {active.length > 0 && (
-            <div>
-              <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
-                Activos ({active.length})
-              </h2>
-              <div className="space-y-2">
-                {active.map((ticket) => {
-                  const s = statusConfig[ticket.status] ?? statusConfig.open;
-                  const StatusIcon = s.icon;
-                  return (
-                    <Card key={ticket.id} className="border-l-4 border-l-orange-400">
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-50">
-                            <StatusIcon className="h-5 w-5 text-orange-500" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between gap-2">
-                              <p className="font-medium text-sm">{ticket.subject}</p>
-                              <Badge variant={s.variant} className="shrink-0 text-xs">
-                                {s.label}
-                              </Badge>
-                            </div>
-                            <div className="mt-1 flex gap-2 text-xs text-muted-foreground">
-                              <Badge variant="outline" className="text-xs">
-                                {categoryLabels[ticket.category] ?? ticket.category}
-                              </Badge>
-                              <span>{formatDate(ticket.created_at)}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
+      {/* Incident Cards */}
+      <div className="flex-1 space-y-3 px-4 py-4">
+        {filtered.map((incident) => (
+          <div
+            key={incident.id}
+            className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100"
+          >
+            {/* Badge + Time */}
+            <div className="flex items-center justify-between">
+              <span
+                className={`inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${incident.badgeBg} ${incident.badgeColor}`}
+              >
+                {incident.badge}
+              </span>
+              <span className="text-xs text-gray-400">{incident.timeAgo}</span>
             </div>
-          )}
 
-          {closed.length > 0 && (
-            <div>
-              <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
-                Cerrados ({closed.length})
-              </h2>
-              <div className="space-y-2">
-                {closed.map((ticket) => {
-                  const s = statusConfig[ticket.status] ?? statusConfig.resolved;
-                  const StatusIcon = s.icon;
-                  return (
-                    <Card key={ticket.id}>
-                      <CardContent className="p-3">
-                        <div className="flex items-start gap-3">
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100">
-                            <StatusIcon className="h-4 w-4 text-gray-500" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-muted-foreground">
-                              {ticket.subject}
-                            </p>
-                            <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                              <span>
-                                {categoryLabels[ticket.category] ?? ticket.category}
-                              </span>
-                              <span>{formatDate(ticket.created_at)}</span>
-                              {ticket.rating && (
-                                <span className="flex items-center gap-0.5">
-                                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                  {ticket.rating}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
+            {/* Title + Description */}
+            <h3 className="mt-2.5 text-sm font-bold text-gray-900">
+              {incident.title}
+            </h3>
+            <p className="mt-1 text-xs leading-relaxed text-gray-500">
+              {incident.description}
+            </p>
+
+            {/* Progress steps */}
+            <div className="mt-4">
+              <div className="flex items-center justify-between">
+                {incident.steps.map((step, idx) => (
+                  <div key={step.label} className="flex items-center">
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`flex h-7 w-7 items-center justify-center rounded-full ${
+                          step.completed
+                            ? "bg-amber-500 text-white"
+                            : step.active
+                              ? "border-2 border-amber-500 bg-amber-50 text-amber-600"
+                              : "border-2 border-gray-200 bg-white text-gray-300"
+                        }`}
+                      >
+                        {step.completed ? (
+                          <CheckCircle className="h-4 w-4" />
+                        ) : step.active ? (
+                          <Clock className="h-3.5 w-3.5" />
+                        ) : (
+                          <AlertCircle className="h-3.5 w-3.5" />
+                        )}
+                      </div>
+                      <span
+                        className={`mt-1 text-[10px] font-medium ${
+                          step.completed || step.active
+                            ? "text-gray-700"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {step.label}
+                      </span>
+                    </div>
+                    {idx < incident.steps.length - 1 && (
+                      <div
+                        className={`mx-1 mb-4 h-0.5 w-8 sm:w-12 ${
+                          step.completed ? "bg-amber-500" : "bg-gray-200"
+                        }`}
+                      />
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
-          )}
-        </div>
-      )}
+
+            {/* Scheduled info */}
+            {incident.scheduled && (
+              <div className="mt-3 flex items-center gap-2 rounded-xl bg-blue-50 px-3 py-2.5">
+                <Calendar className="h-4 w-4 text-blue-600" />
+                <div>
+                  <p className="text-xs font-medium text-blue-800">
+                    Reparacion programada para:
+                  </p>
+                  <p className="text-xs font-bold text-blue-900">
+                    {incident.scheduled.date} - {incident.scheduled.time}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Footer */}
+      <div className="pb-24 pt-2 text-center">
+        <p className="text-[10px] font-medium tracking-wider text-gray-400">
+          <span className="mr-1">{"\u2726"}</span>
+          POTENCIADO POR FOLKS
+        </p>
+      </div>
     </div>
   );
 }
