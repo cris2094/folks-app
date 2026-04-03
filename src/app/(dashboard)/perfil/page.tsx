@@ -2,19 +2,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { User } from "lucide-react";
+import { getCurrentUser } from "@/features/auth/queries/get-current-user";
+import { logout } from "@/features/auth/actions/logout";
 
-const usuario = {
-  nombre: "Cristhian Duran",
-  email: "cristhian@ejemplo.com",
-  telefono: "+57 300 123 4567",
-  documento: "CC 1.234.567.890",
-  rol: "Propietario",
-  conjunto: "Conjunto Residencial Los Pinos",
-  unidad: "Apto 301 - Torre A",
-  desde: "Enero 2024",
-};
+export default async function PerfilPage() {
+  const data = await getCurrentUser();
+  const resident = data?.resident as Record<string, unknown> | null;
+  const unit = resident?.unit as { tower: string; apartment: string } | null;
+  const tenant = resident?.tenant as { name: string } | null;
 
-export default function PerfilPage() {
   return (
     <div className="mx-auto max-w-md p-4">
       <header className="mb-6">
@@ -27,21 +24,38 @@ export default function PerfilPage() {
       <Card className="mb-4">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-2xl">
-              👤
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
+              <User className="h-7 w-7 text-blue-600" />
             </div>
             <div>
-              <CardTitle className="text-base">{usuario.nombre}</CardTitle>
-              <Badge variant="secondary">{usuario.rol}</Badge>
+              <CardTitle className="text-base">
+                {(resident?.full_name as string) ?? data?.user?.email ?? "Usuario"}
+              </CardTitle>
+              <Badge variant="secondary">
+                {(resident?.is_owner as boolean) ? "Propietario" : (resident?.role as string) ?? "Residente"}
+              </Badge>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
           <Separator />
           <div className="space-y-2">
-            <InfoRow label="Correo" value={usuario.email} />
-            <InfoRow label="Telefono" value={usuario.telefono} />
-            <InfoRow label="Documento" value={usuario.documento} />
+            <InfoRow
+              label="Correo"
+              value={(resident?.email as string) ?? data?.user?.email ?? "-"}
+            />
+            <InfoRow
+              label="Telefono"
+              value={(resident?.phone as string) ?? "-"}
+            />
+            <InfoRow
+              label="Documento"
+              value={
+                resident
+                  ? `${(resident.document_type as string)?.toUpperCase()} ${resident.document_number as string}`
+                  : "-"
+              }
+            />
           </div>
         </CardContent>
       </Card>
@@ -51,19 +65,22 @@ export default function PerfilPage() {
           <CardTitle className="text-sm">Conjunto Residencial</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          <InfoRow label="Nombre" value={usuario.conjunto} />
-          <InfoRow label="Unidad" value={usuario.unidad} />
-          <InfoRow label="Residente desde" value={usuario.desde} />
+          <InfoRow label="Nombre" value={tenant?.name ?? "-"} />
+          <InfoRow
+            label="Unidad"
+            value={
+              unit ? `${unit.tower} - Apto ${unit.apartment}` : "Sin vincular"
+            }
+          />
         </CardContent>
       </Card>
 
       <div className="space-y-2">
-        <Button variant="outline" className="w-full">
-          Editar perfil
-        </Button>
-        <Button variant="outline" className="w-full text-red-600">
-          Cerrar sesion
-        </Button>
+        <form action={logout}>
+          <Button variant="outline" className="w-full text-red-600" type="submit">
+            Cerrar sesion
+          </Button>
+        </form>
       </div>
     </div>
   );

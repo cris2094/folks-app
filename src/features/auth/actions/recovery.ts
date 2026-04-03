@@ -2,12 +2,21 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { recoverySchema } from "../schemas/auth";
 
 export async function resetPassword(formData: FormData) {
-  const supabase = await createClient();
-  const email = formData.get("email") as string;
+  const parsed = recoverySchema.safeParse({
+    email: formData.get("email"),
+  });
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+  if (!parsed.success) {
+    return redirect(
+      "/recovery?error=" + encodeURIComponent(parsed.error.issues[0].message),
+    );
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
     redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
   });
 

@@ -2,17 +2,27 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { registerSchema } from "../schemas/auth";
 
 export async function registerWithEmail(formData: FormData) {
-  const supabase = await createClient();
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  const fullName = formData.get("fullName") as string;
+  const parsed = registerSchema.safeParse({
+    fullName: formData.get("fullName"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
+  });
 
+  if (!parsed.success) {
+    return redirect(
+      "/registro?error=" + encodeURIComponent(parsed.error.issues[0].message),
+    );
+  }
+
+  const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: { data: { full_name: fullName } },
+    email: parsed.data.email,
+    password: parsed.data.password,
+    options: { data: { full_name: parsed.data.fullName } },
   });
 
   if (error) {

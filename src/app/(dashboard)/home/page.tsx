@@ -11,6 +11,7 @@ import {
   BarChart3,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { getCurrentUser } from "@/features/auth/queries/get-current-user";
 
 const quickActions: {
   href: string;
@@ -28,13 +29,19 @@ const quickActions: {
   { href: "/finanzas", label: "Financiero", icon: BarChart3, color: "bg-orange-50" },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const data = await getCurrentUser();
+  const name = data?.resident?.full_name?.split(" ")[0] ?? "Residente";
+  const tenantName = (data?.resident as Record<string, unknown>)?.tenant
+    ? ((data?.resident as Record<string, unknown>).tenant as { name: string })?.name
+    : "tu conjunto";
+
   return (
     <div className="mx-auto max-w-md p-4">
       <header className="mb-6">
-        <h1 className="text-2xl font-bold">Hola, Residente</h1>
+        <h1 className="text-2xl font-bold">Hola, {name}</h1>
         <p className="text-muted-foreground text-sm">
-          Bienvenido a tu conjunto
+          Bienvenido a {tenantName}
         </p>
       </header>
 

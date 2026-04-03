@@ -2,13 +2,22 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { loginSchema } from "../schemas/auth";
 
 export async function loginWithEmail(formData: FormData) {
-  const supabase = await createClient();
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+  const parsed = loginSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (!parsed.success) {
+    return redirect(
+      "/login?error=" + encodeURIComponent(parsed.error.issues[0].message),
+    );
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword(parsed.data);
 
   if (error) {
     return redirect("/login?error=" + encodeURIComponent(error.message));

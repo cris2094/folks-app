@@ -1,52 +1,46 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { getUserUnits } from "@/features/propiedad/queries/get-user-units";
+import { UnitCard } from "@/features/propiedad/components/unit-card";
+import { Building2 } from "lucide-react";
 
-const propiedades = [
-  {
-    unidad: "Apto 301",
-    torre: "Torre A",
-    tipo: "Apartamento",
-    area: "72 m2",
-    estado: "Al dia",
-  },
-  {
-    unidad: "Parqueadero 15",
-    torre: "Sotano 1",
-    tipo: "Parqueadero",
-    area: "12 m2",
-    estado: "Al dia",
-  },
-];
+export default async function PropiedadPage() {
+  const userUnits = await getUserUnits();
 
-export default function PropiedadPage() {
   return (
     <div className="mx-auto max-w-md p-4">
       <header className="mb-6">
         <h1 className="text-2xl font-bold">Mi Propiedad</h1>
         <p className="text-muted-foreground text-sm">
-          Unidades asociadas a tu cuenta
+          Tus unidades y residentes
         </p>
       </header>
 
-      <div className="space-y-3">
-        {propiedades.map((prop) => (
-          <Card key={prop.unidad}>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base">{prop.unidad}</CardTitle>
-                <Badge variant="secondary">{prop.estado}</Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-muted-foreground grid grid-cols-2 gap-1 text-sm">
-                <span>Torre: {prop.torre}</span>
-                <span>Tipo: {prop.tipo}</span>
-                <span>Area: {prop.area}</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {userUnits.length === 0 ? (
+        <div className="flex flex-col items-center gap-3 py-12 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+            <Building2 className="h-8 w-8 text-gray-400" />
+          </div>
+          <div>
+            <p className="font-medium text-gray-700">Sin propiedades</p>
+            <p className="text-muted-foreground text-sm">
+              Contacta al administrador para vincular tu unidad
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {userUnits.map((item: any) => (
+            <UnitCard
+              key={item.id}
+              unitId={item.unit.id}
+              tower={item.unit.tower}
+              apartment={item.unit.apartment}
+              isOwner={item.is_owner}
+              adminFee={item.unit.admin_fee_cop}
+              parkingSpot={item.unit.parking_spot}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
