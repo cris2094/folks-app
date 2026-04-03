@@ -38,7 +38,7 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/registro") ||
     request.nextUrl.pathname.startsWith("/recovery");
 
-  if (!user && !isAuthRoute && request.nextUrl.pathname !== "/") {
+  if (!user && !isAuthRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
