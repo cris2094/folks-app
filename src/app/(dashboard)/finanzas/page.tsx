@@ -1,93 +1,55 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Receipt } from "lucide-react";
+import { getMyPayments } from "@/features/pagos/queries/get-my-payments";
+import { getPaymentSummary } from "@/features/pagos/queries/get-payment-summary";
+import { PaymentSummaryCard } from "@/features/pagos/components/payment-summary-card";
+import { PaymentList } from "@/features/pagos/components/payment-list";
 
-const recibos = [
-  {
-    mes: "Abril 2026",
-    valor: "$450.000",
-    vencimiento: "15 abr 2026",
-    estado: "Pendiente",
-  },
-  {
-    mes: "Marzo 2026",
-    valor: "$450.000",
-    vencimiento: "15 mar 2026",
-    estado: "Pagado",
-  },
-  {
-    mes: "Febrero 2026",
-    valor: "$430.000",
-    vencimiento: "15 feb 2026",
-    estado: "Pagado",
-  },
-  {
-    mes: "Enero 2026",
-    valor: "$430.000",
-    vencimiento: "15 ene 2026",
-    estado: "Pagado",
-  },
-];
+export default async function FinanzasPage() {
+  const [payments, summary] = await Promise.all([
+    getMyPayments(),
+    getPaymentSummary(),
+  ]);
 
-const estadoColor: Record<string, "default" | "secondary" | "outline"> = {
-  Pendiente: "default",
-  Pagado: "secondary",
-  Vencido: "outline",
-};
+  const pending = payments.filter((p) => p.status === "pending" || p.status === "overdue");
+  const paid = payments.filter((p) => p.status === "paid");
 
-export default function FinanzasPage() {
   return (
     <div className="mx-auto max-w-md p-4">
       <header className="mb-6">
         <h1 className="text-2xl font-bold">Mis Recibos</h1>
         <p className="text-muted-foreground text-sm">
-          Historial de cuotas de administracion
+          Pagos de administracion y servicios
         </p>
       </header>
 
-      <Card className="mb-6">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Resumen</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div>
-              <p className="text-2xl font-bold text-green-600">$0</p>
-              <p className="text-muted-foreground text-xs">Saldo a favor</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-red-600">$450.000</p>
-              <p className="text-muted-foreground text-xs">Pendiente</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="space-y-3">
-        {recibos.map((recibo) => (
-          <Card key={recibo.mes}>
-            <CardContent className="flex items-center justify-between p-4">
-              <div>
-                <p className="text-sm font-medium">{recibo.mes}</p>
-                <p className="text-muted-foreground text-xs">
-                  Vence: {recibo.vencimiento}
-                </p>
-                <p className="mt-1 text-base font-semibold">{recibo.valor}</p>
-              </div>
-              <div className="flex flex-col items-end gap-2">
-                <Badge variant={estadoColor[recibo.estado]}>
-                  {recibo.estado}
-                </Badge>
-                {recibo.estado === "Pendiente" && (
-                  <Button size="sm" variant="outline">
-                    Pagar
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="mb-4">
+        <PaymentSummaryCard summary={summary} />
       </div>
+
+      <Tabs defaultValue="pendientes">
+        <TabsList className="w-full">
+          <TabsTrigger value="pendientes" className="flex-1">
+            Pendientes ({pending.length})
+          </TabsTrigger>
+          <TabsTrigger value="pagados" className="flex-1">
+            Pagados ({paid.length})
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="pendientes" className="mt-4">
+          {pending.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 py-8 text-center">
+              <Receipt className="h-8 w-8 text-gray-400" />
+              <p className="text-muted-foreground text-sm">Sin pagos pendientes</p>
+            </div>
+          ) : (
+            <PaymentList payments={pending} />
+          )}
+        </TabsContent>
+        <TabsContent value="pagados" className="mt-4">
+          <PaymentList payments={paid} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
