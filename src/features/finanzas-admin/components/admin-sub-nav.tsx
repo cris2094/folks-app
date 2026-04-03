@@ -8,6 +8,7 @@ const tabs = [
   { href: "/admin/finanzas", label: "Resumen" },
   { href: "/admin/gastos", label: "Gastos" },
   { href: "/admin/cartera", label: "Cartera" },
+  { href: "/admin/asambleas", label: "Asambleas" },
 ];
 
 export function AdminSubNav() {

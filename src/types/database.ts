@@ -359,3 +359,92 @@ export interface FinancialSummary {
   overdueUnitsCount: number;
   reserveFundBalance: number;
 }
+
+// ============================================
+// Assemblies AI (MOD-013)
+// ============================================
+
+export type AssemblyType = "ordinary" | "extraordinary";
+
+export type AssemblyStatus =
+  | "scheduled"
+  | "in_progress"
+  | "transcribing"
+  | "generating"
+  | "review"
+  | "published";
+
+export type ConvocationType = "first" | "second" | "universal";
+
+export type AttendeeRole = "owner" | "delegate" | "tenant";
+
+export type CommitmentStatus = "pending" | "in_progress" | "completed" | "overdue";
+
+export interface Assembly {
+  id: string;
+  tenant_id: string;
+  title: string;
+  type: AssemblyType;
+  date: string;
+  location: string | null;
+  convocation_type: ConvocationType | null;
+  quorum_required: number | null;
+  quorum_present: number | null;
+  total_units: number | null;
+  units_present: number | null;
+  status: AssemblyStatus;
+  audio_url: string | null;
+  transcript: string | null;
+  minutes_html: string | null;
+  minutes_pdf_url: string | null;
+  president: string | null;
+  secretary: string | null;
+  created_by: string | null;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AssemblyAttendee {
+  id: string;
+  assembly_id: string;
+  tenant_id: string;
+  resident_id: string | null;
+  unit_id: string | null;
+  full_name: string;
+  role: AttendeeRole;
+  coefficient: number | null;
+  signature_url: string | null;
+  checked_in_at: string;
+}
+
+export interface AgendaItem {
+  id: string;
+  assembly_id: string;
+  tenant_id: string;
+  position: number;
+  title: string;
+  description: string | null;
+  discussion_summary: string | null;
+  decision: string | null;
+  vote_for: number;
+  vote_against: number;
+  vote_abstain: number;
+  created_at: string;
+}
+
+export interface Commitment {
+  id: string;
+  assembly_id: string;
+  tenant_id: string;
+  title: string;
+  description: string | null;
+  responsible: string | null;
+  responsible_id: string | null;
+  due_date: string | null;
+  status: CommitmentStatus;
+  progress: number;
+  completed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
