@@ -10,6 +10,19 @@ export type PackageStatus = "received" | "notified" | "delivered";
 
 export type TicketStatus = "open" | "in_progress" | "resolved" | "rated";
 
+export type TicketCategory =
+  | "maintenance"
+  | "noise"
+  | "security"
+  | "billing"
+  | "common_areas"
+  | "parking"
+  | "pets"
+  | "suggestion"
+  | "other";
+
+export type TicketPriority = "low" | "medium" | "high" | "urgent";
+
 export type ReservationStatus =
   | "pending"
   | "confirmed"
@@ -194,12 +207,15 @@ export interface Ticket {
   tenant_id: string;
   unit_id: string;
   resident_id: string;
-  category: "maintenance" | "noise" | "security" | "billing" | "suggestion" | "other";
+  category: TicketCategory;
+  priority: TicketPriority;
   subject: string;
   description: string;
   status: TicketStatus;
   rating: number | null;
+  rated_at: string | null;
   assigned_to: string | null;
+  scheduled_date: string | null;
   created_at: string;
   updated_at: string;
   resolved_at: string | null;
@@ -208,6 +224,7 @@ export interface Ticket {
 export interface TicketMessage {
   id: string;
   ticket_id: string;
+  tenant_id: string;
   sender_id: string;
   message: string;
   attachments: string[];
@@ -226,8 +243,46 @@ export interface Visitor {
   is_favorite: boolean;
   group_name: string | null;
   authorized_until: string | null;
+  expires_at: string | null;
+  photo_url: string | null;
+  vehicle_plate: string | null;
   arrived_at: string | null;
   left_at: string | null;
+  created_at: string;
+}
+
+// ============================================
+// Access Control (MOD-008)
+// ============================================
+
+export type AccessAction = "entry" | "exit" | "denied";
+
+export type AccessMethod = "manual" | "qr" | "app" | "whatsapp";
+
+export type ContactRelationship = "family" | "friend" | "service" | "delivery";
+
+export interface AccessLog {
+  id: string;
+  tenant_id: string;
+  visitor_id: string | null;
+  unit_id: string | null;
+  action: AccessAction;
+  method: AccessMethod;
+  registered_by: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface FrequentContact {
+  id: string;
+  tenant_id: string;
+  resident_id: string;
+  name: string;
+  document: string | null;
+  phone: string | null;
+  relationship: ContactRelationship | null;
+  photo_url: string | null;
+  is_favorite: boolean;
   created_at: string;
 }
 
