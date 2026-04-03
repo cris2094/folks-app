@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { Home, Megaphone, Waves, User } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-const navItems = [
-  { href: "/home", label: "Inicio", icon: "🏠" },
-  { href: "/comunicados", label: "Avisos", icon: "📢" },
-  { href: "/zonas", label: "Zonas", icon: "🏊" },
-  { href: "/perfil", label: "Perfil", icon: "👤" },
+const navItems: { href: string; label: string; icon: LucideIcon }[] = [
+  { href: "/home", label: "Inicio", icon: Home },
+  { href: "/comunicados", label: "Avisos", icon: Megaphone },
+  { href: "/zonas", label: "Zonas", icon: Waves },
+  { href: "/perfil", label: "Perfil", icon: User },
 ];
 
 export default function DashboardLayout({
@@ -23,7 +25,7 @@ export default function DashboardLayout({
               href={item.href}
               className="flex flex-col items-center gap-0.5 px-3 py-1 text-xs text-gray-600 transition-colors hover:text-blue-600"
             >
-              <span className="text-lg">{item.icon}</span>
+              <item.icon className="h-5 w-5" />
               {item.label}
             </Link>
           ))}

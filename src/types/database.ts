@@ -29,6 +29,7 @@ export interface Tenant {
   nit: string | null;
   admin_email: string;
   admin_phone: string | null;
+  total_units: number;
   created_at: string;
   updated_at: string;
 }
@@ -41,6 +42,7 @@ export interface Unit {
   cadastral_number: string | null;
   area_m2: number | null;
   parking_spot: string | null;
+  admin_fee_cop: number;
   created_at: string;
 }
 
@@ -118,6 +120,15 @@ export interface Reservation {
   guests_count: number;
   status: ReservationStatus;
   payment_id: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface ReservationGuest {
+  id: string;
+  reservation_id: string;
+  full_name: string;
+  document_number: string | null;
   created_at: string;
 }
 
@@ -126,6 +137,7 @@ export interface Payment {
   tenant_id: string;
   unit_id: string;
   concept: "admin_fee" | "zone_reservation" | "penalty" | "other";
+  description: string | null;
   amount_cop: number;
   due_date: string;
   paid_at: string | null;
@@ -191,6 +203,15 @@ export interface Ticket {
   created_at: string;
   updated_at: string;
   resolved_at: string | null;
+}
+
+export interface TicketMessage {
+  id: string;
+  ticket_id: string;
+  sender_id: string;
+  message: string;
+  attachments: string[];
+  created_at: string;
 }
 
 export interface Visitor {
