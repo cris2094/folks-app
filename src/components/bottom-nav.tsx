@@ -30,8 +30,11 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-100/50 bg-white/95 backdrop-blur-lg">
-      <div className="mx-auto flex max-w-md items-end justify-around pb-[env(safe-area-inset-bottom)] py-2">
+    <nav
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-100/50 bg-white/95 backdrop-blur-xl"
+      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+    >
+      <div className="mx-auto flex max-w-md items-end justify-around py-2">
         {navItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");

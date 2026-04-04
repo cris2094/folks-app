@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { getMyTickets } from "@/features/pqr/queries/get-my-tickets";
 import { PqrTabs } from "@/features/pqr/components/pqr-tabs";
+import { FadeIn, FadeInUp } from "@/components/motion";
 
 const statusConfig: Record<
   string,
@@ -122,27 +123,30 @@ export default async function PqrPage() {
   return (
     <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col">
       {/* Header */}
-      <header className="px-5 pb-4 pt-14">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/home"
-            className="inline-flex items-center gap-0.5 text-[15px] font-medium text-amber-500"
-          >
-            <ChevronLeft className="h-5 w-5" strokeWidth={2} />
-            Inicio
-          </Link>
-          <h1 className="text-[17px] font-bold tracking-tight text-gray-900">
-            Incidencias
-          </h1>
-          <Link
-            href="/pqr/nueva"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-white shadow-apple-sm"
-          >
-            <Plus className="h-4 w-4" strokeWidth={2} />
-          </Link>
-        </div>
-      </header>
+      <FadeIn>
+        <header className="px-5 pb-4 pt-14">
+          <div className="flex items-center justify-between">
+            <Link
+              href="/home"
+              className="inline-flex items-center gap-0.5 text-[15px] font-medium text-amber-500"
+            >
+              <ChevronLeft className="h-5 w-5" strokeWidth={2} />
+              Inicio
+            </Link>
+            <h1 className="text-[17px] font-bold tracking-tight text-gray-900">
+              Incidencias
+            </h1>
+            <Link
+              href="/pqr/nueva"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-white shadow-apple-sm"
+            >
+              <Plus className="h-4 w-4" strokeWidth={2} />
+            </Link>
+          </div>
+        </header>
+      </FadeIn>
 
+      <FadeInUp delay={0.1}>
       <PqrTabs
         enProcesoCount={enProceso.length}
         cerradasCount={cerradas.length}
@@ -306,6 +310,7 @@ export default async function PqrPage() {
           )
         }
       />
+      </FadeInUp>
 
       {/* Footer */}
       <div className="pb-24 pt-2 text-center">

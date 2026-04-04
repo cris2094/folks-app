@@ -3,6 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Package, Mail, Plus } from "lucide-react";
+import {
+  FadeIn,
+  FadeInUp,
+  ScaleIn,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/motion";
 
 const pendingPackages = [
   {
@@ -69,24 +76,26 @@ export default function PaquetesPage() {
       </header>
 
       {/* QR Code section */}
-      <div className="mx-5 mt-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-apple-sm">
-        <h2 className="text-center text-[15px] font-bold tracking-tight text-gray-900">
-          Codigo de Recogida
-        </h2>
-        <p className="mt-1.5 text-center text-[13px] text-gray-500">
-          Muestra este codigo al guarda de seguridad para recibir tus paquetes.
-        </p>
+      <ScaleIn>
+        <div className="mx-5 mt-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-apple-sm">
+          <h2 className="text-center text-[15px] font-bold tracking-tight text-gray-900">
+            Codigo de Recogida
+          </h2>
+          <p className="mt-1.5 text-center text-[13px] text-gray-500">
+            Muestra este codigo al guarda de seguridad para recibir tus paquetes.
+          </p>
 
-        {/* QR placeholder */}
-        <div className="mx-auto mt-5 flex h-28 w-28 items-center justify-center rounded-xl bg-white">
-          <QRCode />
+          {/* QR placeholder */}
+          <div className="mx-auto mt-5 flex h-28 w-28 items-center justify-center rounded-xl bg-white">
+            <QRCode />
+          </div>
+
+          {/* Code ID */}
+          <p className="mt-3 text-center text-[12px] text-gray-400">
+            ID: <span className="font-mono font-medium">BR2A-CX94</span>
+          </p>
         </div>
-
-        {/* Code ID */}
-        <p className="mt-3 text-center text-[12px] text-gray-400">
-          ID: <span className="font-mono font-medium">BR2A-CX94</span>
-        </p>
-      </div>
+      </ScaleIn>
 
       {/* Pending packages */}
       <div className="mt-6 px-5">
@@ -99,10 +108,10 @@ export default function PaquetesPage() {
           </button>
         </div>
 
-        <div className="mt-3 space-y-3">
+        <StaggerContainer className="mt-3 space-y-3">
           {pendingPackages.map((pkg) => (
+            <StaggerItem key={pkg.id}>
             <div
-              key={pkg.id}
               className="flex items-start gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-apple-sm"
             >
               {/* Icon */}
@@ -138,8 +147,9 @@ export default function PaquetesPage() {
                 </p>
               </div>
             </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
 
       {/* Notify arrival */}

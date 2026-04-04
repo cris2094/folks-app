@@ -129,9 +129,13 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Prevent overscroll bounce on iOS */
+    -webkit-overflow-scrolling: touch;
   }
   html {
     @apply font-sans;
+    /* Disable tap highlight on iOS */
+    -webkit-tap-highlight-color: transparent;
   }
 }
 

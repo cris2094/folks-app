@@ -9,6 +9,7 @@ import {
   ArrowRight,
   Phone,
 } from "lucide-react";
+import { FadeIn } from "@/components/motion";
 
 interface Message {
   id: string;
@@ -99,29 +100,31 @@ export default function FolkyPage() {
   return (
     <div className="mx-auto flex h-[100dvh] max-w-md flex-col bg-white">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
-        <Link
-          href="/home"
-          className="flex items-center gap-0.5 text-[14px] font-medium text-amber-500"
-        >
-          <ChevronLeft className="h-5 w-5" strokeWidth={2} />
-          Inicio
-        </Link>
-        <div className="text-center">
-          <p className="text-[15px] font-bold text-gray-900">
-            Asistente Irawa
-          </p>
-          <div className="flex items-center justify-center gap-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-            <span className="text-[11px] font-medium text-green-500">
-              En linea
-            </span>
+      <FadeIn>
+        <header className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+          <Link
+            href="/home"
+            className="flex items-center gap-0.5 text-[14px] font-medium text-amber-500"
+          >
+            <ChevronLeft className="h-5 w-5" strokeWidth={2} />
+            Inicio
+          </Link>
+          <div className="text-center">
+            <p className="text-[15px] font-bold text-gray-900">
+              Asistente Irawa
+            </p>
+            <div className="flex items-center justify-center gap-1">
+              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+              <span className="text-[11px] font-medium text-green-500">
+                En linea
+              </span>
+            </div>
           </div>
-        </div>
-        <button className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100">
-          <MoreHorizontal className="h-5 w-5 text-gray-400" />
-        </button>
-      </header>
+          <button className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100">
+            <MoreHorizontal className="h-5 w-5 text-gray-400" />
+          </button>
+        </header>
+      </FadeIn>
 
       {/* Chat area */}
       <div

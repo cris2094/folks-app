@@ -2,6 +2,12 @@
 
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import {
+  FadeIn,
+  FadeInUp,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/motion";
 
 const detalles = [
   { concepto: "Cuota Administracion", valor: 420000 },
@@ -48,72 +54,80 @@ export default function FinanzasPage() {
       </header>
 
       {/* Month label */}
-      <p className="text-center text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400">
-        ADMINISTRACION OCTUBRE
-      </p>
+      <FadeIn>
+        <p className="text-center text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400">
+          ADMINISTRACION OCTUBRE
+        </p>
 
-      {/* Amount */}
-      <p className="mt-2 text-center text-[40px] font-bold tracking-tight text-gray-900">
-        {fmt(total)}
-      </p>
+        {/* Amount */}
+        <p className="mt-2 text-center text-[32px] sm:text-[40px] font-bold tracking-tight text-gray-900">
+          {fmt(total)}
+        </p>
 
-      {/* Due date badge */}
-      <div className="mt-2 flex items-center justify-center gap-1.5">
-        <span className="h-2 w-2 rounded-full bg-red-500" />
-        <span className="text-[13px] font-medium text-red-500">
-          Vence en 5 dias
-        </span>
-      </div>
+        {/* Due date badge */}
+        <div className="mt-2 flex items-center justify-center gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-red-500" />
+          <span className="text-[13px] font-medium text-red-500">
+            Vence en 5 dias
+          </span>
+        </div>
+      </FadeIn>
 
       {/* Divider */}
       <div className="my-6 border-t border-gray-100" />
 
       {/* Detalle del cobro */}
-      <h2 className="mb-4 text-[15px] font-semibold tracking-tight text-gray-900">
-        Detalle del cobro
-      </h2>
+      <FadeInUp delay={0.1}>
+        <h2 className="mb-4 text-[15px] font-semibold tracking-tight text-gray-900">
+          Detalle del cobro
+        </h2>
 
-      <div className="space-y-3">
-        {detalles.map((d) => (
-          <div key={d.concepto} className="flex items-center justify-between">
-            <span className="text-[14px] text-gray-600">{d.concepto}</span>
-            <span className="text-[14px] text-gray-600">{fmt(d.valor)}</span>
-          </div>
-        ))}
-        {/* Total row */}
-        <div className="border-t border-gray-100 pt-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[15px] font-bold text-gray-900">Total</span>
-            <span className="text-[15px] font-bold text-gray-900">
-              {fmt(total)}
-            </span>
+        <div className="space-y-3">
+          {detalles.map((d) => (
+            <div key={d.concepto} className="flex items-center justify-between">
+              <span className="text-[14px] text-gray-600">{d.concepto}</span>
+              <span className="text-[14px] text-gray-600">{fmt(d.valor)}</span>
+            </div>
+          ))}
+          {/* Total row */}
+          <div className="border-t border-gray-100 pt-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[15px] font-bold text-gray-900">Total</span>
+              <span className="text-[15px] font-bold text-gray-900">
+                {fmt(total)}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Pay button */}
-      <button className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 py-4 text-[15px] font-semibold text-white shadow-lg shadow-amber-200/50 transition-all active:scale-[0.98]">
-        Realizar Pago Seguro
-        <CheckCircle2 className="h-5 w-5" strokeWidth={2} />
-      </button>
+        {/* Pay button */}
+        <button className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 py-4 text-[15px] font-semibold text-white shadow-lg shadow-amber-200/50 transition-all active:scale-[0.98]">
+          Realizar Pago Seguro
+          <CheckCircle2 className="h-5 w-5" strokeWidth={2} />
+        </button>
 
-      {/* Payment provider note */}
-      <p className="mt-3 text-center text-[11px] text-gray-400">
-        Pagos procesados por PSE / Tarjeta
-      </p>
+        {/* Payment provider note */}
+        <p className="mt-3 text-center text-[11px] text-gray-400">
+          Pagos procesados por PSE / Tarjeta
+        </p>
+      </FadeInUp>
 
       {/* Divider */}
       <div className="my-6 border-t border-gray-100" />
 
       {/* Historial */}
-      <h2 className="mb-4 text-[15px] font-semibold tracking-tight text-gray-900">
-        Historial de Pagos
-      </h2>
+      <FadeIn delay={0.2}>
+        <h2 className="mb-4 text-[15px] font-semibold tracking-tight text-gray-900">
+          Historial de Pagos
+        </h2>
+      </FadeIn>
 
-      <div className="space-y-3">
+      <StaggerContainer className="space-y-3">
         {historial.map((h) => (
-          <div
+          <StaggerItem
             key={h.id}
+          >
+          <div
             className="flex items-center gap-3 rounded-2xl bg-gray-50 p-4"
           >
             {/* Check icon */}
@@ -137,8 +151,9 @@ export default function FinanzasPage() {
               {fmt(h.monto)}
             </p>
           </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
     </div>
   );
 }
