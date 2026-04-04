@@ -35,7 +35,7 @@ export function LoginForm({ error }: { error?: string }) {
 
       {/* Login Card — glassmorphism: translucent white with blur */}
       <FadeInUp delay={0.2}>
-        <div className="mx-auto w-full max-w-sm rounded-3xl bg-white/80 backdrop-blur-xl p-7 shadow-apple-lg">
+        <div className="mx-auto w-full max-w-sm rounded-3xl bg-white/90 backdrop-blur-xl p-7 shadow-2xl">
           <form action={loginWithEmail} className="space-y-4">
             {/* Email field */}
             <div>
@@ -185,7 +185,7 @@ function QuickAccessButton({
   return (
     <button
       type="button"
-      className="flex cursor-pointer flex-col items-center gap-2"
+      className="flex cursor-pointer flex-col items-center gap-2 rounded-2xl bg-white p-3 shadow-sm"
     >
       <div
         className={`flex h-14 w-14 items-center justify-center rounded-2xl ${bgColor}`}

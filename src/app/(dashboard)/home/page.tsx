@@ -7,6 +7,9 @@ import {
   Clock,
   ChevronRight,
   Activity,
+  Wrench,
+  FileText,
+  Users,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
@@ -40,6 +43,21 @@ const quickActions = [
     href: "/salud",
     label: "Salud",
     icon: Activity,
+  },
+  {
+    href: "/mantenimiento",
+    label: "Mantenimiento",
+    icon: Wrench,
+  },
+  {
+    href: "/manuales",
+    label: "Documentos",
+    icon: FileText,
+  },
+  {
+    href: "/vecinos",
+    label: "Vecinos",
+    icon: Users,
   },
 ];
 
@@ -95,7 +113,7 @@ export default async function HomePage() {
   const latestAnnouncement = announcements[0] ?? null;
 
   return (
-    <div className="mx-auto max-w-md bg-white min-h-screen">
+    <div className="mx-auto w-full max-w-md bg-white min-h-screen">
       {/* -- Header -- */}
       <FadeIn>
         <div className="px-5 pb-3 pt-14">

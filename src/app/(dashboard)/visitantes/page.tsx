@@ -31,7 +31,7 @@ export default async function VisitantesPage() {
   const favorites = contacts.filter((c) => c.is_favorite);
 
   return (
-    <div className="mx-auto max-w-md">
+    <div className="mx-auto w-full max-w-md px-4">
       {/* Header Apple-style */}
       <header className="sticky top-0 z-10 bg-[#F5F5F7]/80 backdrop-blur-lg">
         <div className="flex items-center justify-between px-5 pb-2 pt-14">

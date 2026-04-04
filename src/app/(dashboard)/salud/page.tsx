@@ -113,7 +113,7 @@ export default async function SaludPage() {
   const allRecommendations = health.dimensions.flatMap((d) => d.recommendations);
 
   return (
-    <div className="mx-auto max-w-md">
+    <div className="mx-auto w-full max-w-md">
       {/* Header */}
       <header className="px-5 pb-4 pt-14">
         <div className="flex items-center justify-between">

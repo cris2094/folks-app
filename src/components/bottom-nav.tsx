@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   Home,
   Wallet,
-  Camera,
+  Sparkles,
   LayoutGrid,
   User,
 } from "lucide-react";
@@ -21,7 +21,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: "/home", label: "Inicio", icon: Home },
   { href: "/finanzas", label: "Pagos", icon: Wallet },
-  { href: "/folky", label: "", icon: Camera, isFab: true },
+  { href: "/folky", label: "Folky", icon: Sparkles, isFab: true },
   { href: "/zonas", label: "Zonas", icon: LayoutGrid },
   { href: "/perfil", label: "Perfil", icon: User },
 ];
@@ -45,11 +45,14 @@ export function BottomNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="relative -mt-5 flex cursor-pointer flex-col items-center px-3"
+                className="relative -mt-6 flex cursor-pointer flex-col items-center px-3"
               >
-                <div className="flex h-[56px] w-[56px] items-center justify-center rounded-full bg-gradient-to-b from-[#3D3225] to-[#2A2118] shadow-lg shadow-black/25 ring-4 ring-white transition-transform duration-200 active:scale-95">
-                  <Camera className="h-6 w-6 text-white" strokeWidth={1.5} />
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-b from-[#3D3225] to-[#2A2118] shadow-lg shadow-black/25 ring-4 ring-white transition-transform duration-200 active:scale-95">
+                  <Sparkles className="h-6 w-6 text-white" strokeWidth={1.5} />
                 </div>
+                <span className="mt-0.5 text-[10px] font-medium tracking-tight text-gray-400">
+                  {item.label}
+                </span>
               </Link>
             );
           }
@@ -61,7 +64,7 @@ export function BottomNav() {
               className="relative flex cursor-pointer flex-col items-center gap-0.5 px-3 py-1 transition-colors duration-200"
             >
               <item.icon
-                className={`h-5 w-5 transition-colors duration-200 ${
+                className={`h-6 w-6 transition-colors duration-200 ${
                   isActive ? "text-amber-500" : "text-gray-400"
                 }`}
                 strokeWidth={1.5}

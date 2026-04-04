@@ -10,6 +10,8 @@ const tabs = [
   { href: "/admin/cartera", label: "Cartera" },
   { href: "/admin/presupuesto", label: "Presupuesto" },
   { href: "/admin/asambleas", label: "Asambleas" },
+  { href: "/admin/tareas", label: "Tareas" },
+  { href: "/admin/personal", label: "Personal" },
   { href: "/admin/analytics", label: "Analytics" },
 ];
 

@@ -18,7 +18,7 @@ export default function AuthLayout({
           priority
         />
         {/* Light overlay — lets building show through */}
-        <div className="absolute inset-0 bg-white/30" />
+        <div className="absolute inset-0 bg-white/70" />
         {/* Gradient fallback in case image doesn't load */}
         <div
           className="absolute inset-0 -z-10"

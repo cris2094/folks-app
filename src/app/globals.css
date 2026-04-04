@@ -127,15 +127,18 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-    /* Prevent overscroll bounce on iOS */
-    -webkit-overflow-scrolling: touch;
-  }
   html {
     @apply font-sans;
     /* Disable tap highlight on iOS */
     -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* Prevent overscroll bounce on iOS */
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
   }
 }
 
