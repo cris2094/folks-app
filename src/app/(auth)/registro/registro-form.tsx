@@ -72,8 +72,8 @@ export function RegistroForm() {
             className="font-medium text-amber-600 hover:underline"
           >
             Politica de Privacidad
-          </a>{" "}
-          y los{" "}
+          </a>
+          , los{" "}
           <a
             href="/terminos"
             target="_blank"
@@ -81,7 +81,8 @@ export function RegistroForm() {
             className="font-medium text-amber-600 hover:underline"
           >
             Terminos y Condiciones
-          </a>
+          </a>{" "}
+          y autorizo el tratamiento de mis datos personales conforme a la Ley 1581 de 2012
         </label>
       </div>
       <Button

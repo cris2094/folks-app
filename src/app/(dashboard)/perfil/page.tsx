@@ -9,6 +9,9 @@ import {
   Building2,
   Home,
   LogOut,
+  Download,
+  Trash2,
+  Shield,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
@@ -17,6 +20,8 @@ import Link from "next/link";
 import { FadeIn, FadeInUp } from "@/components/motion";
 import { getRoleLabel, getRoleColor } from "@/lib/permissions";
 import type { UserRole } from "@/types/database";
+import { AccountDeletionButton } from "@/features/auth/components/account-deletion-button";
+import { ExportDataButton } from "@/features/auth/components/export-data-button";
 
 export default async function PerfilPage() {
   const data = await getCurrentUser();
@@ -84,7 +89,7 @@ export default async function PerfilPage() {
         </CardContent>
       </Card>
 
-      <Card className="mb-6">
+      <Card className="mb-4">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm text-gray-500">Conjunto Residencial</CardTitle>
         </CardHeader>
@@ -104,6 +109,29 @@ export default async function PerfilPage() {
                 : "Sin vincular"
             }
           />
+        </CardContent>
+      </Card>
+      </FadeInUp>
+
+      {/* Data rights — ARCO */}
+      <FadeInUp delay={0.15}>
+      <Card className="mb-6">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-sm text-gray-500">
+            <Shield className="h-3.5 w-3.5" />
+            Datos Personales
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Separator className="mb-2" />
+          <p className="text-xs text-gray-400">
+            Conforme a la Ley 1581 de 2012, tienes derecho a acceder, rectificar
+            y solicitar la eliminacion de tus datos personales.
+          </p>
+          <div className="flex flex-col gap-2">
+            <ExportDataButton />
+            <AccountDeletionButton />
+          </div>
         </CardContent>
       </Card>
       </FadeInUp>

@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   MoreHorizontal,
   Mic,
+  Send,
   ArrowRight,
   Phone,
 } from "lucide-react";
@@ -15,13 +16,22 @@ interface Message {
   id: string;
   type: "bot" | "user";
   text: string;
+  time: string;
+}
+
+function getTimeString(): string {
+  return new Date().toLocaleTimeString("es-CO", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 const initialMessages: Message[] = [
   {
     id: "1",
     type: "bot",
-    text: "\u00A1Buenos dias, Do\u00F1a Carmen! \uD83D\uDE0A\n\n\u00BFC\u00F3mo amaneci\u00F3 hoy?\nEstoy aqu\u00ED para ayudarle con la administraci\u00F3n.",
+    text: "\u00A1Buenos dias! \uD83D\uDE0A\n\n\u00BFC\u00F3mo puedo ayudarte hoy?\nEstoy aqu\u00ED para lo que necesites.",
+    time: getTimeString(),
   },
 ];
 
@@ -30,10 +40,24 @@ const quickActions = [
   { label: "Hablar con Seguridad", icon: Phone },
 ];
 
+const suggestedQuestions = [
+  "\u00BFCu\u00E1nto debo?",
+  "\u00BFTengo paquetes?",
+  "Reservar BBQ",
+  "Reportar problema",
+];
+
 const botResponses: Record<string, string> = {
-  "\u00BFTengo paquetes?": "\u00A1S\u00ED, Carmen! \u2705",
+  "\u00BFTengo paquetes?":
+    "\u00A1S\u00ED! Tienes 2 paquetes esperandote en porteria. \u00BFQuieres que te muestre los detalles?",
   "Hablar con Seguridad":
     "Conectandote con la porteria... \uD83D\uDCDE\n\nCarlos (Seguridad) esta disponible ahora.",
+  "\u00BFCu\u00E1nto debo?":
+    "Tu saldo pendiente es de $185.000 correspondiente al mes de abril. \u00BFQuieres ir a pagos?",
+  "Reservar BBQ":
+    "El BBQ esta disponible este sabado de 10am a 6pm. \u00BFQuieres que reserve ese horario?",
+  "Reportar problema":
+    "Claro! \u00BFQu\u00E9 tipo de problema quieres reportar?\n\n1. Dano en zonas comunes\n2. Ruido excesivo\n3. Problema de servicios\n4. Otro",
 };
 
 function BotAvatar() {
@@ -52,9 +76,23 @@ function BotAvatar() {
 
 function UserAvatar() {
   return (
-    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-300 overflow-hidden">
-      {/* Placeholder for user photo */}
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-300">
       <div className="h-full w-full rounded-full bg-gradient-to-br from-amber-200 to-amber-400" />
+    </div>
+  );
+}
+
+function TypingIndicator() {
+  return (
+    <div className="flex items-start gap-2.5">
+      <BotAvatar />
+      <div className="rounded-2xl rounded-tl-md bg-gray-100 px-4 py-3">
+        <div className="flex items-center gap-1">
+          <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:0ms]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:150ms]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:300ms]" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -63,13 +101,14 @@ export default function FolkyPage() {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
   const [showQuickActions, setShowQuickActions] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, isTyping]);
 
   function handleSend(text: string) {
     if (!text.trim()) return;
@@ -78,13 +117,16 @@ export default function FolkyPage() {
       id: Date.now().toString(),
       type: "user",
       text: text.trim(),
+      time: getTimeString(),
     };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setShowQuickActions(false);
+    setIsTyping(true);
 
     // Simulate bot response
     setTimeout(() => {
+      setIsTyping(false);
       const response =
         botResponses[text.trim()] ??
         "Entendido! Dejame revisar eso por ti. Un momento por favor...";
@@ -92,9 +134,10 @@ export default function FolkyPage() {
         id: (Date.now() + 1).toString(),
         type: "bot",
         text: response,
+        time: getTimeString(),
       };
       setMessages((prev) => [...prev, botMsg]);
-    }, 800);
+    }, 1000);
   }
 
   return (
@@ -127,13 +170,25 @@ export default function FolkyPage() {
       </FadeIn>
 
       {/* Chat area */}
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto px-4 py-4"
-      >
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4">
+        {/* Suggested questions chips */}
+        {showQuickActions && (
+          <div className="mb-4 flex flex-wrap justify-center gap-2">
+            {suggestedQuestions.map((q) => (
+              <button
+                key={q}
+                onClick={() => handleSend(q)}
+                className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-[12px] font-medium text-amber-700 transition-colors hover:bg-amber-100 active:bg-amber-200"
+              >
+                {q}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Timestamp */}
         <p className="mb-5 text-center text-[12px] text-gray-400">
-          Hoy, 10:42 AM
+          Hoy, {messages[0]?.time ?? ""}
         </p>
 
         <div className="space-y-4">
@@ -142,18 +197,28 @@ export default function FolkyPage() {
               {msg.type === "bot" ? (
                 <div className="flex items-start gap-2.5">
                   <BotAvatar />
-                  <div className="max-w-[80%] rounded-2xl rounded-tl-md bg-gray-100 px-4 py-3">
-                    <p className="text-[14px] leading-relaxed text-gray-800 whitespace-pre-line">
-                      {msg.text}
-                    </p>
+                  <div className="flex max-w-[80%] flex-col">
+                    <div className="rounded-2xl rounded-tl-md bg-gray-100 px-4 py-3">
+                      <p className="whitespace-pre-line text-[14px] leading-relaxed text-gray-800">
+                        {msg.text}
+                      </p>
+                    </div>
+                    <span className="mt-0.5 pl-1 text-[10px] text-gray-400">
+                      {msg.time}
+                    </span>
                   </div>
                 </div>
               ) : (
                 <div className="flex items-end justify-end gap-2">
-                  <div className="max-w-[75%] rounded-2xl rounded-tr-md bg-amber-500 px-4 py-3">
-                    <p className="text-[14px] leading-relaxed text-white">
-                      {msg.text}
-                    </p>
+                  <div className="flex max-w-[75%] flex-col items-end">
+                    <div className="rounded-2xl rounded-tr-md bg-amber-500 px-4 py-3">
+                      <p className="text-[14px] leading-relaxed text-white">
+                        {msg.text}
+                      </p>
+                    </div>
+                    <span className="mt-0.5 pr-1 text-[10px] text-gray-400">
+                      {msg.time}
+                    </span>
                   </div>
                   <UserAvatar />
                 </div>
@@ -161,8 +226,11 @@ export default function FolkyPage() {
             </div>
           ))}
 
+          {/* Typing indicator */}
+          {isTyping && <TypingIndicator />}
+
           {/* Quick action buttons - show only initially */}
-          {showQuickActions && (
+          {showQuickActions && !isTyping && (
             <div className="flex flex-col gap-2 pl-12">
               {quickActions.map((action) => (
                 <button
@@ -198,7 +266,11 @@ export default function FolkyPage() {
             onClick={() => handleSend(input)}
             className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-amber-500 text-white shadow-sm transition-all duration-200 hover:bg-amber-600 active:scale-95"
           >
-            <Mic className="h-5 w-5" />
+            {input.trim() ? (
+              <Send className="h-5 w-5" />
+            ) : (
+              <Mic className="h-5 w-5" />
+            )}
           </button>
         </div>
       </div>
@@ -206,7 +278,13 @@ export default function FolkyPage() {
       {/* Footer */}
       <div className="pb-3 pt-1 text-center">
         <p className="flex items-center justify-center gap-1 text-[10px] font-medium tracking-widest text-gray-300">
-          <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" /></svg>
+          <svg
+            className="h-2.5 w-2.5"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+          </svg>
           POTENCIADO POR FOLKS
         </p>
       </div>

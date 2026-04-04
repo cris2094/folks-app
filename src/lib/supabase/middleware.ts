@@ -33,11 +33,20 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protected routes: redirect to login if not authenticated
-  const isPublicRoute = request.nextUrl.pathname.startsWith("/privacidad") ||
-    request.nextUrl.pathname.startsWith("/terminos");
+  // Public routes: accessible without authentication
+  const isPublicRoute =
+    request.nextUrl.pathname === "/" ||
+    request.nextUrl.pathname.startsWith("/privacidad") ||
+    request.nextUrl.pathname.startsWith("/terminos") ||
+    request.nextUrl.pathname.startsWith("/acerca");
 
   if (isPublicRoute) {
+    // If authenticated user hits landing page, redirect to /home
+    if (user && request.nextUrl.pathname === "/") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/home";
+      return NextResponse.redirect(url);
+    }
     return supabaseResponse;
   }
 

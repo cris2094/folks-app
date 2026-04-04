@@ -44,6 +44,8 @@ export interface GeneralMetrics {
   activeUsers: number;
   adoptionRate: number;
   avgSatisfaction: number;
+  activeUsersLast7Days: number | null;
+  loginsLast7Days: number | null;
 }
 
 export interface AnalyticsDashboard {
@@ -75,6 +77,8 @@ function emptyDashboard(): AnalyticsDashboard {
       activeUsers: 0,
       adoptionRate: 0,
       avgSatisfaction: 0,
+      activeUsersLast7Days: null,
+      loginsLast7Days: null,
     },
   };
 }
@@ -389,6 +393,9 @@ export async function getAnalyticsDashboard(): Promise<AnalyticsDashboard> {
       activeUsers,
       adoptionRate,
       avgSatisfaction,
+      // Mock data — will be replaced with real auth session tracking
+      activeUsersLast7Days: Math.round(activeUsers * 0.6),
+      loginsLast7Days: Math.round(activeUsers * 2.3),
     },
   };
 }

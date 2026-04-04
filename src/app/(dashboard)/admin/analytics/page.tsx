@@ -6,6 +6,7 @@ import {
   TrendingUp,
   ShieldAlert,
   MapPin,
+  Activity,
 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { getAnalyticsDashboard } from "@/features/analytics/queries/get-analytics-dashboard";
@@ -200,6 +201,55 @@ export default async function AnalyticsPage() {
 
       {/* AI Summary */}
       <AiSummaryCard initialSummary={summary} />
+
+      {/* Adoption Metrics */}
+      <section className="rounded-2xl bg-white p-4 ring-1 ring-gray-100">
+        <div className="mb-4 flex items-center gap-2">
+          <Activity className="h-4 w-4 text-blue-500" />
+          <h2 className="text-sm font-semibold text-gray-900">
+            Metricas de Adopcion
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-xl bg-blue-50 p-3 text-center">
+            <p className="text-lg font-bold text-blue-700">
+              {generalMetrics.totalResidents}
+            </p>
+            <p className="text-[10px] text-blue-600">Usuarios Registrados</p>
+          </div>
+          <div className="rounded-xl bg-emerald-50 p-3 text-center">
+            <p className="text-lg font-bold text-emerald-700">
+              {generalMetrics.adoptionRate}%
+            </p>
+            <p className="text-[10px] text-emerald-600">Adopcion App</p>
+          </div>
+          <div className="rounded-xl bg-purple-50 p-3 text-center">
+            <p className="text-lg font-bold text-purple-700">
+              {generalMetrics.activeUsersLast7Days ?? "—"}
+            </p>
+            <p className="text-[10px] text-purple-600">Activos 7 dias</p>
+          </div>
+        </div>
+
+        <div className="mt-4 space-y-2">
+          <div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-500">Tasa de adopcion</span>
+              <span className="font-medium text-gray-700">{generalMetrics.adoptionRate}%</span>
+            </div>
+            <div className="mt-1 h-2 rounded-full bg-gray-100">
+              <div
+                className="h-2 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 transition-all"
+                style={{ width: `${Math.min(generalMetrics.adoptionRate, 100)}%` }}
+              />
+            </div>
+          </div>
+          <p className="text-[10px] text-gray-400">
+            Logins ultimos 7 dias: {generalMetrics.loginsLast7Days ?? "Sin datos"} sesiones
+          </p>
+        </div>
+      </section>
 
       {/* Footer */}
       <div className="pb-4 text-center">
