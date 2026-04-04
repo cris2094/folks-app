@@ -19,7 +19,7 @@ export function BottomNav({ role = "residente" }: BottomNavProps) {
       className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-100/50 bg-white/95 backdrop-blur-xl"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
-      <div className="mx-auto flex max-w-md items-end justify-around py-2">
+      <div className="mx-auto flex max-w-md items-end justify-around py-1">
         {navItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
@@ -32,7 +32,7 @@ export function BottomNav({ role = "residente" }: BottomNavProps) {
                 href={item.href}
                 className="relative -mt-6 flex cursor-pointer flex-col items-center px-3"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-b from-[#3D3225] to-[#2A2118] shadow-lg shadow-black/25 ring-4 ring-white transition-transform duration-200 active:scale-95">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-b from-[#3D3225] to-[#2A2118] shadow-lg shadow-black/25 ring-4 ring-white transition-all duration-200 active:scale-95 hover:shadow-xl">
                   <Sparkles className="h-6 w-6 text-white" strokeWidth={1.5} />
                 </div>
                 <span className="mt-0.5 text-[10px] font-medium tracking-tight text-gray-400">
@@ -46,7 +46,7 @@ export function BottomNav({ role = "residente" }: BottomNavProps) {
             <Link
               key={item.href}
               href={item.href}
-              className="relative flex cursor-pointer flex-col items-center gap-0.5 px-3 py-1 transition-colors duration-200"
+              className="relative flex min-h-[44px] min-w-[44px] cursor-pointer flex-col items-center justify-center gap-0.5 px-2 py-1 transition-colors duration-200"
             >
               <item.icon
                 className={`h-6 w-6 transition-colors duration-200 ${

@@ -1,4 +1,14 @@
 import Image from "next/image";
+import type { Viewport } from "next";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#B8C8D8",
+};
 
 export default function AuthLayout({
   children,
@@ -7,7 +17,7 @@ export default function AuthLayout({
 }) {
   return (
     <div className="relative flex min-h-[100dvh] flex-col">
-      {/* Background image — visible behind translucent card */}
+      {/* Background image -- visible behind translucent card */}
       <div className="fixed inset-0 z-0">
         <Image
           src="/images/building-bg.jpg"
@@ -17,7 +27,7 @@ export default function AuthLayout({
           className="object-cover blur-[2px] scale-[1.02]"
           priority
         />
-        {/* Light overlay — lets building show through */}
+        {/* Light overlay -- lets building show through */}
         <div className="absolute inset-0 bg-white/70" />
         {/* Gradient fallback in case image doesn't load */}
         <div

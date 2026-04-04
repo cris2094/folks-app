@@ -136,6 +136,8 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Ensure notch/status bar area has background color */
+    background-color: #F5F5F7;
     /* Prevent overscroll bounce on iOS */
     -webkit-overflow-scrolling: touch;
     overflow-x: hidden;

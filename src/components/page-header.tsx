@@ -29,13 +29,13 @@ export function PageHeader({
             </div>
           )}
           <div>
-            <h1 className="text-xl font-bold text-gray-900">{title}</h1>
+            <h1 className="text-xl font-bold tracking-tight text-gray-900">{title}</h1>
             {subtitle && (
               <p className="text-muted-foreground text-sm">{subtitle}</p>
             )}
           </div>
         </div>
-        {action && <div>{action}</div>}
+        {action && <div className="min-h-[44px] min-w-[44px] flex items-center justify-center">{action}</div>}
       </div>
     </header>
   );

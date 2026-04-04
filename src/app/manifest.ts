@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Gestión Residencial Inteligente",
     start_url: "/home",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#D4A017",
+    background_color: "#F5F5F7",
+    theme_color: "#F5F5F7",
     orientation: "portrait",
     icons: [
       {

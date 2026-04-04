@@ -53,7 +53,9 @@ export default async function HomePage() {
   ]);
 
   const role = (data?.resident?.role ?? "residente") as UserRole;
-  const quickActions = getHomeActions(role);
+  const allActions = getHomeActions(role);
+  // Show max 4 quick actions on home to match mobile mockup
+  const quickActions = allActions.slice(0, 4);
 
   const fullName = data?.resident?.full_name ?? "";
   const name = fullName.split(" ")[0] || "Residente";
@@ -73,10 +75,10 @@ export default async function HomePage() {
   const latestAnnouncement = announcements[0] ?? null;
 
   return (
-    <div className="mx-auto w-full max-w-md bg-white min-h-screen">
+    <div className="mx-auto w-full max-w-md min-h-screen bg-[#F5F5F7]">
       {/* -- Header -- */}
       <FadeIn>
-        <div className="px-5 pb-3 pt-14">
+        <div className="px-5 pb-3 pt-4 bg-white">
           <div className="flex items-center justify-between">
             {/* Left: Avatar + greeting */}
             <div className="flex items-center gap-3">
@@ -84,7 +86,7 @@ export default async function HomePage() {
                 {initials || "RE"}
               </div>
               <div>
-                <p className="text-[13px] text-gray-500">
+                <p className="text-[13px] text-gray-400">
                   Hola, {name}
                 </p>
                 <p className="text-[15px] font-semibold tracking-tight text-gray-900">
@@ -94,8 +96,11 @@ export default async function HomePage() {
             </div>
 
             {/* Right: Notifications */}
-            <Link href="/comunicados" className="relative">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+            <Link
+              href="/comunicados"
+              className="relative flex h-11 w-11 items-center justify-center"
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 transition-colors hover:bg-gray-200 active:bg-gray-300">
                 <Bell className="h-5 w-5 text-gray-600" strokeWidth={1.5} />
               </div>
               {unreadCount > 0 && (
@@ -113,8 +118,8 @@ export default async function HomePage() {
 
       {/* -- Payment Card (Dark gradient) -- */}
       <FadeInUp delay={0.1}>
-        <div className="px-5 pt-3">
-          <div className="rounded-2xl bg-gradient-to-br from-[#2D2D2D] to-[#1A1A1A] p-5">
+        <div className="px-5 pt-4 bg-white pb-5">
+          <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-[#2D2D2D] to-[#1A1A1A] p-5 shadow-apple">
             <div className="flex items-end justify-between">
               <div>
                 <p className="text-xs text-white/60">Total a pagar</p>
@@ -130,7 +135,7 @@ export default async function HomePage() {
               </div>
               <Link
                 href="/finanzas"
-                className="rounded-full bg-amber-500 px-5 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-amber-600 active:bg-amber-700"
+                className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-amber-600 active:bg-amber-700 active:scale-95"
               >
                 Pagar
               </Link>
@@ -140,20 +145,20 @@ export default async function HomePage() {
       </FadeInUp>
 
       {/* -- Quick Actions -- */}
-      <div className="px-5 pt-7">
+      <div className="px-5 pt-6">
         <FadeIn delay={0.15}>
           <p className="mb-4 text-[15px] font-semibold tracking-tight text-gray-900">
             Acciones rapidas
           </p>
         </FadeIn>
-        <StaggerContainer className="grid grid-cols-4 gap-4">
+        <StaggerContainer className="grid grid-cols-4 gap-3">
           {quickActions.map((action) => (
             <StaggerItem key={action.href}>
               <Link
                 href={action.href}
-                className="flex flex-col items-center gap-2"
+                className="flex flex-col items-center gap-2 group"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white border border-gray-100 shadow-apple-sm">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white border border-gray-100 shadow-apple-sm transition-all duration-200 group-hover:shadow-apple group-active:scale-95">
                   <action.icon
                     className="h-6 w-6 text-gray-600"
                     strokeWidth={1.5}
@@ -177,7 +182,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/comunicados"
-              className="flex items-center gap-0.5 text-[13px] font-medium text-amber-600"
+              className="flex min-h-[44px] items-center gap-0.5 text-[13px] font-medium text-amber-600 hover:text-amber-700 transition-colors"
             >
               Ver todos
               <ChevronRight className="h-3.5 w-3.5" strokeWidth={2} />
@@ -185,8 +190,8 @@ export default async function HomePage() {
           </div>
 
           {latestAnnouncement ? (
-            <Link href={`/comunicados`} className="block">
-              <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-apple-sm">
+            <Link href={`/comunicados`} className="block group">
+              <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-apple-sm transition-shadow duration-200 group-hover:shadow-apple">
                 {/* Image placeholder - uses attachments or gradient fallback */}
                 <div className="relative h-40 w-full bg-gradient-to-br from-emerald-400 to-teal-500">
                   {latestAnnouncement.attachments?.[0] ? (
@@ -197,7 +202,7 @@ export default async function HomePage() {
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center">
-                      <span className="text-4xl opacity-50">🏊</span>
+                      <span className="text-4xl opacity-50" aria-hidden="true">&#127946;</span>
                     </div>
                   )}
                   {/* Category badge */}
