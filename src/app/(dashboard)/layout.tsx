@@ -1,10 +1,15 @@
 import { BottomNav } from "@/components/bottom-nav";
+import { getCurrentUser } from "@/features/auth/queries/get-current-user";
+import type { UserRole } from "@/types/database";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const data = await getCurrentUser();
+  const role = (data?.resident?.role ?? "residente") as UserRole;
+
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <main
@@ -13,7 +18,7 @@ export default function DashboardLayout({
       >
         {children}
       </main>
-      <BottomNav />
+      <BottomNav role={role} />
     </div>
   );
 }

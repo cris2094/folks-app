@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import type { UserRole } from "@/types/database";
+import { getAdminAllowedPaths } from "@/lib/permissions";
 
-const tabs = [
+const allTabs = [
   { href: "/admin/finanzas", label: "Resumen" },
   { href: "/admin/gastos", label: "Gastos" },
   { href: "/admin/cartera", label: "Cartera" },
@@ -15,8 +17,19 @@ const tabs = [
   { href: "/admin/analytics", label: "Analytics" },
 ];
 
-export function AdminSubNav() {
+interface AdminSubNavProps {
+  role: UserRole;
+}
+
+export function AdminSubNav({ role }: AdminSubNavProps) {
   const pathname = usePathname();
+  const allowedPaths = getAdminAllowedPaths(role);
+
+  // null means all tabs are allowed (super_admin / admin)
+  const tabs =
+    allowedPaths === null
+      ? allTabs
+      : allTabs.filter((tab) => allowedPaths.includes(tab.href));
 
   return (
     <nav className="flex gap-1 overflow-x-auto border-b bg-white px-4 py-2">

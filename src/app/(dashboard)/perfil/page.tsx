@@ -15,11 +15,14 @@ import { getCurrentUser } from "@/features/auth/queries/get-current-user";
 import { logout } from "@/features/auth/actions/logout";
 import Link from "next/link";
 import { FadeIn, FadeInUp } from "@/components/motion";
+import { getRoleLabel, getRoleColor } from "@/lib/permissions";
+import type { UserRole } from "@/types/database";
 
 export default async function PerfilPage() {
   const data = await getCurrentUser();
   const resident = data?.resident;
 
+  const role = (resident?.role ?? "residente") as UserRole;
   const fullName = resident?.full_name ?? data?.user?.email ?? "Usuario";
 
   // Avatar initials
@@ -40,9 +43,14 @@ export default async function PerfilPage() {
         </div>
         <div className="text-center">
           <h1 className="text-xl font-bold text-gray-900">{fullName}</h1>
-          <Badge variant="secondary" className="mt-1">
-            {resident?.is_owner ? "Propietario" : resident?.role ?? "Residente"}
-          </Badge>
+          <span className={`mt-1 inline-block rounded-full px-3 py-0.5 text-xs font-semibold ${getRoleColor(role)}`}>
+            {getRoleLabel(role)}
+          </span>
+          {resident?.is_owner && (
+            <Badge variant="secondary" className="ml-1.5 mt-1">
+              Propietario
+            </Badge>
+          )}
         </div>
       </div>
       </FadeIn>

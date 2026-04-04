@@ -1,15 +1,8 @@
 import Link from "next/link";
 import {
   Bell,
-  CalendarCheck,
-  UserPlus,
-  MessageSquareWarning,
   Clock,
   ChevronRight,
-  Activity,
-  Wrench,
-  FileText,
-  Users,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
@@ -22,44 +15,8 @@ import {
   StaggerContainer,
   StaggerItem,
 } from "@/components/motion";
-
-const quickActions = [
-  {
-    href: "/zonas",
-    label: "Reservar",
-    icon: CalendarCheck,
-  },
-  {
-    href: "/visitantes",
-    label: "Visitantes",
-    icon: UserPlus,
-  },
-  {
-    href: "/pqr",
-    label: "PQR",
-    icon: MessageSquareWarning,
-  },
-  {
-    href: "/salud",
-    label: "Salud",
-    icon: Activity,
-  },
-  {
-    href: "/mantenimiento",
-    label: "Mantenimiento",
-    icon: Wrench,
-  },
-  {
-    href: "/manuales",
-    label: "Documentos",
-    icon: FileText,
-  },
-  {
-    href: "/vecinos",
-    label: "Vecinos",
-    icon: Users,
-  },
-];
+import { getHomeActions } from "@/lib/permissions";
+import type { UserRole } from "@/types/database";
 
 function formatCurrency(amount: number) {
   return `$${amount.toLocaleString("es-CO")}`;
@@ -94,6 +51,9 @@ export default async function HomePage() {
     getPaymentSummary(),
     getAnnouncements(),
   ]);
+
+  const role = (data?.resident?.role ?? "residente") as UserRole;
+  const quickActions = getHomeActions(role);
 
   const fullName = data?.resident?.full_name ?? "";
   const name = fullName.split(" ")[0] || "Residente";

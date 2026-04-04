@@ -2,32 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Home,
-  Wallet,
-  Sparkles,
-  LayoutGrid,
-  User,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import type { UserRole } from "@/types/database";
+import { getBottomNavItems } from "@/lib/permissions";
 
-interface NavItem {
-  href: string;
-  label: string;
-  icon: LucideIcon;
-  isFab?: boolean;
+interface BottomNavProps {
+  role?: UserRole;
 }
 
-const navItems: NavItem[] = [
-  { href: "/home", label: "Inicio", icon: Home },
-  { href: "/finanzas", label: "Pagos", icon: Wallet },
-  { href: "/folky", label: "Folky", icon: Sparkles, isFab: true },
-  { href: "/zonas", label: "Zonas", icon: LayoutGrid },
-  { href: "/perfil", label: "Perfil", icon: User },
-];
-
-export function BottomNav() {
+export function BottomNav({ role = "residente" }: BottomNavProps) {
   const pathname = usePathname();
+  const navItems = getBottomNavItems(role);
 
   return (
     <nav
@@ -39,7 +24,7 @@ export function BottomNav() {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
 
-          // FAB central (camera/assistant button)
+          // FAB central (Folky button)
           if (item.isFab) {
             return (
               <Link

@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
 import { AdminSubNav } from "@/features/finanzas-admin/components/admin-sub-nav";
+import type { UserRole } from "@/types/database";
+
+const ADMIN_ROLES: UserRole[] = ["super_admin", "admin", "consejo"];
 
 export default async function AdminLayout({
   children,
@@ -8,11 +11,9 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const data = await getCurrentUser();
+  const role = (data?.resident?.role ?? "residente") as UserRole;
 
-  if (
-    !data?.resident ||
-    !["admin", "super_admin"].includes(data.resident.role)
-  ) {
+  if (!data?.resident || !ADMIN_ROLES.includes(role)) {
     redirect("/home");
   }
 
@@ -24,8 +25,8 @@ export default async function AdminLayout({
         <p className="text-sm text-white/70">Gestion financiera del conjunto</p>
       </div>
 
-      {/* Sub-nav horizontal */}
-      <AdminSubNav />
+      {/* Sub-nav horizontal - filtered by role */}
+      <AdminSubNav role={role} />
 
       {/* Content */}
       <div className="px-4 pb-6 pt-4">{children}</div>
