@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 import {
   ChevronLeft,
   MoreHorizontal,
@@ -12,12 +14,21 @@ import {
 } from "lucide-react";
 import { FadeIn } from "@/components/motion";
 
-interface Message {
-  id: string;
-  type: "bot" | "user";
-  text: string;
-  time: string;
-}
+const transport = new DefaultChatTransport({
+  api: "/api/ai/chat",
+});
+
+const quickActions = [
+  { label: "Tengo paquetes?", icon: ArrowRight },
+  { label: "Hablar con Seguridad", icon: Phone },
+];
+
+const suggestedQuestions = [
+  "Cuanto debo?",
+  "Tengo paquetes?",
+  "Reservar BBQ",
+  "Reportar problema",
+];
 
 function getTimeString(): string {
   return new Date().toLocaleTimeString("es-CO", {
@@ -25,40 +36,6 @@ function getTimeString(): string {
     minute: "2-digit",
   });
 }
-
-const initialMessages: Message[] = [
-  {
-    id: "1",
-    type: "bot",
-    text: "\u00A1Buenos dias! \uD83D\uDE0A\n\n\u00BFC\u00F3mo puedo ayudarte hoy?\nEstoy aqu\u00ED para lo que necesites.",
-    time: getTimeString(),
-  },
-];
-
-const quickActions = [
-  { label: "\u00BFTengo paquetes?", icon: ArrowRight },
-  { label: "Hablar con Seguridad", icon: Phone },
-];
-
-const suggestedQuestions = [
-  "\u00BFCu\u00E1nto debo?",
-  "\u00BFTengo paquetes?",
-  "Reservar BBQ",
-  "Reportar problema",
-];
-
-const botResponses: Record<string, string> = {
-  "\u00BFTengo paquetes?":
-    "\u00A1S\u00ED! Tienes 2 paquetes esperandote en porteria. \u00BFQuieres que te muestre los detalles?",
-  "Hablar con Seguridad":
-    "Conectandote con la porteria... \uD83D\uDCDE\n\nCarlos (Seguridad) esta disponible ahora.",
-  "\u00BFCu\u00E1nto debo?":
-    "Tu saldo pendiente es de $185.000 correspondiente al mes de abril. \u00BFQuieres ir a pagos?",
-  "Reservar BBQ":
-    "El BBQ esta disponible este sabado de 10am a 6pm. \u00BFQuieres que reserve ese horario?",
-  "Reportar problema":
-    "Claro! \u00BFQu\u00E9 tipo de problema quieres reportar?\n\n1. Dano en zonas comunes\n2. Ruido excesivo\n3. Problema de servicios\n4. Otro",
-};
 
 function BotAvatar() {
   return (
@@ -97,48 +74,39 @@ function TypingIndicator() {
   );
 }
 
+/** Extract plain text from a UIMessage's parts array */
+function getMessageText(parts: Array<{ type: string; text?: string }>): string {
+  return parts
+    .filter((p) => p.type === "text" && p.text)
+    .map((p) => p.text)
+    .join("");
+}
+
 export default function FolkyPage() {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
   const [showQuickActions, setShowQuickActions] = useState(true);
-  const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const startTime = useRef(getTimeString());
+
+  const { messages, sendMessage, status } = useChat({ transport });
+
+  const isLoading = status === "submitted" || status === "streaming";
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isTyping]);
+  }, [messages, isLoading]);
 
   function handleSend(text: string) {
     if (!text.trim()) return;
-
-    const userMsg: Message = {
-      id: Date.now().toString(),
-      type: "user",
-      text: text.trim(),
-      time: getTimeString(),
-    };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
     setShowQuickActions(false);
-    setIsTyping(true);
-
-    // Simulate bot response
-    setTimeout(() => {
-      setIsTyping(false);
-      const response =
-        botResponses[text.trim()] ??
-        "Entendido! Dejame revisar eso por ti. Un momento por favor...";
-      const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        type: "bot",
-        text: response,
-        time: getTimeString(),
-      };
-      setMessages((prev) => [...prev, botMsg]);
-    }, 1000);
+    setInput("");
+    sendMessage({ text: text.trim() });
   }
+
+  // Check if we have any user messages yet (for initial greeting)
+  const hasUserMessages = messages.some((m) => m.role === "user");
 
   return (
     <div className="mx-auto flex h-[100dvh] max-w-md flex-col bg-white">
@@ -188,49 +156,67 @@ export default function FolkyPage() {
 
         {/* Timestamp */}
         <p className="mb-5 text-center text-[12px] text-gray-400">
-          Hoy, {messages[0]?.time ?? ""}
+          Hoy, {startTime.current}
         </p>
+
+        {/* Welcome message if no messages yet */}
+        {!hasUserMessages && !isLoading && (
+          <div className="flex items-start gap-2.5">
+            <BotAvatar />
+            <div className="flex max-w-[80%] flex-col">
+              <div className="rounded-2xl rounded-tl-md bg-gray-100 px-4 py-3">
+                <p className="whitespace-pre-line text-[14px] leading-relaxed text-gray-800">
+                  Buenos dias!{"\n\n"}Como puedo ayudarte hoy?{"\n"}Estoy aqui
+                  para lo que necesites.
+                </p>
+              </div>
+              <span className="mt-0.5 pl-1 text-[10px] text-gray-400">
+                {startTime.current}
+              </span>
+            </div>
+          </div>
+        )}
 
         <div className="space-y-4">
           {messages.map((msg) => (
             <div key={msg.id}>
-              {msg.type === "bot" ? (
+              {msg.role === "assistant" ? (
                 <div className="flex items-start gap-2.5">
                   <BotAvatar />
                   <div className="flex max-w-[80%] flex-col">
                     <div className="rounded-2xl rounded-tl-md bg-gray-100 px-4 py-3">
                       <p className="whitespace-pre-line text-[14px] leading-relaxed text-gray-800">
-                        {msg.text}
+                        {getMessageText(msg.parts)}
                       </p>
                     </div>
                     <span className="mt-0.5 pl-1 text-[10px] text-gray-400">
-                      {msg.time}
+                      {getTimeString()}
                     </span>
                   </div>
                 </div>
-              ) : (
+              ) : msg.role === "user" ? (
                 <div className="flex items-end justify-end gap-2">
                   <div className="flex max-w-[75%] flex-col items-end">
                     <div className="rounded-2xl rounded-tr-md bg-amber-500 px-4 py-3">
                       <p className="text-[14px] leading-relaxed text-white">
-                        {msg.text}
+                        {getMessageText(msg.parts)}
                       </p>
                     </div>
                     <span className="mt-0.5 pr-1 text-[10px] text-gray-400">
-                      {msg.time}
+                      {getTimeString()}
                     </span>
                   </div>
                   <UserAvatar />
                 </div>
-              )}
+              ) : null}
             </div>
           ))}
 
           {/* Typing indicator */}
-          {isTyping && <TypingIndicator />}
+          {isLoading && <TypingIndicator />}
 
           {/* Quick action buttons - show only initially */}
-          {showQuickActions && !isTyping && (
+          {showQuickActions && !isLoading && (
             <div className="flex flex-col gap-2 pl-12">
               {quickActions.map((action) => (
                 <button
@@ -242,6 +228,20 @@ export default function FolkyPage() {
                   <action.icon className="h-4 w-4 text-amber-500" />
                 </button>
               ))}
+            </div>
+          )}
+
+          {/* Error state */}
+          {status === "error" && (
+            <div className="flex items-start gap-2.5">
+              <BotAvatar />
+              <div className="flex max-w-[80%] flex-col">
+                <div className="rounded-2xl rounded-tl-md bg-red-50 px-4 py-3">
+                  <p className="text-[14px] leading-relaxed text-red-700">
+                    Folky esta en modo demo. No se pudo conectar con la IA.
+                  </p>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -258,13 +258,15 @@ export default function FolkyPage() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSend(input);
               }}
+              disabled={isLoading}
               placeholder="Escriba un mensaje..."
               className="flex-1 bg-transparent text-[14px] outline-none placeholder:text-gray-400"
             />
           </div>
           <button
             onClick={() => handleSend(input)}
-            className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-amber-500 text-white shadow-sm transition-all duration-200 hover:bg-amber-600 active:scale-95"
+            disabled={isLoading}
+            className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-amber-500 text-white shadow-sm transition-all duration-200 hover:bg-amber-600 active:scale-95 disabled:opacity-50"
           >
             {input.trim() ? (
               <Send className="h-5 w-5" />

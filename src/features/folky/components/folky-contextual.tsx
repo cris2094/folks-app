@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 import { Sparkles, X, Send, Mic } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -52,16 +54,9 @@ function getContextForPath(pathname: string): ContextConfig {
   return DEFAULT_CONTEXT;
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
-interface ChatMessage {
-  id: string;
-  type: "bot" | "user";
-  text: string;
-  time: string;
-}
+const transport = new DefaultChatTransport({
+  api: "/api/ai/chat",
+});
 
 function getTimeString(): string {
   return new Date().toLocaleTimeString("es-CO", {
@@ -70,26 +65,45 @@ function getTimeString(): string {
   });
 }
 
+/** Extract plain text from a UIMessage's parts array */
+function getMessageText(parts: Array<{ type: string; text?: string }>): string {
+  return parts
+    .filter((p) => p.type === "text" && p.text)
+    .map((p) => p.text)
+    .join("");
+}
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
 export function FolkyContextual() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Don't render on /folky — it has its own full chat
+  const { messages, sendMessage, status } = useChat({
+    id: "folky-contextual",
+    transport,
+  });
+
+  const isLoading = status === "submitted" || status === "streaming";
+
+  // Don't render on /folky -- it has its own full chat
   if (pathname === "/folky") return null;
 
   const context = getContextForPath(pathname);
+  const hasUserMessages = messages.some((m) => m.role === "user");
 
   // Scroll to bottom on new messages
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isTyping]);
+  }, [messages, isLoading]);
 
   // Focus input when opened
   useEffect(() => {
@@ -100,42 +114,12 @@ export function FolkyContextual() {
 
   function handleOpen() {
     setIsOpen(true);
-    if (messages.length === 0) {
-      setMessages([
-        {
-          id: "welcome",
-          type: "bot",
-          text: context.greeting,
-          time: getTimeString(),
-        },
-      ]);
-    }
   }
 
   function handleSend(text: string) {
     if (!text.trim()) return;
-
-    const userMsg: ChatMessage = {
-      id: Date.now().toString(),
-      type: "user",
-      text: text.trim(),
-      time: getTimeString(),
-    };
-    setMessages((prev) => [...prev, userMsg]);
     setInput("");
-    setIsTyping(true);
-
-    // Simulate bot response
-    setTimeout(() => {
-      setIsTyping(false);
-      const botMsg: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        type: "bot",
-        text: "Entendido! Dejame revisar eso por ti. Un momento...",
-        time: getTimeString(),
-      };
-      setMessages((prev) => [...prev, botMsg]);
-    }, 1200);
+    sendMessage({ text: text.trim() });
   }
 
   // ------- Floating button (closed state) -------
@@ -168,13 +152,24 @@ export function FolkyContextual() {
             </div>
           </div>
         </div>
-        <button
-          onClick={() => setIsOpen(false)}
-          className="flex h-7 w-7 items-center justify-center rounded-full transition-colors hover:bg-white/20"
-          aria-label="Cerrar"
-        >
-          <X className="h-4 w-4 text-white" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              router.push("/folky");
+            }}
+            className="flex h-7 items-center rounded-full px-2 text-[10px] font-medium text-white/80 transition-colors hover:bg-white/20"
+          >
+            Expandir
+          </button>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="flex h-7 w-7 items-center justify-center rounded-full transition-colors hover:bg-white/20"
+            aria-label="Cerrar"
+          >
+            <X className="h-4 w-4 text-white" />
+          </button>
+        </div>
       </div>
 
       {/* Messages */}
@@ -182,26 +177,40 @@ export function FolkyContextual() {
         ref={scrollRef}
         className="flex max-h-[300px] min-h-[200px] flex-col gap-3 overflow-y-auto px-3 py-3"
       >
+        {/* Welcome message */}
+        {!hasUserMessages && (
+          <div className="flex flex-col items-start">
+            <div className="max-w-[85%] rounded-2xl rounded-tl-md bg-gray-100 px-3 py-2 text-[13px] leading-relaxed text-gray-800">
+              {context.greeting}
+            </div>
+            <span className="mt-0.5 text-[10px] text-gray-400">
+              {getTimeString()}
+            </span>
+          </div>
+        )}
+
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`flex flex-col ${msg.type === "user" ? "items-end" : "items-start"}`}
+            className={`flex flex-col ${msg.role === "user" ? "items-end" : "items-start"}`}
           >
             <div
               className={`max-w-[85%] rounded-2xl px-3 py-2 text-[13px] leading-relaxed ${
-                msg.type === "bot"
+                msg.role === "assistant"
                   ? "rounded-tl-md bg-gray-100 text-gray-800"
                   : "rounded-tr-md bg-amber-500 text-white"
               }`}
             >
-              {msg.text}
+              {getMessageText(msg.parts)}
             </div>
-            <span className="mt-0.5 text-[10px] text-gray-400">{msg.time}</span>
+            <span className="mt-0.5 text-[10px] text-gray-400">
+              {getTimeString()}
+            </span>
           </div>
         ))}
 
         {/* Typing indicator */}
-        {isTyping && (
+        {isLoading && (
           <div className="flex items-start">
             <div className="rounded-2xl rounded-tl-md bg-gray-100 px-3 py-2">
               <div className="flex gap-1">
@@ -213,8 +222,17 @@ export function FolkyContextual() {
           </div>
         )}
 
-        {/* Quick actions — only show if no user messages yet */}
-        {messages.length <= 1 && (
+        {/* Error state */}
+        {status === "error" && (
+          <div className="flex flex-col items-start">
+            <div className="max-w-[85%] rounded-2xl rounded-tl-md bg-red-50 px-3 py-2 text-[13px] leading-relaxed text-red-700">
+              Folky esta en modo demo.
+            </div>
+          </div>
+        )}
+
+        {/* Quick actions -- only show if no user messages yet */}
+        {!hasUserMessages && (
           <div className="flex flex-wrap gap-1.5">
             {context.actions.map((action) => (
               <button
@@ -240,12 +258,14 @@ export function FolkyContextual() {
             onKeyDown={(e) => {
               if (e.key === "Enter") handleSend(input);
             }}
+            disabled={isLoading}
             placeholder="Escribe un mensaje..."
             className="flex-1 rounded-full border border-gray-200 bg-gray-50 px-3 py-2 text-[13px] outline-none placeholder:text-gray-400 focus:border-amber-300"
           />
           <button
             onClick={() => handleSend(input)}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white transition-all hover:bg-amber-600 active:scale-95"
+            disabled={isLoading}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white transition-all hover:bg-amber-600 active:scale-95 disabled:opacity-50"
             aria-label="Enviar"
           >
             {input.trim() ? (

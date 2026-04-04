@@ -560,3 +560,71 @@ export interface ResidentBadge {
   badge_id: string;
   earned_at: string;
 }
+
+// ============================================
+// Voting (MOD-014)
+// ============================================
+
+export type PollType = "simple" | "multiple" | "weighted";
+
+export type PollStatus = "draft" | "open" | "closed" | "cancelled";
+
+export interface Poll {
+  id: string;
+  tenant_id: string;
+  assembly_id: string | null;
+  title: string;
+  description: string | null;
+  type: PollType;
+  status: PollStatus;
+  requires_quorum: boolean;
+  quorum_percentage: number;
+  restricted: boolean;
+  opens_at: string | null;
+  closes_at: string | null;
+  created_by: string | null;
+  created_at: string;
+}
+
+export interface PollOption {
+  id: string;
+  poll_id: string;
+  tenant_id: string;
+  label: string;
+  position: number;
+  created_at: string;
+}
+
+export interface Vote {
+  id: string;
+  poll_id: string;
+  option_id: string;
+  tenant_id: string;
+  resident_id: string;
+  unit_id: string | null;
+  coefficient: number | null;
+  created_at: string;
+}
+
+// ============================================
+// Staff Shifts (MOD-015)
+// ============================================
+
+export type StaffRole = "portero" | "aseo" | "mantenimiento" | "seguridad";
+
+export type ShiftStatus = "scheduled" | "in_progress" | "completed" | "absent";
+
+export interface StaffShift {
+  id: string;
+  tenant_id: string;
+  staff_name: string;
+  role: StaffRole;
+  shift_date: string;
+  start_time: string;
+  end_time: string;
+  status: ShiftStatus;
+  check_in_at: string | null;
+  check_out_at: string | null;
+  notes: string | null;
+  created_at: string;
+}

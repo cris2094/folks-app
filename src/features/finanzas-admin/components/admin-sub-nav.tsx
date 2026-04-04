@@ -14,6 +14,7 @@ const allTabs = [
   { href: "/admin/asambleas", label: "Asambleas" },
   { href: "/admin/tareas", label: "Tareas" },
   { href: "/admin/personal", label: "Personal" },
+  { href: "/admin/turnos", label: "Turnos" },
   { href: "/admin/analytics", label: "Analytics" },
 ];
 

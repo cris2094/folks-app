@@ -17,6 +17,7 @@ import {
   Gavel,
   Wallet,
   ClipboardList,
+  Vote,
 } from "lucide-react";
 
 // ============================================
@@ -41,6 +42,7 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "mantenimiento",
     "manuales",
     "vecinos",
+    "votaciones",
     "admin/finanzas",
     "admin/gastos",
     "admin/cartera",
@@ -49,6 +51,7 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "admin/analytics",
     "admin/tareas",
     "admin/personal",
+    "admin/turnos",
   ],
   consejo: [
     "home",
@@ -66,6 +69,7 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "mantenimiento",
     "manuales",
     "vecinos",
+    "votaciones",
     "admin/finanzas",
     "admin/presupuesto",
     "admin/asambleas",
@@ -87,6 +91,7 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "mantenimiento",
     "manuales",
     "vecinos",
+    "votaciones",
   ],
   personal: [
     "home",
@@ -127,20 +132,20 @@ const ROLE_QUICK_ACTIONS: Record<UserRole, QuickAction[]> = {
     { href: "/admin", label: "Panel Admin", icon: LayoutDashboard },
     { href: "/pqr", label: "Incidencias", icon: MessageSquareWarning },
     { href: "/zonas", label: "Reservas", icon: CalendarCheck },
+    { href: "/votaciones", label: "Votaciones", icon: Vote },
     { href: "/admin/personal", label: "Personal", icon: UserCog },
     { href: "/comunicados", label: "Comunicados", icon: Megaphone },
     { href: "/mantenimiento", label: "Mantenimiento", icon: Wrench },
-    { href: "/manuales", label: "Documentos", icon: FileText },
   ],
   admin: [
     { href: "/finanzas", label: "Recibos", icon: Receipt },
     { href: "/admin", label: "Panel Admin", icon: LayoutDashboard },
     { href: "/pqr", label: "Incidencias", icon: MessageSquareWarning },
     { href: "/zonas", label: "Reservas", icon: CalendarCheck },
+    { href: "/votaciones", label: "Votaciones", icon: Vote },
     { href: "/admin/personal", label: "Personal", icon: UserCog },
     { href: "/comunicados", label: "Comunicados", icon: Megaphone },
     { href: "/mantenimiento", label: "Mantenimiento", icon: Wrench },
-    { href: "/manuales", label: "Documentos", icon: FileText },
   ],
   consejo: [
     { href: "/finanzas", label: "Recibos", icon: Receipt },
@@ -157,8 +162,8 @@ const ROLE_QUICK_ACTIONS: Record<UserRole, QuickAction[]> = {
     { href: "/paquetes", label: "Paquetes", icon: Package },
     { href: "/pqr", label: "Incidencias", icon: MessageSquareWarning },
     { href: "/zonas", label: "Reservas", icon: CalendarCheck },
+    { href: "/votaciones", label: "Votaciones", icon: Vote },
     { href: "/vecinos", label: "Vecinos", icon: Users },
-    { href: "/manuales", label: "Documentos", icon: FileText },
     { href: "/propiedad", label: "Mi Propiedad", icon: HomeIcon },
     { href: "/salud", label: "Salud", icon: Activity },
   ],
