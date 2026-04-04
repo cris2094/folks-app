@@ -8,6 +8,7 @@ import {
   Calendar,
   User,
 } from "lucide-react";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { getPublicInfo } from "@/features/transparencia/queries/get-public-info";
 import type { CommitmentStatus } from "@/types/database";
@@ -68,6 +69,7 @@ export default async function TransparenciaPage() {
         </div>
       </header>
 
+      <FadeIn>
       <div className="flex flex-col gap-5 px-4 pb-6 pt-4">
         {/* Section: Últimas decisiones del consejo */}
         <section>
@@ -89,9 +91,10 @@ export default async function TransparenciaPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="flex flex-col gap-2">
+            <StaggerContainer className="flex flex-col gap-2">
               {info.assemblies.map((assembly) => (
-                <Card key={assembly.id} size="sm">
+                <StaggerItem key={assembly.id}>
+                <Card size="sm">
                   <CardContent className="flex flex-col gap-1.5">
                     <div className="flex items-start justify-between gap-2">
                       <p className="text-xs font-medium text-gray-900">
@@ -108,8 +111,9 @@ export default async function TransparenciaPage() {
                     )}
                   </CardContent>
                 </Card>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
           )}
         </section>
 
@@ -133,7 +137,7 @@ export default async function TransparenciaPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="flex flex-col gap-2">
+            <StaggerContainer className="flex flex-col gap-2">
               {info.commitments.map((commitment) => {
                 const style = STATUS_STYLE[commitment.status];
                 const isOverdue =
@@ -142,7 +146,8 @@ export default async function TransparenciaPage() {
                   commitment.status !== "completed";
 
                 return (
-                  <Card key={commitment.id} size="sm">
+                  <StaggerItem key={commitment.id}>
+                  <Card size="sm">
                     <CardContent className="flex flex-col gap-2">
                       <div className="flex items-start justify-between gap-2">
                         <p className="text-xs font-medium text-gray-900">
@@ -189,9 +194,10 @@ export default async function TransparenciaPage() {
                       </div>
                     </CardContent>
                   </Card>
+                  </StaggerItem>
                 );
               })}
-            </div>
+            </StaggerContainer>
           )}
         </section>
 
@@ -282,6 +288,7 @@ export default async function TransparenciaPage() {
           POTENCIADO POR FOLKS
         </p>
       </div>
+      </FadeIn>
     </div>
   );
 }

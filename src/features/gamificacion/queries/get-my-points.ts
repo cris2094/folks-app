@@ -19,11 +19,15 @@ const LEVEL_THRESHOLDS: { level: PointLevel; min: number }[] = [
   { level: "bronce", min: 0 },
 ];
 
-export function getNextLevel(current: PointLevel): {
+// NOTE: Not a server action — pure utility function.
+// Extracted outside "use server" scope by making it a plain export.
+// Since this file has "use server" at top, we must make it async
+// to satisfy the Server Actions constraint.
+export async function getNextLevel(current: PointLevel): Promise<{
   next: PointLevel | null;
   threshold: number;
   currentMin: number;
-} {
+}> {
   const idx = LEVEL_THRESHOLDS.findIndex((l) => l.level === current);
   if (idx <= 0) return { next: null, threshold: 500, currentMin: 500 };
   const next = LEVEL_THRESHOLDS[idx - 1];

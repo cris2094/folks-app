@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
-  // TODO: Make dynamic per tenant (fetch tenant branding from DB/cookie)
   return {
     name: "Irawa",
     short_name: "Irawa",

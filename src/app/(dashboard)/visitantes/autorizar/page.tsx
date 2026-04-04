@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+import { FadeIn, FadeInUp } from "@/components/motion";
 import { AuthorizeForm } from "@/features/visitantes/components/authorize-form";
 
 export default function AutorizarVisitantePage() {
@@ -22,9 +23,11 @@ export default function AutorizarVisitantePage() {
         </div>
       </header>
 
+      <FadeInUp delay={0.1}>
       <div className="px-4 pt-4 pb-8">
         <AuthorizeForm />
       </div>
+      </FadeInUp>
 
       {/* Footer */}
       <footer className="pb-24 pt-4 text-center">

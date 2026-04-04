@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, ChevronLeft, Shield, Users, Clock } from "lucide-react";
+import { FadeIn, FadeInUp } from "@/components/motion";
 import { getMyVisitors } from "@/features/visitantes/queries/get-my-visitors";
 import { getFrequentContacts } from "@/features/visitantes/queries/get-frequent-contacts";
 import { getAccessLog } from "@/features/visitantes/queries/get-access-log";
@@ -53,6 +54,7 @@ export default async function VisitantesPage() {
         </div>
       </header>
 
+      <FadeInUp delay={0.1}>
       <div className="px-4 pt-2 pb-8">
         <Tabs defaultValue="autorizados">
           <TabsList className="w-full rounded-full bg-gray-100 p-1">
@@ -152,6 +154,7 @@ export default async function VisitantesPage() {
           </TabsContent>
         </Tabs>
       </div>
+      </FadeInUp>
 
       {/* Footer */}
       <footer className="pb-24 pt-4 text-center">

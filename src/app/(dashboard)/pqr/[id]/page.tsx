@@ -17,6 +17,7 @@ import {
   User,
   Flag,
 } from "lucide-react";
+import { FadeIn, FadeInUp } from "@/components/motion";
 import { getTicketDetail } from "@/features/pqr/queries/get-ticket-detail";
 import { TicketChat } from "@/features/pqr/components/ticket-chat";
 import { StarRating } from "@/features/pqr/components/star-rating";
@@ -167,6 +168,7 @@ export default async function TicketDetailPage({
     : ticket.assigned?.full_name;
 
   return (
+    <FadeIn>
     <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col">
       {/* Header */}
       <header className="px-5 pb-4 pt-14">
@@ -190,6 +192,7 @@ export default async function TicketDetailPage({
       </header>
 
       {/* Info card */}
+      <FadeInUp delay={0.1}>
       <div className="px-4 pt-4">
         <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
           <div className="grid grid-cols-2 gap-3">
@@ -274,6 +277,7 @@ export default async function TicketDetailPage({
           )}
         </div>
       </div>
+      </FadeInUp>
 
       {/* Scheduled date */}
       {ticket.scheduled_date && (
@@ -380,5 +384,6 @@ export default async function TicketDetailPage({
         </p>
       </div>
     </div>
+    </FadeIn>
   );
 }

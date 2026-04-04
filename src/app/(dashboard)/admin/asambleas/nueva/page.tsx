@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FileText } from "lucide-react";
+import { FadeIn, FadeInUp } from "@/components/motion";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createAssembly } from "@/features/asambleas/actions/create-assembly";
@@ -30,6 +31,7 @@ export default function NuevaAsambleaPage() {
   }
 
   return (
+    <FadeIn>
     <div className="flex flex-col gap-4">
       {/* Header */}
       <div className="flex items-center gap-2">
@@ -37,6 +39,7 @@ export default function NuevaAsambleaPage() {
         <h2 className="text-lg font-bold">Nueva Asamblea</h2>
       </div>
 
+      <FadeInUp delay={0.1}>
       <form action={handleSubmit} className="flex flex-col gap-4">
         {/* Titulo */}
         <div className="flex flex-col gap-1.5">
@@ -130,6 +133,12 @@ export default function NuevaAsambleaPage() {
           </button>
         </div>
       </form>
+      </FadeInUp>
+
+      <p className="pb-2 pt-6 text-center text-[10px] font-medium tracking-wider text-gray-300">
+        POTENCIADO POR FOLKS
+      </p>
     </div>
+    </FadeIn>
   );
 }

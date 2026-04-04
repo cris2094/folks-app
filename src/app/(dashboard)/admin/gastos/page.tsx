@@ -1,4 +1,5 @@
 import { Receipt, Plus } from "lucide-react";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -72,6 +73,7 @@ export default async function GastosPage({ searchParams }: GastosPageProps) {
   });
 
   return (
+    <FadeIn>
     <div className="flex flex-col gap-4">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -128,14 +130,15 @@ export default async function GastosPage({ searchParams }: GastosPageProps) {
           </p>
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
+        <StaggerContainer className="flex flex-col gap-3">
           {expenses.map((expense) => {
             const statusStyle = STATUS_STYLES[expense.status];
             const categoryLabel =
               CATEGORY_LABELS[expense.category] || expense.category;
 
             return (
-              <Card key={expense.id} size="sm">
+              <StaggerItem key={expense.id}>
+              <Card size="sm">
                 <CardContent className="flex flex-col gap-2">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
@@ -187,11 +190,17 @@ export default async function GastosPage({ searchParams }: GastosPageProps) {
                   )}
                 </CardContent>
               </Card>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
       )}
+
+      <p className="pb-2 pt-6 text-center text-[10px] font-medium tracking-wider text-gray-300">
+        POTENCIADO POR FOLKS
+      </p>
     </div>
+    </FadeIn>
   );
 }
 

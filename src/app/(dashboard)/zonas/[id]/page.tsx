@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Clock, Users, DollarSign, Calendar } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { FadeIn, FadeInUp } from "@/components/motion";
 
 export default async function ZoneDetailPage({
   params,
@@ -122,6 +123,10 @@ export default async function ZoneDetailPage({
 
       <p className="text-center text-sm text-muted-foreground">
         Formulario de reserva proximamente
+      </p>
+
+      <p className="pb-2 pt-8 text-center text-[10px] font-medium tracking-wider text-gray-300">
+        POTENCIADO POR FOLKS
       </p>
     </div>
   );

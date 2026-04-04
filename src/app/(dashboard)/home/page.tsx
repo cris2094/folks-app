@@ -256,6 +256,13 @@ export default async function HomePage() {
           )}
         </div>
       </FadeInUp>
+
+      {/* Footer */}
+      <div className="pb-24 pt-4 text-center">
+        <p className="text-[10px] font-medium tracking-wider text-gray-300">
+          POTENCIADO POR FOLKS
+        </p>
+      </div>
     </div>
   );
 }

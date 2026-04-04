@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChevronLeft, CheckCircle2 } from "lucide-react";
+import { FadeIn, FadeInUp, StaggerContainer, StaggerItem } from "@/components/motion";
 
 // Barcode bars pattern
 const barWidths = [
@@ -48,6 +49,7 @@ export default function PaqueteDetailPage() {
       </header>
 
       {/* Main package card */}
+      <FadeInUp delay={0.1}>
       <div className="mx-5 mt-4">
         <div className="overflow-hidden rounded-[20px] bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg shadow-amber-200/40">
           {/* Top section */}
@@ -105,7 +107,10 @@ export default function PaqueteDetailPage() {
         </div>
       </div>
 
+      </FadeInUp>
+
       {/* History */}
+      <FadeInUp delay={0.2}>
       <div className="mt-6 px-5">
         <h2 className="text-[15px] font-semibold tracking-tight text-gray-900">
           Historial
@@ -136,6 +141,14 @@ export default function PaqueteDetailPage() {
             </div>
           ))}
         </div>
+      </div>
+      </FadeInUp>
+
+      {/* Footer */}
+      <div className="pb-2 pt-8 text-center">
+        <p className="text-[10px] font-medium tracking-wider text-gray-300">
+          POTENCIADO POR FOLKS
+        </p>
       </div>
     </div>
   );

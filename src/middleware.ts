@@ -15,6 +15,6 @@ export const config = {
      * - public folder
      * - api routes (handled separately)
      */
-    "/((?!_next/static|_next/image|favicon.ico|icons/|auth/callback|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|icons/|auth/callback|api/|privacidad|terminos|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

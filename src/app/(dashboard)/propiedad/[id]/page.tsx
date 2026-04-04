@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Building2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { FadeIn, FadeInUp } from "@/components/motion";
 
 export default async function UnitDetailPage({
   params,
@@ -35,6 +36,7 @@ export default async function UnitDetailPage({
         <ArrowLeft className="h-4 w-4" /> Volver
       </Link>
 
+      <FadeIn>
       <header className="mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50">
@@ -57,7 +59,9 @@ export default async function UnitDetailPage({
           )}
         </div>
       </header>
+      </FadeIn>
 
+      <FadeInUp delay={0.1}>
       <Tabs defaultValue="residentes">
         <TabsList className="w-full">
           <TabsTrigger value="residentes" className="flex-1">
@@ -80,6 +84,11 @@ export default async function UnitDetailPage({
           <PetList pets={pets} />
         </TabsContent>
       </Tabs>
+      </FadeInUp>
+
+      <p className="pb-2 pt-8 text-center text-[10px] font-medium tracking-wider text-gray-300">
+        POTENCIADO POR FOLKS
+      </p>
     </div>
   );
 }

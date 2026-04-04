@@ -1,4 +1,5 @@
 import { getBudget } from "@/features/finanzas-admin/queries/get-budget";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { Card, CardContent } from "@/components/ui/card";
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -26,6 +27,7 @@ export default async function PresupuestoPage() {
   const budget = await getBudget();
 
   return (
+    <FadeIn>
     <div className="flex flex-col gap-4">
       {/* Period summary card */}
       {budget.period ? (
@@ -105,9 +107,10 @@ export default async function PresupuestoPage() {
           </h3>
 
           {/* Category progress bars */}
-          <div className="flex flex-col gap-2">
+          <StaggerContainer className="flex flex-col gap-2">
             {budget.items.map((item) => (
-              <Card key={item.id} size="sm">
+              <StaggerItem key={item.id}>
+              <Card size="sm">
                 <CardContent className="flex flex-col gap-2">
                   <div className="flex items-baseline justify-between">
                     <p className="text-xs font-medium text-gray-900">
@@ -165,8 +168,9 @@ export default async function PresupuestoPage() {
                   </div>
                 </CardContent>
               </Card>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       )}
 
@@ -175,5 +179,6 @@ export default async function PresupuestoPage() {
         POTENCIADO POR FOLKS
       </p>
     </div>
+    </FadeIn>
   );
 }

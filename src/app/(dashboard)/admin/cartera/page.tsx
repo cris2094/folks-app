@@ -1,4 +1,5 @@
 import { AlertTriangle } from "lucide-react";
+import { FadeIn, FadeInUp, StaggerContainer, StaggerItem } from "@/components/motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getPortfolio } from "@/features/finanzas-admin/queries/get-portfolio";
 import { PortfolioChart } from "@/features/finanzas-admin/components/portfolio-chart";
@@ -66,6 +67,7 @@ export default async function CarteraPage() {
   );
 
   return (
+    <FadeIn>
     <div className="flex flex-col gap-4">
       {/* Resumen total */}
       <div className="flex items-center justify-between rounded-xl bg-red-50 p-4">
@@ -84,10 +86,10 @@ export default async function CarteraPage() {
       </div>
 
       {/* Aging cards */}
-      <div className="grid grid-cols-4 gap-2">
+      <StaggerContainer className="grid grid-cols-4 gap-2">
         {agingCards.map((card) => (
+          <StaggerItem key={card.label}>
           <div
-            key={card.label}
             className={`rounded-lg border p-2 text-center ${card.bg} ${card.border}`}
           >
             <p className={`text-[10px] ${card.text}`}>{card.label}</p>
@@ -95,8 +97,9 @@ export default async function CarteraPage() {
               {formatCOP(card.value)}
             </p>
           </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
 
       {/* Donut chart */}
       <Card>
@@ -124,11 +127,12 @@ export default async function CarteraPage() {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-2">
+          <StaggerContainer className="flex flex-col gap-2">
             {overdueUnits.map((unit) => {
               const daysMora = getDaysSince(unit.oldest_overdue_date);
               return (
-                <Card key={unit.unit_id} size="sm">
+                <StaggerItem key={unit.unit_id}>
+                <Card size="sm">
                   <CardContent className="flex items-center justify-between gap-3">
                     <div className="min-w-0">
                       <p className="text-sm font-medium">
@@ -155,11 +159,17 @@ export default async function CarteraPage() {
                     </div>
                   </CardContent>
                 </Card>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerContainer>
         )}
       </div>
+
+      <p className="pb-2 pt-6 text-center text-[10px] font-medium tracking-wider text-gray-300">
+        POTENCIADO POR FOLKS
+      </p>
     </div>
+    </FadeIn>
   );
 }

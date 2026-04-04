@@ -1,4 +1,5 @@
 import { FileText, Plus, Calendar } from "lucide-react";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { getAssemblies } from "@/features/asambleas/queries/get-assemblies";
@@ -53,6 +54,7 @@ export default async function AsambleasPage() {
   const { data: assemblies, count } = await getAssemblies({ limit: 50 });
 
   return (
+    <FadeIn>
     <div className="flex flex-col gap-4">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -91,14 +93,14 @@ export default async function AsambleasPage() {
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
+        <StaggerContainer className="flex flex-col gap-3">
           {assemblies.map((assembly) => {
             const statusStyle = STATUS_CONFIG[assembly.status];
             const typeLabel = TYPE_LABELS[assembly.type];
 
             return (
+              <StaggerItem key={assembly.id}>
               <Link
-                key={assembly.id}
                 href={`/admin/asambleas/${assembly.id}`}
               >
                 <Card size="sm" className="transition-shadow hover:shadow-md">
@@ -137,10 +139,16 @@ export default async function AsambleasPage() {
                   </CardContent>
                 </Card>
               </Link>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
       )}
+
+      <p className="pb-2 pt-6 text-center text-[10px] font-medium tracking-wider text-gray-300">
+        POTENCIADO POR FOLKS
+      </p>
     </div>
+    </FadeIn>
   );
 }

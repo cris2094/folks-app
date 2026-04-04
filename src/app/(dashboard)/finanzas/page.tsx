@@ -154,6 +154,13 @@ export default function FinanzasPage() {
           </StaggerItem>
         ))}
       </StaggerContainer>
+
+      {/* Footer */}
+      <div className="pb-2 pt-8 text-center">
+        <p className="text-[10px] font-medium tracking-wider text-gray-300">
+          POTENCIADO POR FOLKS
+        </p>
+      </div>
     </div>
   );
 }

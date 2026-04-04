@@ -21,7 +21,7 @@ export default async function PuntosPage() {
   const currentPoints = pointsData.points?.points ?? 0;
   const currentLevel = (pointsData.points?.level ?? "bronce") as PointLevel;
   const totalEarned = pointsData.points?.total_earned ?? 0;
-  const { next, threshold, currentMin } = getNextLevel(currentLevel);
+  const { next, threshold, currentMin } = await getNextLevel(currentLevel);
 
   return (
     <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col">

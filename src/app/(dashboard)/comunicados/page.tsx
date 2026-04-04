@@ -8,6 +8,7 @@ import {
 } from "@/features/comunicados/queries/get-notifications";
 import { AnnouncementCard } from "@/features/comunicados/components/announcement-card";
 import { NotificationCard } from "@/features/comunicados/components/notification-card";
+import { FadeIn, FadeInUp } from "@/components/motion";
 
 export default async function ComunicadosPage() {
   const [announcements, notifications, unreadCount] = await Promise.all([
@@ -18,13 +19,16 @@ export default async function ComunicadosPage() {
 
   return (
     <div className="mx-auto max-w-md p-4">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold">Comunicados</h1>
-        <p className="text-muted-foreground text-sm">
-          Noticias y notificaciones del conjunto
-        </p>
-      </header>
+      <FadeIn>
+        <header className="mb-6">
+          <h1 className="text-2xl font-bold">Comunicados</h1>
+          <p className="text-muted-foreground text-sm">
+            Noticias y notificaciones del conjunto
+          </p>
+        </header>
+      </FadeIn>
 
+      <FadeInUp delay={0.1}>
       <Tabs defaultValue="actividad">
         <TabsList className="w-full">
           <TabsTrigger value="actividad" className="flex-1 gap-1.5">
@@ -95,6 +99,11 @@ export default async function ComunicadosPage() {
           )}
         </TabsContent>
       </Tabs>
+      </FadeInUp>
+
+      <p className="pb-2 pt-8 text-center text-[10px] font-medium tracking-wider text-gray-300">
+        POTENCIADO POR FOLKS
+      </p>
     </div>
   );
 }

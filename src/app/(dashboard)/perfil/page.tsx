@@ -14,6 +14,7 @@ import type { LucideIcon } from "lucide-react";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
 import { logout } from "@/features/auth/actions/logout";
 import Link from "next/link";
+import { FadeIn, FadeInUp } from "@/components/motion";
 
 export default async function PerfilPage() {
   const data = await getCurrentUser();
@@ -32,6 +33,7 @@ export default async function PerfilPage() {
   return (
     <div className="mx-auto max-w-md p-4">
       {/* Avatar header */}
+      <FadeIn>
       <div className="mb-6 flex flex-col items-center gap-3 pt-2">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-amber-600 text-2xl font-bold text-white shadow-lg shadow-amber-600/25">
           {initials || "U"}
@@ -43,7 +45,9 @@ export default async function PerfilPage() {
           </Badge>
         </div>
       </div>
+      </FadeIn>
 
+      <FadeInUp delay={0.1}>
       <Card className="mb-4">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm text-gray-500">Informacion Personal</CardTitle>
@@ -94,7 +98,9 @@ export default async function PerfilPage() {
           />
         </CardContent>
       </Card>
+      </FadeInUp>
 
+      <FadeInUp delay={0.2}>
       <div className="space-y-2">
         <form action={logout}>
           <Button
@@ -108,6 +114,8 @@ export default async function PerfilPage() {
         </form>
       </div>
 
+      </FadeInUp>
+
       <div className="mt-6 flex justify-center gap-4 text-xs text-gray-400">
         <Link href="/privacidad" className="hover:text-gray-600 hover:underline">
           Politica de Privacidad
@@ -116,6 +124,13 @@ export default async function PerfilPage() {
         <Link href="/terminos" className="hover:text-gray-600 hover:underline">
           Terminos y Condiciones
         </Link>
+      </div>
+
+      {/* Footer */}
+      <div className="pb-24 pt-6 text-center">
+        <p className="text-[10px] font-medium tracking-wider text-gray-300">
+          POTENCIADO POR FOLKS
+        </p>
       </div>
     </div>
   );

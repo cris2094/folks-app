@@ -7,6 +7,7 @@ import {
   ShieldAlert,
   MapPin,
 } from "lucide-react";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { getAnalyticsDashboard } from "@/features/analytics/queries/get-analytics-dashboard";
 import { getAiSummary } from "@/features/analytics/queries/get-ai-summary";
 import { MorosityChart } from "@/features/analytics/components/morosity-chart";
@@ -73,12 +74,13 @@ export default async function AnalyticsPage() {
   ];
 
   return (
+    <FadeIn>
     <div className="flex flex-col gap-5">
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 gap-3">
+      <StaggerContainer className="grid grid-cols-2 gap-3">
         {kpis.map((kpi) => (
+          <StaggerItem key={kpi.label}>
           <div
-            key={kpi.label}
             className="flex items-center gap-3 rounded-2xl bg-white p-3.5 ring-1 ring-gray-100"
           >
             <div
@@ -91,8 +93,9 @@ export default async function AnalyticsPage() {
               <p className="text-[10px] text-gray-500">{kpi.label}</p>
             </div>
           </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
 
       {/* Morosity Prediction */}
       <section className="rounded-2xl bg-white p-4 ring-1 ring-gray-100">
@@ -205,5 +208,6 @@ export default async function AnalyticsPage() {
         </p>
       </div>
     </div>
+    </FadeIn>
   );
 }

@@ -80,6 +80,49 @@ INSERT INTO zones (tenant_id, name, description, icon, price_cop, max_duration_h
    '{"lunes":{"open":"06:00","close":"21:00"},"martes":{"open":"06:00","close":"21:00"},"miercoles":{"open":"06:00","close":"21:00"},"jueves":{"open":"06:00","close":"21:00"},"viernes":{"open":"06:00","close":"21:00"},"sabado":{"open":"06:00","close":"21:00"},"domingo":{"open":"06:00","close":"21:00"}}');
 
 -- ============================================
+-- Announcements (comunicados de ejemplo)
+-- ============================================
+INSERT INTO announcements (tenant_id, title, body, category, attachments) VALUES
+  ('a0000000-0000-0000-0000-000000000001',
+   'Mantenimiento piscina programado',
+   'Informamos que la piscina estara en mantenimiento del 10 al 12 de noviembre. Se realizara limpieza profunda y revision del sistema de filtracion. Disculpen las molestias.',
+   'maintenance', '{}'),
+  ('a0000000-0000-0000-0000-000000000001',
+   'Asamblea General Ordinaria 2026',
+   'Se convoca a todos los propietarios a la Asamblea General Ordinaria que se realizara el dia 20 de noviembre a las 7:00 PM en el Salon Social. Orden del dia: presupuesto 2026, eleccion de consejo.',
+   'general', '{}'),
+  ('a0000000-0000-0000-0000-000000000001',
+   'Alerta: trabajos en via principal',
+   'La Alcaldia de Floridablanca informa que habra cierre parcial de la Cra 15 entre calles 56 y 60 por obras de pavimentacion. Usar rutas alternas. Duracion estimada: 2 semanas.',
+   'urgent', '{}');
+
+-- ============================================
+-- Budget period (presupuesto activo)
+-- ============================================
+INSERT INTO budget_periods (tenant_id, name, start_date, end_date, is_active) VALUES
+  ('a0000000-0000-0000-0000-000000000001', 'Presupuesto 2026', '2026-01-01', '2026-12-31', true);
+
+-- Budget items
+INSERT INTO budget_items (tenant_id, budget_period_id, category, description, budgeted_cop)
+SELECT
+  'a0000000-0000-0000-0000-000000000001',
+  bp.id,
+  item.category,
+  item.description,
+  item.budgeted
+FROM budget_periods bp,
+(VALUES
+  ('maintenance', 'Mantenimiento general y reparaciones', 24000000),
+  ('security', 'Vigilancia 24/7 y CCTV', 36000000),
+  ('utilities', 'Servicios publicos zonas comunes', 18000000),
+  ('cleaning', 'Aseo y fumigacion', 12000000),
+  ('insurance', 'Polizas de seguros', 8000000),
+  ('payroll', 'Nomina administracion', 30000000),
+  ('reserve_fund', 'Fondo de reserva (1%)', 5000000)
+) AS item(category, description, budgeted)
+WHERE bp.tenant_id = 'a0000000-0000-0000-0000-000000000001';
+
+-- ============================================
 -- Usuario admin de prueba
 -- Email: admin@irawa.com / Password: 1234
 -- NOTA: Este usuario se crea via Supabase Auth, no directamente en la tabla

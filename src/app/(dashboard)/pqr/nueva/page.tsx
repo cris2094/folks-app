@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+import { FadeIn, FadeInUp } from "@/components/motion";
 import { CreateTicketForm } from "@/features/pqr/components/create-ticket-form";
 
 export default function NuevaIncidenciaPage() {
   return (
+    <FadeIn>
     <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col">
       {/* Header */}
       <header className="px-5 pb-4 pt-14">
@@ -23,9 +25,11 @@ export default function NuevaIncidenciaPage() {
       </header>
 
       {/* Form */}
+      <FadeInUp delay={0.1}>
       <div className="flex-1">
         <CreateTicketForm />
       </div>
+      </FadeInUp>
 
       {/* Footer */}
       <div className="pb-24 pt-2 text-center">
@@ -35,5 +39,6 @@ export default function NuevaIncidenciaPage() {
         </p>
       </div>
     </div>
+    </FadeIn>
   );
 }

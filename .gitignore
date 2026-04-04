@@ -44,3 +44,7 @@ public/swe-worker-*.js
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local design reference files
+design-reference/
+design-system/

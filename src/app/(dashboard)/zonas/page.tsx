@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { CalendarDays, Users } from "lucide-react";
+import { FadeIn, FadeInUp, StaggerContainer, StaggerItem } from "@/components/motion";
 
 const zones = [
   {
@@ -34,28 +35,30 @@ export default function ZonasPage() {
   return (
     <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col bg-white pb-28">
       {/* Header */}
-      <header className="flex items-center justify-between px-5 pb-2 pt-14">
-        <div className="w-8" />
-        <h1 className="text-[17px] font-bold tracking-tight text-gray-900">
-          Zonas Comunes
-        </h1>
-        <Link
-          href="/zonas"
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white"
-        >
-          <CalendarDays className="h-[18px] w-[18px] text-gray-600" strokeWidth={1.5} />
-        </Link>
-      </header>
+      <FadeIn>
+        <header className="flex items-center justify-between px-5 pb-2 pt-14">
+          <div className="w-8" />
+          <h1 className="text-[17px] font-bold tracking-tight text-gray-900">
+            Zonas Comunes
+          </h1>
+          <Link
+            href="/zonas"
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 bg-white"
+          >
+            <CalendarDays className="h-[18px] w-[18px] text-gray-600" strokeWidth={1.5} />
+          </Link>
+        </header>
 
-      {/* Subtitle */}
-      <p className="px-5 pb-5 pt-1 text-[14px] text-gray-500">
-        Selecciona el area que deseas reservar.
-      </p>
+        {/* Subtitle */}
+        <p className="px-5 pb-5 pt-1 text-[14px] text-gray-500">
+          Selecciona el area que deseas reservar.
+        </p>
+      </FadeIn>
 
       {/* Zone cards */}
-      <div className="space-y-4 px-5">
+      <StaggerContainer className="space-y-4 px-5">
         {zones.map((zone) => (
-          <div key={zone.id}>
+          <StaggerItem key={zone.id}>
             {/* Photo card */}
             <div className="relative h-48 overflow-hidden rounded-2xl bg-gray-200">
               {/* Placeholder image — in production, use next/image with real URLs */}
@@ -113,8 +116,15 @@ export default function ZonasPage() {
                 Reservar
               </Link>
             </div>
-          </div>
+          </StaggerItem>
         ))}
+      </StaggerContainer>
+
+      {/* Footer */}
+      <div className="pb-2 pt-8 text-center">
+        <p className="text-[10px] font-medium tracking-wider text-gray-300">
+          POTENCIADO POR FOLKS
+        </p>
       </div>
     </div>
   );

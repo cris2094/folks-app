@@ -1,4 +1,5 @@
 import { DollarSign, TrendingDown, Scale, Target } from "lucide-react";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { KpiCard } from "@/features/finanzas-admin/components/kpi-card";
@@ -23,9 +24,11 @@ export default async function AdminFinanzasPage() {
   ]);
 
   return (
+    <FadeIn>
     <div className="flex flex-col gap-4">
       {/* KPI Grid 2x2 */}
-      <div className="grid grid-cols-2 gap-3">
+      <StaggerContainer className="grid grid-cols-2 gap-3">
+        <StaggerItem>
         <KpiCard
           title="Ingresos del mes"
           value={formatCOP(summary.totalIncome)}
@@ -33,6 +36,8 @@ export default async function AdminFinanzasPage() {
           iconBg="bg-emerald-50"
           iconColor="text-emerald-600"
         />
+        </StaggerItem>
+        <StaggerItem>
         <KpiCard
           title="Egresos del mes"
           value={formatCOP(summary.totalExpenses)}
@@ -40,6 +45,8 @@ export default async function AdminFinanzasPage() {
           iconBg="bg-red-50"
           iconColor="text-red-600"
         />
+        </StaggerItem>
+        <StaggerItem>
         <KpiCard
           title="Balance"
           value={formatCOP(summary.balance)}
@@ -47,6 +54,8 @@ export default async function AdminFinanzasPage() {
           iconBg="bg-blue-50"
           iconColor="text-blue-700"
         />
+        </StaggerItem>
+        <StaggerItem>
         <KpiCard
           title="% Recaudo"
           value={`${summary.collectionRate}%`}
@@ -54,7 +63,8 @@ export default async function AdminFinanzasPage() {
           iconBg="bg-amber-50"
           iconColor="text-amber-600"
         />
-      </div>
+        </StaggerItem>
+      </StaggerContainer>
 
       {/* Grafico Ingresos vs Egresos */}
       <Card>
@@ -127,6 +137,11 @@ export default async function AdminFinanzasPage() {
           </p>
         </CardContent>
       </Card>
+
+      <p className="pb-2 text-center text-[10px] font-medium tracking-wider text-gray-300">
+        POTENCIADO POR FOLKS
+      </p>
     </div>
+    </FadeIn>
   );
 }

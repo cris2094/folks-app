@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { FadeIn, FadeInUp } from "@/components/motion";
 import {
   getAssemblyDetail,
   type AssemblyDetail,
@@ -80,6 +81,7 @@ export default async function AssemblyDetailPage({
   const assembly: AssemblyDetail = detail;
 
   return (
+    <FadeIn>
     <div className="flex flex-col gap-4">
       {/* Header */}
       <div className="flex flex-col gap-2">
@@ -136,12 +138,19 @@ export default async function AssemblyDetailPage({
       </div>
 
       {/* Tabs */}
+      <FadeInUp delay={0.1}>
       <AssemblyDetailTabs
         assembly={assembly}
         attendees={detail.attendees}
         agendaItems={detail.agenda_items}
         commitments={detail.commitments}
       />
+      </FadeInUp>
+
+      <p className="pb-2 pt-6 text-center text-[10px] font-medium tracking-wider text-gray-300">
+        POTENCIADO POR FOLKS
+      </p>
     </div>
+    </FadeIn>
   );
 }
