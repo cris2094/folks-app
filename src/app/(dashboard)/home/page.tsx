@@ -4,9 +4,9 @@ import {
   CalendarCheck,
   UserPlus,
   MessageSquareWarning,
-  Headphones,
   Clock,
   ChevronRight,
+  Activity,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
@@ -37,9 +37,9 @@ const quickActions = [
     icon: MessageSquareWarning,
   },
   {
-    href: "/folky",
-    label: "Soporte",
-    icon: Headphones,
+    href: "/salud",
+    label: "Salud",
+    icon: Activity,
   },
 ];
 

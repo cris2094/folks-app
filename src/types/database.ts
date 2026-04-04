@@ -503,3 +503,60 @@ export interface Commitment {
   created_at: string;
   updated_at: string;
 }
+
+// ============================================
+// Gamification (MOD-010)
+// ============================================
+
+export type PointLevel = "bronce" | "plata" | "oro" | "platino";
+
+export type PointTransactionType = "earn" | "spend" | "expire";
+
+export type PointReason =
+  | "payment_ontime"
+  | "pqr_created"
+  | "assembly_attended"
+  | "reservation"
+  | "redeem_discount";
+
+export interface ResidentPoints {
+  id: string;
+  tenant_id: string;
+  resident_id: string;
+  points: number;
+  level: PointLevel;
+  total_earned: number;
+  total_spent: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PointTransaction {
+  id: string;
+  tenant_id: string;
+  resident_id: string;
+  type: PointTransactionType;
+  amount: number;
+  reason: PointReason;
+  reference_id: string | null;
+  created_at: string;
+}
+
+export interface Badge {
+  id: string;
+  tenant_id: string;
+  name: string;
+  description: string;
+  icon: string;
+  requirement: string;
+  points_reward: number;
+  created_at: string;
+}
+
+export interface ResidentBadge {
+  id: string;
+  tenant_id: string;
+  resident_id: string;
+  badge_id: string;
+  earned_at: string;
+}
