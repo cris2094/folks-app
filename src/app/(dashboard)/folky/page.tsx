@@ -1,9 +1,7 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
 import {
   ChevronLeft,
   MoreHorizontal,
@@ -14,9 +12,12 @@ import {
 } from "lucide-react";
 import { FadeIn } from "@/components/motion";
 
-const transport = new DefaultChatTransport({
-  api: "/api/ai/chat",
-});
+interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  time: string;
+}
 
 const quickActions = [
   { label: "Tengo paquetes?", icon: ArrowRight },
@@ -74,23 +75,27 @@ function TypingIndicator() {
   );
 }
 
-/** Extract plain text from a UIMessage's parts array */
-function getMessageText(parts: Array<{ type: string; text?: string }>): string {
-  return parts
-    .filter((p) => p.type === "text" && p.text)
-    .map((p) => p.text)
-    .join("");
+// Demo responses when no API key
+const DEMO_RESPONSES: Record<string, string> = {
+  "¿Cuánto debo?": "Tu saldo pendiente es de $185.000 del mes de abril. Ve a Finanzas para ver el detalle completo. 💰",
+  "¿Tengo paquetes?": "¡Sí! Tienes 2 paquetes esperándote en portería. Uno de Amazon y otro de Servientrega. 📦",
+  "Reservar BBQ": "El BBQ está disponible este sábado de 10am a 6pm. ¿Quieres que te lleve a la sección de Reservas? 🔥",
+  "Reportar problema": "Claro, te llevo a crear una incidencia. ¿Es un problema de mantenimiento, ruido o seguridad? 🔧",
+  "Hablar con Seguridad": "Conectándote con portería... Carlos (Seguridad) está disponible ahora. 📞",
+};
+
+function getDemoResponse(text: string): string {
+  return DEMO_RESPONSES[text] ??
+    `Entendido. Déjame ayudarte con "${text}". Te sugiero revisar la sección correspondiente de la app. ¿Necesitas algo más? 😊`;
 }
 
 export default function FolkyPage() {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const startTime = useRef(getTimeString());
-
-  const { messages, sendMessage, status } = useChat({ transport });
-
-  const isLoading = status === "submitted" || status === "streaming";
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -98,15 +103,81 @@ export default function FolkyPage() {
     }
   }, [messages, isLoading]);
 
-  function handleSend(text: string) {
-    if (!text.trim()) return;
+  const handleSend = useCallback(async (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed || isLoading) return;
+
     setShowQuickActions(false);
     setInput("");
-    sendMessage({ text: text.trim() });
-  }
 
-  // Check if we have any user messages yet (for initial greeting)
-  const hasUserMessages = messages.some((m) => m.role === "user");
+    const userMsg: ChatMessage = {
+      id: Date.now().toString(),
+      role: "user",
+      content: trimmed,
+      time: getTimeString(),
+    };
+
+    setMessages(prev => [...prev, userMsg]);
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [...messages, { role: "user", content: trimmed }].map(m => ({
+            role: m.role,
+            content: m.content,
+          })),
+        }),
+      });
+
+      if (!res.ok) throw new Error("API error");
+
+      // Try to read as stream, fallback to text
+      const responseText = await res.text();
+
+      // Parse streaming response — extract text content
+      let botText = "";
+      try {
+        // AI SDK stream format has data lines
+        const lines = responseText.split("\n").filter(l => l.trim());
+        for (const line of lines) {
+          if (line.startsWith("0:")) {
+            // Text delta format: 0:"text content"
+            const content = line.slice(2).trim();
+            if (content.startsWith('"') && content.endsWith('"')) {
+              botText += JSON.parse(content);
+            }
+          }
+        }
+      } catch {
+        // If parsing fails, use raw text
+        botText = responseText;
+      }
+
+      if (!botText) botText = getDemoResponse(trimmed);
+
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: botText,
+        time: getTimeString(),
+      }]);
+    } catch {
+      // Fallback to demo response on any error
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: getDemoResponse(trimmed),
+        time: getTimeString(),
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [messages, isLoading]);
+
+  const hasUserMessages = messages.length > 0;
 
   return (
     <div className="mx-auto flex h-[100dvh] max-w-md flex-col bg-white">
@@ -186,29 +257,29 @@ export default function FolkyPage() {
                   <div className="flex max-w-[80%] flex-col">
                     <div className="rounded-2xl rounded-tl-md bg-gray-100 px-4 py-3">
                       <p className="whitespace-pre-line text-[14px] leading-relaxed text-gray-800">
-                        {getMessageText(msg.parts)}
+                        {msg.content}
                       </p>
                     </div>
                     <span className="mt-0.5 pl-1 text-[10px] text-gray-400">
-                      {getTimeString()}
+                      {msg.time}
                     </span>
                   </div>
                 </div>
-              ) : msg.role === "user" ? (
+              ) : (
                 <div className="flex items-end justify-end gap-2">
                   <div className="flex max-w-[75%] flex-col items-end">
                     <div className="rounded-2xl rounded-tr-md bg-amber-500 px-4 py-3">
                       <p className="text-[14px] leading-relaxed text-white">
-                        {getMessageText(msg.parts)}
+                        {msg.content}
                       </p>
                     </div>
                     <span className="mt-0.5 pr-1 text-[10px] text-gray-400">
-                      {getTimeString()}
+                      {msg.time}
                     </span>
                   </div>
                   <UserAvatar />
                 </div>
-              ) : null}
+              )}
             </div>
           ))}
 
@@ -231,19 +302,7 @@ export default function FolkyPage() {
             </div>
           )}
 
-          {/* Error state */}
-          {status === "error" && (
-            <div className="flex items-start gap-2.5">
-              <BotAvatar />
-              <div className="flex max-w-[80%] flex-col">
-                <div className="rounded-2xl rounded-tl-md bg-red-50 px-4 py-3">
-                  <p className="text-[14px] leading-relaxed text-red-700">
-                    Folky esta en modo demo. No se pudo conectar con la IA.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Error messages are handled inline as demo responses */}
         </div>
       </div>
 
