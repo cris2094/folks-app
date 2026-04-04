@@ -1,270 +1,245 @@
 import Link from "next/link";
 import {
-  Building2,
-  Package,
-  Receipt,
-  AlertCircle,
-  Home,
-  Users,
-  Headphones,
-  Scale,
-  Calendar,
   Bell,
-  Settings,
-  ChevronDown,
-  Sparkles,
-  Wallet,
+  CalendarCheck,
+  UserPlus,
+  MessageSquareWarning,
+  Headphones,
+  Clock,
+  ChevronRight,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
 import { getUnreadCount } from "@/features/comunicados/queries/get-notifications";
 import { getPaymentSummary } from "@/features/pagos/queries/get-payment-summary";
+import { getAnnouncements } from "@/features/comunicados/queries/get-announcements";
 
-const serviceItems: {
-  href: string;
-  label: string;
-  icon: LucideIcon;
-  bgColor: string;
-  iconColor: string;
-  notification?: boolean;
-}[] = [
-  {
-    href: "/finanzas",
-    label: "Recibos",
-    icon: Receipt,
-    bgColor: "bg-amber-50",
-    iconColor: "text-amber-600",
-  },
-  {
-    href: "/paquetes",
-    label: "Paquetes",
-    icon: Package,
-    bgColor: "bg-green-50",
-    iconColor: "text-green-600",
-    notification: true,
-  },
-  {
-    href: "/incidencias",
-    label: "Incidencias",
-    icon: AlertCircle,
-    bgColor: "bg-red-50",
-    iconColor: "text-red-600",
-  },
-  {
-    href: "/propiedad",
-    label: "Mi Propiedad",
-    icon: Home,
-    bgColor: "bg-blue-50",
-    iconColor: "text-blue-600",
-  },
-  {
-    href: "/vecinos",
-    label: "Vecinos",
-    icon: Users,
-    bgColor: "bg-cyan-50",
-    iconColor: "text-cyan-600",
-  },
-  {
-    href: "/admin",
-    label: "Admin",
-    icon: Headphones,
-    bgColor: "bg-emerald-50",
-    iconColor: "text-emerald-600",
-  },
-  {
-    href: "/legal",
-    label: "Temas Legales",
-    icon: Scale,
-    bgColor: "bg-gray-100",
-    iconColor: "text-gray-600",
-  },
+const quickActions = [
   {
     href: "/zonas",
-    label: "Reservas",
-    icon: Calendar,
-    bgColor: "bg-amber-50",
-    iconColor: "text-amber-600",
+    label: "Reservar",
+    icon: CalendarCheck,
+  },
+  {
+    href: "/visitantes",
+    label: "Visitantes",
+    icon: UserPlus,
+  },
+  {
+    href: "/pqr",
+    label: "PQR",
+    icon: MessageSquareWarning,
+  },
+  {
+    href: "/folky",
+    label: "Soporte",
+    icon: Headphones,
   },
 ];
 
+function formatCurrency(amount: number) {
+  return `$${amount.toLocaleString("es-CO")}`;
+}
+
+function formatAnnouncementTime(dateStr: string) {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const isToday = date.toDateString() === now.toDateString();
+  const time = date.toLocaleTimeString("es-CO", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+  return isToday ? `Hoy, ${time}` : date.toLocaleDateString("es-CO", { day: "numeric", month: "short" }) + `, ${time}`;
+}
+
+function getCategoryBadge(category: string) {
+  const map: Record<string, { label: string; className: string }> = {
+    urgent: { label: "IMPORTANTE", className: "bg-red-500 text-white" },
+    maintenance: { label: "MANTENIMIENTO", className: "bg-amber-500 text-white" },
+    general: { label: "GENERAL", className: "bg-blue-500 text-white" },
+    event: { label: "EVENTO", className: "bg-green-500 text-white" },
+  };
+  return map[category] ?? { label: category.toUpperCase(), className: "bg-gray-500 text-white" };
+}
+
 export default async function HomePage() {
-  const [data, unreadCount, paymentSummary] = await Promise.all([
+  const [data, unreadCount, paymentSummary, announcements] = await Promise.all([
     getCurrentUser(),
     getUnreadCount(),
     getPaymentSummary(),
+    getAnnouncements(),
   ]);
 
   const fullName = data?.resident?.full_name ?? "";
   const name = fullName.split(" ")[0] || "Residente";
   const unit = data?.resident?.unit;
+  const unitLabel = unit ? `Torre ${unit.tower} - Apto ${unit.apartment}` : "Sin unidad";
 
-  const unitLabel = unit ? `${unit.tower}, ${unit.apartment}` : "Sin unidad";
+  const totalPending = paymentSummary.totalPending + paymentSummary.totalOverdue;
 
-  const totalPending =
-    paymentSummary.totalPending + paymentSummary.totalOverdue;
+  // Get initials for avatar fallback
+  const initials = fullName
+    .split(" ")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+
+  const latestAnnouncement = announcements[0] ?? null;
 
   return (
-    <div className="mx-auto max-w-md">
+    <div className="mx-auto max-w-md bg-white min-h-screen">
       {/* -- Header -- */}
       <div className="px-5 pb-3 pt-14">
         <div className="flex items-center justify-between">
-          {/* Izquierda: logo + ubicacion */}
+          {/* Left: Avatar + greeting */}
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-50 shadow-apple-sm">
-              <Building2
-                className="h-[18px] w-[18px] text-amber-500"
-                strokeWidth={1.5}
-              />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-100 text-sm font-bold text-amber-700">
+              {initials || "RE"}
             </div>
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-gray-400">
-                MI HOGAR
+              <p className="text-[13px] text-gray-500">
+                Hola, {name}
               </p>
-              <button className="flex items-center gap-1">
-                <span className="text-[17px] font-semibold tracking-tight text-gray-900">
-                  {unitLabel}
+              <p className="text-[15px] font-semibold tracking-tight text-gray-900">
+                {unitLabel}
+              </p>
+            </div>
+          </div>
+
+          {/* Right: Notifications */}
+          <Link href="/comunicados" className="relative">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+              <Bell className="h-5 w-5 text-gray-600" strokeWidth={1.5} />
+            </div>
+            {unreadCount > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -right-0.5 -top-0.5 h-4 min-w-4 px-1 text-[10px]"
+              >
+                {unreadCount}
+              </Badge>
+            )}
+          </Link>
+        </div>
+      </div>
+
+      {/* -- Payment Card (Dark gradient) -- */}
+      <div className="px-5 pt-3">
+        <div className="rounded-2xl bg-gradient-to-br from-[#2D2D2D] to-[#1A1A1A] p-5">
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="text-xs text-white/60">Total a pagar</p>
+              <p className="mt-1 text-3xl font-bold tracking-tight text-white">
+                {formatCurrency(totalPending)}
+              </p>
+              <div className="mt-2 flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-green-400" />
+                <span className="text-xs text-green-400">
+                  Vence: 15 de Octubre
                 </span>
-                <ChevronDown
-                  className="h-4 w-4 text-gray-400"
-                  strokeWidth={1.5}
-                />
-              </button>
-            </div>
-          </div>
-
-          {/* Derecha: bell + settings */}
-          <div className="flex items-center gap-2">
-            <Link href="/comunicados" className="relative">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-apple-sm">
-                <Bell
-                  className="h-[18px] w-[18px] text-gray-500"
-                  strokeWidth={1.5}
-                />
               </div>
-              {unreadCount > 0 && (
-                <Badge
-                  variant="destructive"
-                  className="absolute -right-0.5 -top-0.5 h-4 min-w-4 px-1 text-[10px]"
-                >
-                  {unreadCount}
-                </Badge>
-              )}
-            </Link>
-            <Link href="/configuracion">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-apple-sm">
-                <Settings
-                  className="h-[18px] w-[18px] text-gray-500"
-                  strokeWidth={1.5}
-                />
-              </div>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* -- Card Asistente Folky -- */}
-      <div className="px-5 pt-2">
-        <div className="rounded-[20px] border border-amber-200/30 bg-gradient-to-r from-amber-400 to-amber-500 p-4 shadow-apple">
-          <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500 shadow-sm">
-              <Sparkles className="h-5 w-5 text-white" strokeWidth={1.5} />
             </div>
-            <div className="flex-1">
-              <h2 className="text-[17px] font-bold tracking-tight text-white">
-                Hola, {name}!
-              </h2>
-              <p className="mt-0.5 text-[15px] leading-snug text-white/90">
-                Soy tu asistente virtual.{"\n"}Te ayudo a revisar tus paquetes o
-                pagos?
-              </p>
-            </div>
-          </div>
-          <button className="mt-3 flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-gray-800 shadow-apple-sm transition-colors hover:bg-gray-50">
-            <span className="text-base">🎙</span>
-            Hablar ahora
-          </button>
-        </div>
-      </div>
-
-      {/* -- Servicios grid 4x2 -- */}
-      <div className="px-5 pb-2 pt-7">
-        <p className="mb-4 text-[15px] font-semibold tracking-tight text-gray-900">
-          Servicios
-        </p>
-        <div className="grid grid-cols-4 gap-x-4 gap-y-5">
-          {serviceItems.map((item) => (
             <Link
-              key={item.href + item.label}
-              href={item.href}
+              href="/finanzas"
+              className="rounded-full bg-amber-500 px-5 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-amber-600 active:bg-amber-700"
+            >
+              Pagar
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* -- Quick Actions -- */}
+      <div className="px-5 pt-7">
+        <p className="mb-4 text-[15px] font-semibold tracking-tight text-gray-900">
+          Acciones rapidas
+        </p>
+        <div className="grid grid-cols-4 gap-4">
+          {quickActions.map((action) => (
+            <Link
+              key={action.href}
+              href={action.href}
               className="flex flex-col items-center gap-2"
             >
-              <div className="relative">
-                <div
-                  className={`flex h-14 w-14 items-center justify-center rounded-2xl shadow-apple-sm ${item.bgColor}`}
-                >
-                  <item.icon
-                    className={`h-6 w-6 ${item.iconColor}`}
-                    strokeWidth={1.5}
-                  />
-                </div>
-                {item.notification && (
-                  <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-[#F5F5F7] bg-red-500" />
-                )}
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white border border-gray-100 shadow-apple-sm">
+                <action.icon
+                  className="h-6 w-6 text-gray-600"
+                  strokeWidth={1.5}
+                />
               </div>
               <span className="text-center text-[11px] font-medium leading-tight text-gray-500">
-                {item.label}
+                {action.label}
               </span>
             </Link>
           ))}
         </div>
       </div>
 
-      {/* -- Cards horizontales -- */}
-      <div className="px-5 pb-6 pt-5">
-        <div className="grid grid-cols-2 gap-3">
-          {/* Proximo Pago */}
-          <Link href="/finanzas" className="block">
-            <div className="rounded-[20px] border border-gray-100 bg-white p-4 shadow-apple-sm">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50">
-                  <Wallet
-                    className="h-[18px] w-[18px] text-amber-600"
-                    strokeWidth={1.5}
-                  />
-                </div>
-                <span className="text-[11px] font-medium text-gray-500">
-                  Proximo Pago
-                </span>
-              </div>
-              <p className="mt-3 text-[20px] font-bold tracking-tight text-gray-900">
-                ${totalPending.toLocaleString("es-CO")}
-              </p>
-              <p className="mt-0.5 text-[11px] text-gray-400">
-                Vence en 5 dias
-              </p>
-            </div>
-          </Link>
-
-          {/* Tu Reserva */}
-          <Link href="/zonas" className="block">
-            <div className="overflow-hidden rounded-[20px] border border-gray-100 bg-white shadow-apple-sm">
-              <div className="h-20 w-full bg-gradient-to-br from-cyan-400 to-blue-400">
-                <div className="flex h-full items-center justify-center">
-                  <span className="text-2xl">🏊</span>
-                </div>
-              </div>
-              <div className="p-3.5">
-                <p className="text-[13px] font-semibold tracking-tight text-gray-900">
-                  Piscina Sur
-                </p>
-                <p className="mt-0.5 text-[11px] text-gray-400">
-                  Hoy, 3:00 PM
-                </p>
-              </div>
-            </div>
+      {/* -- Comunicados -- */}
+      <div className="px-5 pt-7 pb-6">
+        <div className="mb-4 flex items-center justify-between">
+          <p className="text-[15px] font-semibold tracking-tight text-gray-900">
+            Comunicados
+          </p>
+          <Link
+            href="/comunicados"
+            className="flex items-center gap-0.5 text-[13px] font-medium text-amber-600"
+          >
+            Ver todos
+            <ChevronRight className="h-3.5 w-3.5" strokeWidth={2} />
           </Link>
         </div>
+
+        {latestAnnouncement ? (
+          <Link href={`/comunicados`} className="block">
+            <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-apple-sm">
+              {/* Image placeholder - uses attachments or gradient fallback */}
+              <div className="relative h-40 w-full bg-gradient-to-br from-emerald-400 to-teal-500">
+                {latestAnnouncement.attachments?.[0] ? (
+                  <img
+                    src={latestAnnouncement.attachments[0]}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <span className="text-4xl opacity-50">🏊</span>
+                  </div>
+                )}
+                {/* Category badge */}
+                <div className="absolute left-3 top-3">
+                  <span
+                    className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${getCategoryBadge(latestAnnouncement.category).className}`}
+                  >
+                    {getCategoryBadge(latestAnnouncement.category).label}
+                  </span>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-4">
+                <div className="flex items-center gap-1.5 text-gray-400">
+                  <Clock className="h-3 w-3" strokeWidth={2} />
+                  <span className="text-[11px]">
+                    {formatAnnouncementTime(latestAnnouncement.created_at)}
+                  </span>
+                </div>
+                <h3 className="mt-1.5 text-[15px] font-semibold tracking-tight text-gray-900">
+                  {latestAnnouncement.title}
+                </h3>
+                <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-gray-500">
+                  {latestAnnouncement.body}
+                </p>
+              </div>
+            </div>
+          </Link>
+        ) : (
+          <div className="rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-apple-sm">
+            <p className="text-sm text-gray-400">No hay comunicados recientes</p>
+          </div>
+        )}
       </div>
     </div>
   );

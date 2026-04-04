@@ -5,11 +5,11 @@ import {
   Eye,
   EyeOff,
   ScanFace,
-  ChevronRight,
-  LayoutGrid,
-  Phone,
-  Package,
-  MessageCircle,
+  Mail,
+  Lock,
+  QrCode,
+  AlertCircle,
+  PhoneCall,
 } from "lucide-react";
 import Link from "next/link";
 import { loginWithEmail } from "@/features/auth/actions/login";
@@ -19,140 +19,137 @@ export function LoginForm({ error }: { error?: string }) {
   const [rememberMe, setRememberMe] = useState(true);
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-6">
       {error && (
         <div className="rounded-xl bg-red-50 p-3 text-center text-sm text-red-600">
           {error}
         </div>
       )}
 
-      {/* Login Form */}
-      <form action={loginWithEmail} className="space-y-3.5">
-        {/* Email / Document input */}
-        <input
-          name="email"
-          type="text"
-          placeholder="Correo electronico o Documento"
-          required
-          className="h-12 w-full rounded-xl border border-gray-100 bg-[#F9F9F9] px-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
-        />
+      {/* Login Card */}
+      <div className="mx-auto w-full max-w-sm rounded-3xl bg-white p-7 shadow-apple-lg">
+        <form action={loginWithEmail} className="space-y-4">
+          {/* Email field */}
+          <div>
+            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+              Correo Electr&oacute;nico
+            </label>
+            <div className="relative">
+              <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-300" />
+              <input
+                name="email"
+                type="email"
+                placeholder="tu@apartamento.com"
+                required
+                className="h-12 w-full rounded-xl border border-gray-100 bg-[#F9F9FB] pl-12 pr-4 text-sm text-gray-900 outline-none placeholder:text-gray-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+              />
+            </div>
+          </div>
 
-        {/* Password input */}
-        <div className="relative">
-          <input
-            name="password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Contrasena"
-            required
-            className="h-12 w-full rounded-xl border border-gray-100 bg-[#F9F9F9] px-4 pr-12 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
-          />
-          <button
-            type="button"
-            tabIndex={-1}
-            onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            aria-label={showPassword ? "Ocultar contrasena" : "Mostrar contrasena"}
-          >
-            {showPassword ? (
-              <EyeOff className="h-5 w-5" />
-            ) : (
-              <Eye className="h-5 w-5" />
-            )}
-          </button>
-        </div>
+          {/* Password field */}
+          <div>
+            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+              Contrase&ntilde;a
+            </label>
+            <div className="relative">
+              <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-300" />
+              <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                required
+                className="h-12 w-full rounded-xl border border-gray-100 bg-[#F9F9FB] pl-12 pr-12 text-sm text-gray-900 outline-none placeholder:text-gray-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+              />
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 hover:text-gray-500"
+                aria-label={showPassword ? "Ocultar contrasena" : "Mostrar contrasena"}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
+            </div>
+          </div>
 
-        {/* Remember me + Forgot password row */}
-        <div className="flex items-center justify-between">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-green-500 accent-green-500"
-            />
-            <span className="text-sm text-gray-600">Recordarme</span>
-          </label>
-          <Link
-            href="/recovery"
-            className="text-sm font-medium text-amber-600 hover:underline"
-          >
-            Olvido su clave?
-          </Link>
-        </div>
+          {/* Remember me + Forgot password row */}
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="h-4 w-4 rounded border-gray-300 text-green-500 accent-green-500"
+              />
+              <span className="text-sm text-gray-600">Recordarme</span>
+            </label>
+            <Link
+              href="/recovery"
+              className="text-sm text-gray-500 hover:text-gray-700"
+            >
+              &iquest;Olvidaste la clave?
+            </Link>
+          </div>
 
-        {/* Submit button row */}
-        <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            className="h-12 flex-1 rounded-2xl bg-gray-900 text-sm font-semibold text-white shadow-apple-sm transition-colors hover:bg-gray-800 active:bg-black"
-          >
-            Ingresar
-          </button>
-          <button
-            type="button"
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gray-100 bg-[#F9F9F9] text-gray-500 shadow-apple-sm transition-colors hover:bg-gray-100"
-            aria-label="Ingreso biometrico"
-          >
-            <ScanFace className="h-5 w-5" />
-          </button>
-        </div>
-      </form>
-
-      {/* Separator */}
-      <div className="border-t border-gray-100" />
-
-      {/* Virtual assistant card */}
-      <button
-        type="button"
-        className="flex w-full items-center gap-3 rounded-[20px] bg-[#F0FAF0] p-4 text-left transition-colors hover:bg-green-100/60"
-      >
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500">
-          <MessageCircle className="h-5 w-5 text-white" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold text-gray-900">
-            Necesita ayuda para entrar?
-          </p>
-          <p className="text-sm leading-snug text-gray-600">
-            Toque aqui para hablar o escribir con el asistente virtual Irawa.
-          </p>
-        </div>
-        <ChevronRight className="h-5 w-5 shrink-0 text-gray-400" />
-      </button>
+          {/* Submit button row */}
+          <div className="flex items-center gap-3 pt-1">
+            <button
+              type="submit"
+              className="h-14 flex-1 rounded-2xl bg-gradient-to-b from-gray-800 to-gray-900 text-base font-semibold text-white shadow-apple-sm transition-all hover:from-gray-700 hover:to-gray-800 active:from-gray-900 active:to-black"
+            >
+              Ingresar
+            </button>
+            <button
+              type="button"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-apple-sm transition-colors hover:bg-amber-600 active:bg-amber-700"
+              aria-label="Ingreso biometrico"
+            >
+              <ScanFace className="h-6 w-6" />
+            </button>
+          </div>
+        </form>
+      </div>
 
       {/* Quick access section */}
-      <div>
-        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400 mt-6">
-          ACCESOS RAPIDOS
+      <div className="mx-auto w-full max-w-sm">
+        <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400">
+          Accesos R&aacute;pidos
         </p>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           <QuickAccessButton
-            icon={<LayoutGrid className="h-6 w-6 text-white" />}
-            label="Pase Visitas"
-            bgColor="bg-blue-500"
+            icon={<QrCode className="h-5 w-5 text-blue-500" />}
+            label="Pase de Visita"
+            bgColor="bg-blue-50"
           />
           <QuickAccessButton
-            icon={<Phone className="h-6 w-6 text-white" />}
-            label="Llamar Porteria"
-            bgColor="bg-green-500"
+            icon={<AlertCircle className="h-5 w-5 text-red-500" />}
+            label="Reportar Emergencia"
+            bgColor="bg-red-50"
           />
           <QuickAccessButton
-            icon={<Package className="h-6 w-6 text-white" />}
-            label="Mis Paquetes"
-            bgColor="bg-amber-500"
-          />
-          <QuickAccessButton
-            label="SOS Ayuda"
-            bgColor="bg-red-500"
-            isSOS
+            icon={<PhoneCall className="h-5 w-5 text-green-500" />}
+            label="Llamar a Porteria"
+            bgColor="bg-green-50"
           />
         </div>
       </div>
 
       {/* Footer */}
-      <p className="mt-8 text-center text-xs tracking-wider text-gray-300">
-        Potenciado por Folks
-      </p>
+      <div className="mx-auto w-full max-w-sm pt-4 pb-4 text-center">
+        <p className="text-sm text-gray-400">
+          &iquest;Eres nuevo residente?
+        </p>
+        <Link
+          href="/register"
+          className="mt-0.5 inline-block text-sm font-bold text-gray-900 hover:underline"
+        >
+          Solicitar acceso a la administraci&oacute;n
+        </Link>
+      </div>
     </div>
   );
 }
@@ -161,28 +158,22 @@ function QuickAccessButton({
   icon,
   label,
   bgColor,
-  isSOS = false,
 }: {
-  icon?: React.ReactNode;
+  icon: React.ReactNode;
   label: string;
   bgColor: string;
-  isSOS?: boolean;
 }) {
   return (
     <button
       type="button"
-      className="flex flex-col items-center gap-1.5"
+      className="flex flex-col items-center gap-2"
     >
       <div
-        className={`flex h-14 w-14 items-center justify-center rounded-[18px] shadow-apple-sm ${bgColor}`}
+        className={`flex h-14 w-14 items-center justify-center rounded-2xl ${bgColor}`}
       >
-        {isSOS ? (
-          <span className="text-sm font-bold text-white">SOS</span>
-        ) : (
-          icon
-        )}
+        {icon}
       </div>
-      <span className="text-[10px] text-gray-500 leading-tight text-center">
+      <span className="text-[11px] text-gray-500 leading-tight text-center">
         {label}
       </span>
     </button>

@@ -2,7 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { ChevronLeft, MoreVertical, Mic, ArrowRight, Phone } from "lucide-react";
+import {
+  ChevronLeft,
+  MoreHorizontal,
+  Mic,
+  ArrowRight,
+  Phone,
+} from "lucide-react";
 
 interface Message {
   id: string;
@@ -14,25 +20,48 @@ const initialMessages: Message[] = [
   {
     id: "1",
     type: "bot",
-    text: "Buenos dias, Dona Carmen! \u{1F60A}\n\nComo amanecio hoy? Estoy aqui para ayudarle con la administracion.",
+    text: "\u00A1Buenos dias, Do\u00F1a Carmen! \uD83D\uDE0A\n\n\u00BFC\u00F3mo amaneci\u00F3 hoy?\nEstoy aqu\u00ED para ayudarle con la administraci\u00F3n.",
   },
 ];
 
 const quickActions = [
-  { label: "Tengo paquetes?", icon: ArrowRight },
+  { label: "\u00BFTengo paquetes?", icon: ArrowRight },
   { label: "Hablar con Seguridad", icon: Phone },
 ];
 
 const botResponses: Record<string, string> = {
-  "Tengo paquetes?":
-    "Si, Carmen! \u2705\n\nTienes 1 paquete pendiente por recoger:\n\n\u{1F4E6} Servientrega - Caja Mediana\nRecibido hoy a las 10:30 AM por Carlos (Seguridad).\n\nQuieres que te genere el codigo de recogida?",
+  "\u00BFTengo paquetes?": "\u00A1S\u00ED, Carmen! \u2705",
   "Hablar con Seguridad":
-    "Conectandote con la porteria... \u{1F4DE}\n\nCarlos (Seguridad) esta disponible ahora. Puedes llamar al ext. 101 o quieres que le envie un mensaje?",
+    "Conectandote con la porteria... \uD83D\uDCDE\n\nCarlos (Seguridad) esta disponible ahora.",
 };
+
+function BotAvatar() {
+  return (
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-500">
+      <svg
+        className="h-4 w-4 text-white"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+      </svg>
+    </div>
+  );
+}
+
+function UserAvatar() {
+  return (
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-300 overflow-hidden">
+      {/* Placeholder for user photo */}
+      <div className="h-full w-full rounded-full bg-gradient-to-br from-amber-200 to-amber-400" />
+    </div>
+  );
+}
 
 export default function FolkyPage() {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
+  const [showQuickActions, setShowQuickActions] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,12 +80,13 @@ export default function FolkyPage() {
     };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
+    setShowQuickActions(false);
 
     // Simulate bot response
     setTimeout(() => {
       const response =
         botResponses[text.trim()] ??
-        "Entendido! Dejame revisar eso por ti. Un momento por favor... \u23F3";
+        "Entendido! Dejame revisar eso por ti. Un momento por favor...";
       const botMsg: Message = {
         id: (Date.now() + 1).toString(),
         type: "bot",
@@ -69,96 +99,87 @@ export default function FolkyPage() {
   return (
     <div className="mx-auto flex h-[100dvh] max-w-md flex-col bg-white">
       {/* Header */}
-      <header className="flex items-center gap-3 border-b border-gray-100/50 px-5 py-3">
+      <header className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
         <Link
           href="/home"
-          className="flex items-center gap-0.5 text-[15px] font-medium text-amber-500"
+          className="flex items-center gap-0.5 text-[14px] font-medium text-amber-500"
         >
           <ChevronLeft className="h-5 w-5" strokeWidth={2} />
           Inicio
         </Link>
-        <div className="flex flex-1 items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500">
-            <svg
-              className="h-4 w-4 text-white"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-            </svg>
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-gray-900">
-              Asistente Irawa
-            </p>
-            <div className="flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-              <span className="text-[11px] text-green-600">En linea</span>
-            </div>
+        <div className="text-center">
+          <p className="text-[15px] font-bold text-gray-900">
+            Asistente Irawa
+          </p>
+          <div className="flex items-center justify-center gap-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+            <span className="text-[11px] font-medium text-green-500">
+              En linea
+            </span>
           </div>
         </div>
         <button className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100">
-          <MoreVertical className="h-4 w-4 text-gray-500" />
+          <MoreHorizontal className="h-5 w-5 text-gray-400" />
         </button>
       </header>
 
       {/* Chat area */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto px-4 py-4 space-y-4"
+        className="flex-1 overflow-y-auto px-4 py-4"
       >
-        {messages.map((msg) => (
-          <div key={msg.id}>
-            {msg.type === "bot" ? (
-              <div className="flex items-start gap-2 max-w-[85%]">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-green-500 mt-0.5">
-                  <svg
-                    className="h-3.5 w-3.5 text-white"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                  </svg>
-                </div>
-                <div className="rounded-2xl rounded-tl-md bg-gray-100 px-3.5 py-2.5">
-                  <p className="text-sm leading-relaxed text-gray-800 whitespace-pre-line">
-                    {msg.text}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex justify-end">
-                <div className="max-w-[80%] rounded-2xl rounded-tr-md bg-amber-500 px-3.5 py-2.5">
-                  <p className="text-sm leading-relaxed text-white">
-                    {msg.text}
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
+        {/* Timestamp */}
+        <p className="mb-5 text-center text-[12px] text-gray-400">
+          Hoy, 10:42 AM
+        </p>
 
-        {/* Quick action buttons - show only after first bot message */}
-        {messages.length === 1 && (
-          <div className="flex flex-col gap-2 pl-9">
-            {quickActions.map((action) => (
-              <button
-                key={action.label}
-                onClick={() => handleSend(action.label)}
-                className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
-              >
-                <span>{action.label}</span>
-                <action.icon className="h-4 w-4 text-gray-400" />
-              </button>
-            ))}
-          </div>
-        )}
+        <div className="space-y-4">
+          {messages.map((msg) => (
+            <div key={msg.id}>
+              {msg.type === "bot" ? (
+                <div className="flex items-start gap-2.5">
+                  <BotAvatar />
+                  <div className="max-w-[80%] rounded-2xl rounded-tl-md bg-gray-100 px-4 py-3">
+                    <p className="text-[14px] leading-relaxed text-gray-800 whitespace-pre-line">
+                      {msg.text}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-end justify-end gap-2">
+                  <div className="max-w-[75%] rounded-2xl rounded-tr-md bg-amber-500 px-4 py-3">
+                    <p className="text-[14px] leading-relaxed text-white">
+                      {msg.text}
+                    </p>
+                  </div>
+                  <UserAvatar />
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Quick action buttons - show only initially */}
+          {showQuickActions && (
+            <div className="flex flex-col gap-2 pl-12">
+              {quickActions.map((action) => (
+                <button
+                  key={action.label}
+                  onClick={() => handleSend(action.label)}
+                  className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                >
+                  <span>{action.label}</span>
+                  <action.icon className="h-4 w-4 text-amber-500" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Input bar */}
-      <div className="border-t bg-white px-4 py-3">
-        <div className="flex items-center gap-2">
-          <div className="flex flex-1 items-center rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
+      <div className="border-t border-gray-100 bg-white px-4 py-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex flex-1 items-center rounded-full border border-gray-200 bg-gray-50 px-4 py-2.5">
             <input
               type="text"
               value={input}
@@ -167,12 +188,12 @@ export default function FolkyPage() {
                 if (e.key === "Enter") handleSend(input);
               }}
               placeholder="Escriba un mensaje..."
-              className="flex-1 bg-transparent text-sm outline-none placeholder:text-gray-400"
+              className="flex-1 bg-transparent text-[14px] outline-none placeholder:text-gray-400"
             />
           </div>
           <button
             onClick={() => handleSend(input)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-sm transition-colors hover:bg-amber-600"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-sm transition-colors hover:bg-amber-600 active:scale-95"
           >
             <Mic className="h-5 w-5" />
           </button>
@@ -180,9 +201,9 @@ export default function FolkyPage() {
       </div>
 
       {/* Footer */}
-      <div className="pb-2 pt-1 text-center">
-        <p className="text-[10px] font-medium tracking-wider text-gray-400">
-          <span className="mr-1">\u2726</span>
+      <div className="pb-3 pt-1 text-center">
+        <p className="text-[10px] font-medium tracking-widest text-gray-300">
+          <span className="mr-1">{"\u2726"}</span>
           POTENCIADO POR FOLKS
         </p>
       </div>
