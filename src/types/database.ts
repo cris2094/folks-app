@@ -610,6 +610,49 @@ export interface Vote {
 // Staff Shifts (MOD-015)
 // ============================================
 
+// ============================================
+// Wallet (MOD-016)
+// ============================================
+
+export type WalletTransactionType = "income" | "expense";
+
+export type WalletCategory =
+  | "administracion"
+  | "servicios"
+  | "mercado"
+  | "transporte"
+  | "salud"
+  | "educacion"
+  | "entretenimiento"
+  | "otros";
+
+export interface WalletTransaction {
+  id: string;
+  tenant_id: string;
+  resident_id: string;
+  type: WalletTransactionType;
+  category: WalletCategory;
+  description: string;
+  amount_cop: number;
+  date: string;
+  is_recurring: boolean;
+  created_at: string;
+}
+
+export interface WalletBudget {
+  id: string;
+  tenant_id: string;
+  resident_id: string;
+  category: WalletCategory;
+  budget_cop: number;
+  month: string;
+  created_at: string;
+}
+
+// ============================================
+// Staff Shifts (MOD-015)
+// ============================================
+
 export type StaffRole = "portero" | "aseo" | "mantenimiento" | "seguridad";
 
 export type ShiftStatus = "scheduled" | "in_progress" | "completed" | "absent";

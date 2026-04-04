@@ -24,6 +24,8 @@ import {
   Scale,
   Star,
   BarChart3,
+  Droplets,
+  FolderOpen,
 } from "lucide-react";
 
 // ============================================
@@ -53,6 +55,9 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "soporte",
     "citas",
     "presupuesto",
+    "wallet",
+    "servicios",
+    "documentos",
     "tools",
     "admin/finanzas",
     "admin/gastos",
@@ -63,6 +68,7 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "admin/tareas",
     "admin/personal",
     "admin/turnos",
+    "admin/servicios",
   ],
   consejo: [
     "home",
@@ -85,11 +91,15 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "soporte",
     "citas",
     "presupuesto",
+    "wallet",
+    "servicios",
+    "documentos",
     "tools",
     "admin/finanzas",
     "admin/presupuesto",
     "admin/asambleas",
     "admin/analytics",
+    "admin/servicios",
   ],
   residente: [
     "home",
@@ -112,6 +122,9 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "soporte",
     "citas",
     "presupuesto",
+    "wallet",
+    "servicios",
+    "documentos",
     "tools",
   ],
   personal: [
@@ -186,12 +199,12 @@ const ROLE_QUICK_ACTIONS: Record<UserRole, QuickAction[]> = {
   ],
   residente: [
     { href: "/finanzas", label: "Recibos", icon: Receipt },
+    { href: "/wallet", label: "Wallet", icon: Wallet },
     { href: "/paquetes", label: "Paquetes", icon: Package },
     { href: "/pqr", label: "PQR", icon: MessageSquareWarning },
     { href: "/zonas", label: "Reservas", icon: CalendarCheck },
-    { href: "/votaciones", label: "Votaciones", icon: Vote },
-    { href: "/vecinos", label: "Vecinos", icon: Users },
-    { href: "/propiedad", label: "Mi Propiedad", icon: HomeIcon },
+    { href: "/servicios", label: "Servicios", icon: Droplets },
+    { href: "/documentos", label: "Documentos", icon: FolderOpen },
     { href: "/salud", label: "Salud", icon: Activity },
   ],
   personal: [
@@ -218,6 +231,7 @@ export function getHomeActions(role: UserRole): QuickAction[] {
 
 const ALL_TOOLS: QuickAction[] = [
   { href: "/finanzas", label: "Recibos", icon: Receipt },
+  { href: "/wallet", label: "Wallet", icon: Wallet },
   { href: "/paquetes", label: "Paquetes", icon: Package },
   { href: "/pqr", label: "PQR", icon: MessageSquareWarning },
   { href: "/propiedad", label: "Mi Propiedad", icon: HomeIcon },
@@ -229,6 +243,8 @@ const ALL_TOOLS: QuickAction[] = [
   { href: "/mantenimiento", label: "Mantenimiento", icon: Wrench },
   { href: "/actas", label: "Actas", icon: FileText },
   { href: "/votaciones", label: "Votaciones", icon: Vote },
+  { href: "/servicios", label: "Servicios", icon: Droplets },
+  { href: "/documentos", label: "Documentos", icon: FolderOpen },
   { href: "/presupuesto", label: "Presupuesto", icon: Wallet },
   { href: "/salud", label: "Salud", icon: Activity },
   { href: "/puntos", label: "Puntos", icon: Star },
@@ -283,6 +299,7 @@ export function getRoleColor(role: UserRole): string {
 const CONSEJO_ADMIN_PATHS = [
   "/admin/finanzas",
   "/admin/presupuesto",
+  "/admin/servicios",
   "/admin/asambleas",
   "/admin/analytics",
 ];

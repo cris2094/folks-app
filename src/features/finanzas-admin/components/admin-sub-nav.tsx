@@ -11,6 +11,7 @@ const allTabs = [
   { href: "/admin/gastos", label: "Gastos" },
   { href: "/admin/cartera", label: "Cartera" },
   { href: "/admin/presupuesto", label: "Presupuesto" },
+  { href: "/admin/servicios", label: "Servicios" },
   { href: "/admin/asambleas", label: "Asambleas" },
   { href: "/admin/tareas", label: "Tareas" },
   { href: "/admin/personal", label: "Personal" },
