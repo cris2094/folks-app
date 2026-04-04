@@ -82,15 +82,20 @@ export default function FinanzasPage() {
           Detalle del cobro
         </h2>
 
-        <div className="space-y-3">
-          {detalles.map((d) => (
-            <div key={d.concepto} className="flex items-center justify-between">
+        <div className="overflow-hidden rounded-2xl border border-gray-100">
+          {detalles.map((d, i) => (
+            <div
+              key={d.concepto}
+              className={`flex items-center justify-between px-4 py-3 ${
+                i < detalles.length - 1 ? "border-b border-gray-50" : ""
+              }`}
+            >
               <span className="text-[14px] text-gray-600">{d.concepto}</span>
-              <span className="text-[14px] text-gray-600">{fmt(d.valor)}</span>
+              <span className="text-[14px] font-medium text-gray-700">{fmt(d.valor)}</span>
             </div>
           ))}
           {/* Total row */}
-          <div className="border-t border-gray-100 pt-3">
+          <div className="border-t border-gray-200 bg-gray-50/50 px-4 py-3">
             <div className="flex items-center justify-between">
               <span className="text-[15px] font-bold text-gray-900">Total</span>
               <span className="text-[15px] font-bold text-gray-900">
@@ -101,7 +106,7 @@ export default function FinanzasPage() {
         </div>
 
         {/* Pay button */}
-        <button className="mt-8 flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 py-4 text-[15px] font-semibold text-white shadow-lg shadow-amber-200/50 transition-all duration-200 hover:from-amber-500 hover:to-amber-600 active:scale-[0.98]">
+        <button className="mt-8 flex w-full cursor-pointer items-center justify-center gap-2 rounded-3xl bg-gradient-to-r from-amber-400 to-amber-500 py-4 text-[15px] font-semibold text-white shadow-lg shadow-amber-200/50 transition-all duration-200 hover:from-amber-500 hover:to-amber-600 active:scale-[0.98]">
           Realizar Pago Seguro
           <CheckCircle2 className="h-5 w-5" strokeWidth={2} />
         </button>
@@ -128,7 +133,7 @@ export default function FinanzasPage() {
             key={h.id}
           >
           <div
-            className="flex items-center gap-3 rounded-2xl bg-gray-50 p-4"
+            className="flex items-center gap-3 rounded-3xl border border-gray-100 bg-white p-4 shadow-apple-sm transition-shadow duration-200 hover:shadow-apple"
           >
             {/* Check icon */}
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100">

@@ -133,21 +133,21 @@ export function LoginForm({ error }: { error?: string }) {
           <StaggerContainer className="grid grid-cols-3 gap-3" staggerDelay={0.07}>
             <StaggerItem>
               <QuickAccessButton
-                icon={<QrCode className="h-5 w-5 text-blue-500" />}
+                icon={<QrCode className="h-7 w-7 text-blue-500" />}
                 label="Pase de Visita"
                 bgColor="bg-blue-50"
               />
             </StaggerItem>
             <StaggerItem>
               <QuickAccessButton
-                icon={<AlertCircle className="h-5 w-5 text-red-500" />}
+                icon={<AlertCircle className="h-7 w-7 text-red-500" />}
                 label="Reportar Emergencia"
                 bgColor="bg-red-50"
               />
             </StaggerItem>
             <StaggerItem>
               <QuickAccessButton
-                icon={<PhoneCall className="h-5 w-5 text-green-500" />}
+                icon={<PhoneCall className="h-7 w-7 text-green-500" />}
                 label="Llamar a Porteria"
                 bgColor="bg-green-50"
               />
@@ -186,10 +186,10 @@ function QuickAccessButton({
   return (
     <button
       type="button"
-      className="flex w-full cursor-pointer flex-col items-center gap-2 rounded-2xl bg-white p-3 shadow-apple-sm border border-white/80 transition-all duration-200 hover:shadow-apple active:scale-[0.97]"
+      className="flex w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-2xl bg-white p-3 shadow-apple-sm aspect-square border border-white/80 transition-all duration-200 hover:shadow-apple active:scale-[0.97]"
     >
       <div
-        className={`flex h-12 w-12 items-center justify-center rounded-2xl ${bgColor}`}
+        className={`flex h-10 w-10 items-center justify-center rounded-2xl ${bgColor}`}
       >
         {icon}
       </div>

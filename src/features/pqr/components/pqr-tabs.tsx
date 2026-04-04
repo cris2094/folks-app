@@ -23,7 +23,7 @@ export function PqrTabs({
     <>
       {/* Tabs pill */}
       <div className="px-5 pb-4">
-        <div className="flex rounded-full bg-gray-100/80 p-1">
+        <div className="flex rounded-full border border-gray-200 bg-gray-100/80 p-1">
           <button
             onClick={() => setActiveTab("en_proceso")}
             className={`flex-1 cursor-pointer rounded-full py-2 text-center text-[13px] font-medium transition-all duration-200 ${

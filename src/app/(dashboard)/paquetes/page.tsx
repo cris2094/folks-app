@@ -77,7 +77,7 @@ export default function PaquetesPage() {
 
       {/* QR Code section */}
       <ScaleIn>
-        <div className="mx-5 mt-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-apple-sm">
+        <div className="mx-5 mt-4 rounded-3xl border border-gray-100 bg-white p-6 shadow-apple-sm">
           <h2 className="text-center text-[15px] font-bold tracking-tight text-gray-900">
             Codigo de Recogida
           </h2>
@@ -86,13 +86,13 @@ export default function PaquetesPage() {
           </p>
 
           {/* QR placeholder */}
-          <div className="mx-auto mt-5 flex h-28 w-28 items-center justify-center rounded-xl bg-white">
+          <div className="mx-auto mt-5 flex h-32 w-32 items-center justify-center rounded-2xl bg-gray-50 p-2">
             <QRCode />
           </div>
 
           {/* Code ID */}
           <p className="mt-3 text-center text-[12px] text-gray-400">
-            ID: <span className="font-mono font-medium">BR2A-CX94</span>
+            ID: <span className="rounded-lg bg-gray-100 px-2 py-0.5 font-mono font-medium text-gray-600">BR2A-CX94</span>
           </p>
         </div>
       </ScaleIn>
@@ -112,7 +112,7 @@ export default function PaquetesPage() {
           {pendingPackages.map((pkg) => (
             <StaggerItem key={pkg.id}>
             <div
-              className="flex items-start gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-apple-sm"
+              className="flex items-start gap-3 rounded-3xl border border-gray-100 bg-white p-4 shadow-apple-sm transition-shadow duration-200 hover:shadow-apple"
             >
               {/* Icon */}
               <div
@@ -154,7 +154,7 @@ export default function PaquetesPage() {
 
       {/* Notify arrival */}
       <div className="mx-5 mt-4">
-        <button className="flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-4 text-left transition-colors duration-200 hover:bg-gray-50 active:bg-gray-100">
+        <button className="flex w-full cursor-pointer items-center gap-3 rounded-3xl border border-dashed border-gray-200 bg-gray-50/50 p-4 text-left transition-colors duration-200 hover:bg-gray-50 active:bg-gray-100">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-200">
             <Plus className="h-5 w-5 text-gray-400" strokeWidth={1.5} />
           </div>

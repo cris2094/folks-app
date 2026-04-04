@@ -12,19 +12,19 @@ export default function manifest(): MetadataRoute.Manifest {
     orientation: "portrait",
     icons: [
       {
-        src: "/icons/icon-192.png",
+        src: "/images/irawa-logo.jpg",
         sizes: "192x192",
-        type: "image/png",
+        type: "image/jpeg",
       },
       {
-        src: "/icons/icon-512.png",
+        src: "/images/irawa-logo.jpg",
         sizes: "512x512",
-        type: "image/png",
+        type: "image/jpeg",
       },
       {
-        src: "/icons/icon-512.png",
+        src: "/images/irawa-logo.jpg",
         sizes: "512x512",
-        type: "image/png",
+        type: "image/jpeg",
         purpose: "maskable",
       },
     ],

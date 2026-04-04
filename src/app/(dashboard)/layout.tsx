@@ -1,5 +1,4 @@
 import { BottomNav } from "@/components/bottom-nav";
-import { FolkyContextual } from "@/features/folky/components/folky-contextual";
 import { FolkyOnboarding } from "@/features/folky/components/folky-onboarding";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
 import type { UserRole } from "@/types/database";
@@ -21,7 +20,6 @@ export default async function DashboardLayout({
         {children}
       </main>
       <BottomNav role={role} />
-      <FolkyContextual />
       <FolkyOnboarding />
     </div>
   );

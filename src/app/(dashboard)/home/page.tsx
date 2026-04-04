@@ -54,8 +54,9 @@ export default async function HomePage() {
 
   const role = (data?.resident?.role ?? "residente") as UserRole;
   const allActions = getHomeActions(role);
-  // Show max 4 quick actions on home to match mobile mockup
-  const quickActions = allActions.slice(0, 4);
+  // Show max 8 quick actions on home (2 rows x 4 cols)
+  const quickActions = allActions.slice(0, 8);
+  const hasMoreActions = allActions.length > 8;
 
   const fullName = data?.resident?.full_name ?? "";
   const name = fullName.split(" ")[0] || "Residente";
@@ -82,9 +83,9 @@ export default async function HomePage() {
           <div className="flex items-center justify-between">
             {/* Left: Avatar + greeting */}
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-100 text-sm font-bold text-amber-700">
+              <Link href="/perfil" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-100 text-sm font-bold text-amber-700 transition-transform active:scale-95">
                 {initials || "RE"}
-              </div>
+              </Link>
               <div>
                 <p className="text-[13px] text-gray-400">
                   Hola, {name}
@@ -171,6 +172,19 @@ export default async function HomePage() {
             </StaggerItem>
           ))}
         </StaggerContainer>
+        {hasMoreActions && (
+          <FadeIn delay={0.25}>
+            <div className="mt-4 flex justify-center">
+              <Link
+                href="/tools"
+                className="flex min-h-[44px] items-center gap-1 text-[13px] font-medium text-amber-600 hover:text-amber-700 transition-colors"
+              >
+                Ver mas
+                <ChevronRight className="h-3.5 w-3.5" strokeWidth={2} />
+              </Link>
+            </div>
+          </FadeIn>
+        )}
       </div>
 
       {/* -- Comunicados -- */}

@@ -180,10 +180,10 @@ export default function FolkyPage() {
   const hasUserMessages = messages.length > 0;
 
   return (
-    <div className="mx-auto flex h-[100dvh] max-w-md flex-col bg-white">
+    <div className="mx-auto flex h-[100dvh] max-w-md flex-col overflow-hidden bg-white">
       {/* Header */}
       <FadeIn>
-        <header className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+        <header className="flex shrink-0 items-center justify-between border-b border-gray-100 px-4 py-3">
           <Link
             href="/home"
             className="flex items-center gap-0.5 text-[14px] font-medium text-amber-500"
@@ -209,7 +209,7 @@ export default function FolkyPage() {
       </FadeIn>
 
       {/* Chat area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4">
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
         {/* Suggested questions chips */}
         {showQuickActions && (
           <div className="mb-4 flex flex-wrap justify-center gap-2">
@@ -307,7 +307,7 @@ export default function FolkyPage() {
       </div>
 
       {/* Input bar */}
-      <div className="border-t border-gray-100 bg-white px-4 py-3">
+      <div className="shrink-0 border-t border-gray-100 bg-white px-4 py-3">
         <div className="flex items-center gap-2.5">
           <div className="flex flex-1 items-center rounded-full border border-gray-200 bg-gray-50 px-4 py-2.5">
             <input
@@ -337,7 +337,7 @@ export default function FolkyPage() {
       </div>
 
       {/* Footer */}
-      <div className="pb-3 pt-1 text-center">
+      <div className="shrink-0 pb-3 pt-1 text-center">
         <p className="flex items-center justify-center gap-1 text-[10px] font-medium tracking-widest text-gray-300">
           <svg
             className="h-2.5 w-2.5"

@@ -77,15 +77,17 @@ function ProgressSteps({ status }: { status: string }) {
   const steps = getSteps(status);
 
   return (
-    <div className="mt-4 flex items-center">
+    <div className="mt-4 flex items-center gap-1">
       {steps.map((step, idx) => (
-        <div key={step.label} className="flex items-center">
+        <div key={step.label} className="flex items-center gap-1">
           <div className="flex flex-col items-center">
             <div
-              className={`flex h-3 w-3 rounded-full ${
-                step.completed || step.active
-                  ? "bg-amber-500"
-                  : "bg-gray-200"
+              className={`flex h-2.5 w-2.5 rounded-full ring-2 ring-offset-1 ${
+                step.completed
+                  ? "bg-amber-500 ring-amber-200"
+                  : step.active
+                    ? "bg-amber-400 ring-amber-100"
+                    : "bg-gray-200 ring-gray-100"
               }`}
             />
             <span
@@ -100,8 +102,8 @@ function ProgressSteps({ status }: { status: string }) {
           </div>
           {idx < steps.length - 1 && (
             <div
-              className={`mx-2 mb-4 h-[2.5px] w-10 rounded-full ${
-                step.completed ? "bg-amber-500" : "bg-gray-200"
+              className={`mx-1 mb-4 h-[2px] w-8 rounded-full ${
+                step.completed ? "bg-amber-400" : "bg-gray-100"
               }`}
             />
           )}
@@ -175,7 +177,7 @@ export default async function PqrPage() {
                   <Link
                     key={ticket.id}
                     href={`/pqr/${ticket.id}`}
-                    className="block rounded-[20px] border border-gray-100 bg-white p-4 shadow-apple-sm transition-shadow hover:shadow-apple"
+                    className="block rounded-2xl border border-gray-100/80 bg-white p-4 shadow-apple-sm transition-shadow hover:shadow-apple"
                   >
                     {/* Badge row */}
                     <div className="flex items-center justify-between">
@@ -258,7 +260,7 @@ export default async function PqrPage() {
                   <Link
                     key={ticket.id}
                     href={`/pqr/${ticket.id}`}
-                    className="block rounded-[20px] border border-gray-100 bg-white p-4 shadow-apple-sm transition-shadow hover:shadow-apple"
+                    className="block rounded-2xl border border-gray-100/80 bg-white p-4 shadow-apple-sm transition-shadow hover:shadow-apple"
                   >
                     <div className="flex items-center justify-between">
                       <span

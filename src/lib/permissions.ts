@@ -18,6 +18,12 @@ import {
   Wallet,
   ClipboardList,
   Vote,
+  Headset,
+  CalendarClock,
+  BookOpen,
+  Scale,
+  Star,
+  BarChart3,
 } from "lucide-react";
 
 // ============================================
@@ -43,6 +49,9 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "manuales",
     "vecinos",
     "votaciones",
+    "soporte",
+    "citas",
+    "tools",
     "admin/finanzas",
     "admin/gastos",
     "admin/cartera",
@@ -70,6 +79,9 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "manuales",
     "vecinos",
     "votaciones",
+    "soporte",
+    "citas",
+    "tools",
     "admin/finanzas",
     "admin/presupuesto",
     "admin/asambleas",
@@ -92,6 +104,9 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "manuales",
     "vecinos",
     "votaciones",
+    "soporte",
+    "citas",
+    "tools",
   ],
   personal: [
     "home",
@@ -99,6 +114,9 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "mantenimiento",
     "comunicados",
     "folky",
+    "soporte",
+    "citas",
+    "tools",
   ],
   portero: [
     "home",
@@ -106,6 +124,9 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "visitantes",
     "comunicados",
     "folky",
+    "soporte",
+    "citas",
+    "tools",
   ],
 };
 
@@ -186,6 +207,41 @@ export function getHomeActions(role: UserRole): QuickAction[] {
 }
 
 // ============================================
+// All tools (launchpad / tools page)
+// ============================================
+
+const ALL_TOOLS: QuickAction[] = [
+  { href: "/finanzas", label: "Recibos", icon: Receipt },
+  { href: "/paquetes", label: "Paquetes", icon: Package },
+  { href: "/pqr", label: "Incidencias", icon: MessageSquareWarning },
+  { href: "/propiedad", label: "Mi Propiedad", icon: HomeIcon },
+  { href: "/vecinos", label: "Vecinos", icon: Users },
+  { href: "/admin", label: "Admin", icon: LayoutDashboard },
+  { href: "/manuales", label: "Temas Legales", icon: Scale },
+  { href: "/zonas", label: "Reservas", icon: CalendarCheck },
+  { href: "/comunicados", label: "Comunicados", icon: Megaphone },
+  { href: "/mantenimiento", label: "Mantenimiento", icon: Wrench },
+  { href: "/manuales", label: "Manuales", icon: BookOpen },
+  { href: "/votaciones", label: "Votaciones", icon: Vote },
+  { href: "/salud", label: "Salud", icon: Activity },
+  { href: "/puntos", label: "Puntos", icon: Star },
+  { href: "/transparencia", label: "Transparencia", icon: Eye },
+  { href: "/soporte", label: "Soporte", icon: Headset },
+  { href: "/citas", label: "Agendar Cita", icon: CalendarClock },
+];
+
+export function getAllToolsActions(role: UserRole): QuickAction[] {
+  const perms = ROLE_PERMISSIONS[role];
+  if (!perms) return [];
+  if (perms.includes("*")) return ALL_TOOLS;
+  // Filter tools to only those the role has access to
+  return ALL_TOOLS.filter((tool) => {
+    const module = tool.href.replace(/^\//, "");
+    return perms.includes(module);
+  });
+}
+
+// ============================================
 // Role labels and colors
 // ============================================
 
@@ -254,42 +310,42 @@ const ROLE_BOTTOM_NAV: Record<UserRole, BottomNavItem[]> = {
     { href: "/home", label: "Inicio", icon: HomeIcon },
     { href: "/finanzas", label: "Pagos", icon: WalletNav },
     { href: "/folky", label: "Folky", icon: Sparkles, isFab: true },
-    { href: "/admin", label: "Admin", icon: LayoutGrid },
+    { href: "/tools", label: "Tools", icon: LayoutGrid },
     { href: "/perfil", label: "Perfil", icon: User },
   ],
   admin: [
     { href: "/home", label: "Inicio", icon: HomeIcon },
     { href: "/finanzas", label: "Pagos", icon: WalletNav },
     { href: "/folky", label: "Folky", icon: Sparkles, isFab: true },
-    { href: "/admin", label: "Admin", icon: LayoutGrid },
+    { href: "/tools", label: "Tools", icon: LayoutGrid },
     { href: "/perfil", label: "Perfil", icon: User },
   ],
   consejo: [
     { href: "/home", label: "Inicio", icon: HomeIcon },
     { href: "/finanzas", label: "Pagos", icon: WalletNav },
     { href: "/folky", label: "Folky", icon: Sparkles, isFab: true },
-    { href: "/transparencia", label: "Transparencia", icon: Eye },
+    { href: "/tools", label: "Tools", icon: LayoutGrid },
     { href: "/perfil", label: "Perfil", icon: User },
   ],
   residente: [
     { href: "/home", label: "Inicio", icon: HomeIcon },
     { href: "/finanzas", label: "Pagos", icon: WalletNav },
     { href: "/folky", label: "Folky", icon: Sparkles, isFab: true },
-    { href: "/zonas", label: "Zonas", icon: LayoutGrid },
+    { href: "/tools", label: "Tools", icon: LayoutGrid },
     { href: "/perfil", label: "Perfil", icon: User },
   ],
   personal: [
     { href: "/home", label: "Inicio", icon: HomeIcon },
     { href: "/mantenimiento", label: "Tareas", icon: ClipboardList },
     { href: "/folky", label: "Folky", icon: Sparkles, isFab: true },
-    { href: "/mantenimiento", label: "Mantenimiento", icon: Wrench },
+    { href: "/tools", label: "Tools", icon: LayoutGrid },
     { href: "/perfil", label: "Perfil", icon: User },
   ],
   portero: [
     { href: "/home", label: "Inicio", icon: HomeIcon },
     { href: "/paquetes", label: "Paquetes", icon: Package },
     { href: "/folky", label: "Folky", icon: Sparkles, isFab: true },
-    { href: "/visitantes", label: "Visitantes", icon: Users },
+    { href: "/tools", label: "Tools", icon: LayoutGrid },
     { href: "/perfil", label: "Perfil", icon: User },
   ],
 };

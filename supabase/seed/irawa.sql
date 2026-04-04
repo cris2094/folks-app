@@ -82,19 +82,27 @@ INSERT INTO zones (tenant_id, name, description, icon, price_cop, max_duration_h
 -- ============================================
 -- Announcements (comunicados de ejemplo)
 -- ============================================
-INSERT INTO announcements (tenant_id, title, body, category, attachments) VALUES
+INSERT INTO announcements (tenant_id, title, body, category, is_pinned, attachments, created_at) VALUES
   ('a0000000-0000-0000-0000-000000000001',
-   'Mantenimiento piscina programado',
-   'Informamos que la piscina estara en mantenimiento del 10 al 12 de noviembre. Se realizara limpieza profunda y revision del sistema de filtracion. Disculpen las molestias.',
-   'maintenance', '{}'),
+   'Mantenimiento de Piscina',
+   'La piscina estara cerrada por mantenimiento preventivo el dia sabado 5 de abril. Se realizaran trabajos de limpieza profunda y revision del sistema de filtracion.',
+   'maintenance', true, '{}', now() - interval '1 day'),
   ('a0000000-0000-0000-0000-000000000001',
-   'Asamblea General Ordinaria 2026',
-   'Se convoca a todos los propietarios a la Asamblea General Ordinaria que se realizara el dia 20 de noviembre a las 7:00 PM en el Salon Social. Orden del dia: presupuesto 2026, eleccion de consejo.',
-   'general', '{}'),
+   'Asamblea General Ordinaria',
+   'Se convoca a todos los propietarios a la Asamblea General Ordinaria que se realizara el 15 de abril a las 7:00 PM en el salon social. Orden del dia: presupuesto 2026, eleccion consejo.',
+   'event', true, '{}', now() - interval '3 days'),
+  ('a0000000-0000-0000-0000-000000000001',
+   'Nuevo Horario de Gimnasio',
+   'A partir del 1 de mayo, el gimnasio tendra horario extendido: Lunes a Viernes de 5:00 AM a 10:00 PM. Sabados y Domingos de 7:00 AM a 8:00 PM.',
+   'general', false, '{}', now() - interval '5 days'),
+  ('a0000000-0000-0000-0000-000000000001',
+   'Corte de Agua Programado',
+   'EPM realizara un corte programado de agua el miercoles 8 de abril de 8:00 AM a 2:00 PM. Se recomienda almacenar agua con anticipacion.',
+   'emergency', false, '{}', now() - interval '7 days'),
   ('a0000000-0000-0000-0000-000000000001',
    'Alerta: trabajos en via principal',
    'La Alcaldia de Floridablanca informa que habra cierre parcial de la Cra 15 entre calles 56 y 60 por obras de pavimentacion. Usar rutas alternas. Duracion estimada: 2 semanas.',
-   'urgent', '{}');
+   'emergency', false, '{}', now() - interval '10 days');
 
 -- ============================================
 -- Budget period (presupuesto activo)

@@ -1,7 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Mail,
   Phone,
@@ -9,9 +6,8 @@ import {
   Building2,
   Home,
   LogOut,
-  Download,
-  Trash2,
   Shield,
+  ChevronLeft,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getCurrentUser } from "@/features/auth/queries/get-current-user";
@@ -22,6 +18,7 @@ import { getRoleLabel, getRoleColor } from "@/lib/permissions";
 import type { UserRole } from "@/types/database";
 import { AccountDeletionButton } from "@/features/auth/components/account-deletion-button";
 import { ExportDataButton } from "@/features/auth/components/export-data-button";
+import { ProfileEditor } from "@/features/auth/components/profile-editor";
 
 export default async function PerfilPage() {
   const data = await getCurrentUser();
@@ -39,128 +36,176 @@ export default async function PerfilPage() {
     .join("");
 
   return (
-    <div className="mx-auto max-w-md p-4">
-      {/* Avatar header */}
+    <div className="mx-auto w-full max-w-md min-h-screen bg-[#F5F5F7]">
+      {/* Header */}
       <FadeIn>
-      <div className="mb-6 flex flex-col items-center gap-3 pt-2">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-amber-600 text-2xl font-bold text-white shadow-lg shadow-amber-600/25">
-          {initials || "U"}
+        <div className="bg-white">
+          <div className="flex items-center gap-3 px-5 pt-4 pb-2">
+            <Link
+              href="/home"
+              className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100 active:bg-gray-200"
+            >
+              <ChevronLeft className="h-5 w-5 text-gray-600" strokeWidth={1.5} />
+            </Link>
+            <h1 className="text-lg font-semibold tracking-tight text-gray-900">
+              Perfil
+            </h1>
+          </div>
+
+          {/* Avatar + Name */}
+          <div className="flex flex-col items-center gap-3 pb-5 pt-3">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-2xl font-bold text-white shadow-lg shadow-amber-500/20">
+              {initials || "U"}
+            </div>
+            <div className="text-center">
+              <h2 className="text-xl font-bold tracking-tight text-gray-900">
+                {fullName}
+              </h2>
+              <div className="mt-1.5 flex items-center justify-center gap-2">
+                <span
+                  className={`inline-block rounded-full px-3 py-0.5 text-[11px] font-semibold ${getRoleColor(role)}`}
+                >
+                  {getRoleLabel(role)}
+                </span>
+                {resident?.is_owner && (
+                  <Badge variant="secondary" className="text-[10px]">
+                    Propietario
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="text-center">
-          <h1 className="text-xl font-bold text-gray-900">{fullName}</h1>
-          <span className={`mt-1 inline-block rounded-full px-3 py-0.5 text-xs font-semibold ${getRoleColor(role)}`}>
-            {getRoleLabel(role)}
-          </span>
-          {resident?.is_owner && (
-            <Badge variant="secondary" className="ml-1.5 mt-1">
-              Propietario
-            </Badge>
-          )}
-        </div>
-      </div>
       </FadeIn>
 
+      {/* Editable Personal Info */}
       <FadeInUp delay={0.1}>
-      <Card className="mb-4">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-500">Informacion Personal</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
-          <Separator className="mb-2" />
-          <InfoRow
-            icon={Mail}
-            label="Correo"
-            value={resident?.email ?? data?.user?.email ?? "-"}
-          />
-          <InfoRow
-            icon={Phone}
-            label="Telefono"
-            value={resident?.phone ?? "-"}
-          />
-          <InfoRow
-            icon={FileText}
-            label="Documento"
-            value={
-              resident
-                ? `${resident.document_type.toUpperCase()} ${resident.document_number}`
-                : "-"
-            }
-          />
-        </CardContent>
-      </Card>
-
-      <Card className="mb-4">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-500">Conjunto Residencial</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
-          <Separator className="mb-2" />
-          <InfoRow
-            icon={Building2}
-            label="Nombre"
-            value={resident?.tenant?.name ?? "-"}
-          />
-          <InfoRow
-            icon={Home}
-            label="Unidad"
-            value={
-              resident?.unit
-                ? `${resident.unit.tower} - Apto ${resident.unit.apartment}`
-                : "Sin vincular"
-            }
-          />
-        </CardContent>
-      </Card>
-      </FadeInUp>
-
-      {/* Data rights — ARCO */}
-      <FadeInUp delay={0.15}>
-      <Card className="mb-6">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm text-gray-500">
-            <Shield className="h-3.5 w-3.5" />
-            Datos Personales
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <Separator className="mb-2" />
-          <p className="text-xs text-gray-400">
-            Conforme a la Ley 1581 de 2012, tienes derecho a acceder, rectificar
-            y solicitar la eliminacion de tus datos personales.
-          </p>
-          <div className="flex flex-col gap-2">
-            <ExportDataButton />
-            <AccountDeletionButton />
+        <div className="px-5 pt-5">
+          <div className="overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <div className="px-4 py-3 border-b border-gray-100">
+              <h3 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wide">
+                Informacion Personal
+              </h3>
+            </div>
+            <div className="px-4 py-2">
+              <ProfileEditor
+                initialName={resident?.full_name ?? ""}
+                initialPhone={resident?.phone ?? ""}
+              />
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
       </FadeInUp>
 
+      {/* Read-only info */}
+      <FadeInUp delay={0.15}>
+        <div className="px-5 pt-4">
+          <div className="overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <div className="px-4 py-3 border-b border-gray-100">
+              <h3 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wide">
+                Cuenta
+              </h3>
+            </div>
+            <div className="px-4 py-1">
+              <InfoRow
+                icon={Mail}
+                label="Correo"
+                value={resident?.email ?? data?.user?.email ?? "-"}
+              />
+              <InfoRow
+                icon={FileText}
+                label="Documento"
+                value={
+                  resident
+                    ? `${resident.document_type.toUpperCase()} ${resident.document_number}`
+                    : "-"
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </FadeInUp>
+
+      {/* Conjunto info */}
       <FadeInUp delay={0.2}>
-      <div className="space-y-2">
-        <form action={logout}>
-          <Button
-            variant="outline"
-            className="w-full h-11 rounded-xl border-red-200 text-red-600 font-medium hover:bg-red-50 hover:border-red-300 transition-all"
-            type="submit"
-          >
-            <LogOut className="h-4 w-4 mr-2" />
-            Cerrar sesion
-          </Button>
-        </form>
-      </div>
-
+        <div className="px-5 pt-4">
+          <div className="overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <div className="px-4 py-3 border-b border-gray-100">
+              <h3 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wide">
+                Conjunto Residencial
+              </h3>
+            </div>
+            <div className="px-4 py-1">
+              <InfoRow
+                icon={Building2}
+                label="Nombre"
+                value={resident?.tenant?.name ?? "-"}
+              />
+              <InfoRow
+                icon={Home}
+                label="Unidad"
+                value={
+                  resident?.unit
+                    ? `Torre ${resident.unit.tower} - Apto ${resident.unit.apartment}`
+                    : "Sin vincular"
+                }
+              />
+            </div>
+          </div>
+        </div>
       </FadeInUp>
 
-      <div className="mt-6 flex justify-center gap-4 text-xs text-gray-400">
-        <Link href="/privacidad" className="hover:text-gray-600 hover:underline">
-          Politica de Privacidad
-        </Link>
-        <span>|</span>
-        <Link href="/terminos" className="hover:text-gray-600 hover:underline">
-          Terminos y Condiciones
-        </Link>
-      </div>
+      {/* Data rights */}
+      <FadeInUp delay={0.25}>
+        <div className="px-5 pt-4">
+          <div className="overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <div className="px-4 py-3 border-b border-gray-100">
+              <h3 className="flex items-center gap-1.5 text-[13px] font-semibold text-gray-400 uppercase tracking-wide">
+                <Shield className="h-3.5 w-3.5" />
+                Datos Personales
+              </h3>
+            </div>
+            <div className="px-4 py-3 space-y-3">
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Conforme a la Ley 1581 de 2012, tienes derecho a acceder,
+                rectificar y solicitar la eliminacion de tus datos personales.
+              </p>
+              <div className="flex flex-col gap-2">
+                <ExportDataButton />
+                <AccountDeletionButton />
+              </div>
+            </div>
+          </div>
+        </div>
+      </FadeInUp>
+
+      {/* Logout */}
+      <FadeInUp delay={0.3}>
+        <div className="px-5 pt-5">
+          <form action={logout}>
+            <button
+              type="submit"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-red-200 bg-white py-3 text-[14px] font-medium text-red-600 transition-all hover:bg-red-50 hover:border-red-300 active:scale-[0.98]"
+            >
+              <LogOut className="h-4 w-4" />
+              Cerrar sesion
+            </button>
+          </form>
+        </div>
+
+        <div className="mt-5 flex justify-center gap-4 text-xs text-gray-400">
+          <Link
+            href="/privacidad"
+            className="hover:text-gray-600 hover:underline"
+          >
+            Politica de Privacidad
+          </Link>
+          <span>|</span>
+          <Link href="/terminos" className="hover:text-gray-600 hover:underline">
+            Terminos y Condiciones
+          </Link>
+        </div>
+      </FadeInUp>
 
       {/* Footer */}
       <div className="pb-24 pt-6 text-center">
@@ -182,13 +227,13 @@ function InfoRow({
   value: string;
 }) {
   return (
-    <div className="flex items-center gap-3 py-2">
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-50">
+    <div className="flex items-center gap-3 py-2.5">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-50">
         <Icon className="h-4 w-4 text-gray-400" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="text-sm font-medium truncate">{value}</p>
+        <p className="text-xs text-gray-400">{label}</p>
+        <p className="text-[14px] font-medium text-gray-900 truncate">{value}</p>
       </div>
     </div>
   );
