@@ -26,20 +26,20 @@ export function PqrTabs({
         <div className="flex rounded-full bg-gray-100/80 p-1">
           <button
             onClick={() => setActiveTab("en_proceso")}
-            className={`flex-1 rounded-full py-2 text-center text-[13px] font-medium transition-all ${
+            className={`flex-1 cursor-pointer rounded-full py-2 text-center text-[13px] font-medium transition-all duration-200 ${
               activeTab === "en_proceso"
                 ? "bg-white text-gray-900 shadow-apple-sm"
-                : "text-gray-500"
+                : "text-gray-500 hover:text-gray-700"
             }`}
           >
             En Proceso ({enProcesoCount})
           </button>
           <button
             onClick={() => setActiveTab("cerradas")}
-            className={`flex-1 rounded-full py-2 text-center text-[13px] font-medium transition-all ${
+            className={`flex-1 cursor-pointer rounded-full py-2 text-center text-[13px] font-medium transition-all duration-200 ${
               activeTab === "cerradas"
                 ? "bg-white text-gray-900 shadow-apple-sm"
-                : "text-gray-500"
+                : "text-gray-500 hover:text-gray-700"
             }`}
           >
             Cerradas ({cerradasCount})

@@ -7,18 +7,18 @@ export default function AuthLayout({
 }) {
   return (
     <div className="relative flex min-h-[100dvh] flex-col">
-      {/* Background image with blur — fixed to cover full screen including safe areas */}
+      {/* Background image — visible behind translucent card */}
       <div className="fixed inset-0 z-0">
         <Image
           src="/images/building-bg.jpg"
           alt=""
           fill
           sizes="100vw"
-          className="object-cover blur-[3px] scale-105"
+          className="object-cover blur-[2px] scale-[1.02]"
           priority
         />
-        {/* Semi-transparent overlay for readability */}
-        <div className="absolute inset-0 bg-white/50" />
+        {/* Light overlay — lets building show through */}
+        <div className="absolute inset-0 bg-white/30" />
         {/* Gradient fallback in case image doesn't load */}
         <div
           className="absolute inset-0 -z-10"
@@ -39,13 +39,13 @@ export default function AuthLayout({
       >
         {/* Top branding */}
         <div className="flex flex-col items-center pt-14 pb-5">
-          <div className="shadow-apple-lg rounded-2xl overflow-hidden">
+          <div className="shadow-apple-lg rounded-2xl overflow-hidden border-2 border-amber-400/30">
             <Image
               src="/images/irawa-logo.jpg"
               alt="Irawa"
-              width={96}
-              height={96}
-              className="h-24 w-24 object-cover"
+              width={72}
+              height={72}
+              className="h-[72px] w-[72px] object-cover"
               priority
             />
           </div>

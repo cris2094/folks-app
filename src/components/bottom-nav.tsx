@@ -39,15 +39,15 @@ export function BottomNav() {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
 
-          // FAB central (camera button)
+          // FAB central (camera/assistant button)
           if (item.isFab) {
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className="relative flex flex-col items-center px-3"
+                className="relative -mt-5 flex cursor-pointer flex-col items-center px-3"
               >
-                <div className="-mt-7 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-b from-[#3D3225] to-[#2A2118] shadow-lg">
+                <div className="flex h-[56px] w-[56px] items-center justify-center rounded-full bg-gradient-to-b from-[#3D3225] to-[#2A2118] shadow-lg shadow-black/25 ring-4 ring-white transition-transform duration-200 active:scale-95">
                   <Camera className="h-6 w-6 text-white" strokeWidth={1.5} />
                 </div>
               </Link>
@@ -58,17 +58,17 @@ export function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className="relative flex flex-col items-center gap-0.5 px-3 py-1"
+              className="relative flex cursor-pointer flex-col items-center gap-0.5 px-3 py-1 transition-colors duration-200"
             >
               <item.icon
-                className={`h-5 w-5 ${
+                className={`h-5 w-5 transition-colors duration-200 ${
                   isActive ? "text-amber-500" : "text-gray-400"
                 }`}
                 strokeWidth={1.5}
                 fill={isActive ? "currentColor" : "none"}
               />
               <span
-                className={`text-[10px] tracking-tight ${
+                className={`text-[10px] tracking-tight transition-colors duration-200 ${
                   isActive
                     ? "font-semibold text-amber-500"
                     : "font-medium text-gray-400"

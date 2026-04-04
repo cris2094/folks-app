@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   CheckCircle,
   ChevronLeft,
+  Wrench,
 } from "lucide-react";
 import { getMyTickets } from "@/features/pqr/queries/get-my-tickets";
 import { PqrTabs } from "@/features/pqr/components/pqr-tabs";
@@ -210,9 +211,9 @@ export default async function PqrPage() {
                     {/* Scheduled info */}
                     {ticket.scheduled_date && (
                       <div className="mt-3 rounded-[14px] bg-blue-50 p-3">
-                        <p className="text-[13px] text-blue-800">
-                          <span className="mr-1">{"\uD83D\uDD27"}</span>
-                          Reparacion programada para:{" "}
+                        <p className="flex items-start gap-1.5 text-[13px] text-blue-800">
+                          <Wrench className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" strokeWidth={2} />
+                          <span>Reparacion programada para:{" "}
                           <span className="font-bold">
                             {new Date(
                               ticket.scheduled_date
@@ -223,6 +224,7 @@ export default async function PqrPage() {
                               hour: "2-digit",
                               minute: "2-digit",
                             })}
+                          </span>
                           </span>
                         </p>
                       </div>
@@ -314,8 +316,8 @@ export default async function PqrPage() {
 
       {/* Footer */}
       <div className="pb-24 pt-2 text-center">
-        <p className="text-xs font-medium tracking-wider text-gray-300">
-          <span className="mr-1">{"\u2726"}</span>
+        <p className="flex items-center justify-center gap-1 text-xs font-medium tracking-wider text-gray-300">
+          <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" /></svg>
           POTENCIADO POR FOLKS
         </p>
       </div>

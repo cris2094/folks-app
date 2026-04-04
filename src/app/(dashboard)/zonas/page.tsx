@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Users } from "lucide-react";
 
 const zones = [
   {
@@ -81,8 +81,8 @@ export default function ZonasPage() {
               {/* Bottom overlay content */}
               <div className="absolute inset-x-0 bottom-0 p-4">
                 <h3 className="text-lg font-bold text-white">{zone.name}</h3>
-                <p className="mt-0.5 flex items-center gap-1 text-[13px] text-white/90">
-                  <span>{"\uD83C\uDFE0"}</span>
+                <p className="mt-0.5 flex items-center gap-1.5 text-[13px] text-white/90">
+                  <Users className="h-3.5 w-3.5" strokeWidth={2} />
                   Capacidad: {zone.capacity} pers.
                 </p>
               </div>
@@ -108,7 +108,7 @@ export default function ZonasPage() {
               </div>
               <Link
                 href={`/zonas/${zone.id}`}
-                className="rounded-lg border border-gray-300 px-5 py-1.5 text-[13px] font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                className="cursor-pointer rounded-lg border border-gray-300 px-5 py-1.5 text-[13px] font-medium text-gray-700 transition-colors duration-200 hover:bg-gray-50 active:bg-gray-100"
               >
                 Reservar
               </Link>

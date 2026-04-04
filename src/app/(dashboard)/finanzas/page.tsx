@@ -101,7 +101,7 @@ export default function FinanzasPage() {
         </div>
 
         {/* Pay button */}
-        <button className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 py-4 text-[15px] font-semibold text-white shadow-lg shadow-amber-200/50 transition-all active:scale-[0.98]">
+        <button className="mt-8 flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 py-4 text-[15px] font-semibold text-white shadow-lg shadow-amber-200/50 transition-all duration-200 hover:from-amber-500 hover:to-amber-600 active:scale-[0.98]">
           Realizar Pago Seguro
           <CheckCircle2 className="h-5 w-5" strokeWidth={2} />
         </button>

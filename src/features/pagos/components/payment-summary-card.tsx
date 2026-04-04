@@ -31,7 +31,7 @@ export function PaymentSummaryCard({ summary }: { summary: PaymentSummary }) {
       {/* Pagar Ahora button - bottom right */}
       {hasDebt && (
         <div className="mt-5 flex justify-end">
-          <button className="rounded-full bg-amber-500 px-6 py-2.5 text-[13px] font-semibold text-white shadow-apple-sm transition-all hover:bg-amber-400 active:scale-95">
+          <button className="cursor-pointer rounded-full bg-amber-500 px-6 py-2.5 text-[13px] font-semibold text-white shadow-apple-sm transition-all duration-200 hover:bg-amber-400 active:scale-95">
             Pagar Ahora
           </button>
         </div>

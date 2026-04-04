@@ -120,7 +120,7 @@ export default function FolkyPage() {
               </span>
             </div>
           </div>
-          <button className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-gray-100">
+          <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-colors duration-200 hover:bg-gray-100">
             <MoreHorizontal className="h-5 w-5 text-gray-400" />
           </button>
         </header>
@@ -168,7 +168,7 @@ export default function FolkyPage() {
                 <button
                   key={action.label}
                   onClick={() => handleSend(action.label)}
-                  className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                  className="flex cursor-pointer items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 text-[14px] font-medium text-gray-700 transition-colors duration-200 hover:bg-gray-50 active:bg-gray-100"
                 >
                   <span>{action.label}</span>
                   <action.icon className="h-4 w-4 text-amber-500" />
@@ -196,7 +196,7 @@ export default function FolkyPage() {
           </div>
           <button
             onClick={() => handleSend(input)}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-sm transition-colors hover:bg-amber-600 active:scale-95"
+            className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-amber-500 text-white shadow-sm transition-all duration-200 hover:bg-amber-600 active:scale-95"
           >
             <Mic className="h-5 w-5" />
           </button>
@@ -205,8 +205,8 @@ export default function FolkyPage() {
 
       {/* Footer */}
       <div className="pb-3 pt-1 text-center">
-        <p className="text-[10px] font-medium tracking-widest text-gray-300">
-          <span className="mr-1">{"\u2726"}</span>
+        <p className="flex items-center justify-center gap-1 text-[10px] font-medium tracking-widest text-gray-300">
+          <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" /></svg>
           POTENCIADO POR FOLKS
         </p>
       </div>

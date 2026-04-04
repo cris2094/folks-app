@@ -103,7 +103,7 @@ export default function PaquetesPage() {
           <h2 className="text-[15px] font-bold tracking-tight text-gray-900">
             Por recoger ({pendingPackages.length})
           </h2>
-          <button className="text-[13px] font-medium text-amber-600">
+          <button className="cursor-pointer text-[13px] font-medium text-amber-600 transition-colors duration-200 hover:text-amber-700">
             Historial
           </button>
         </div>
@@ -154,7 +154,7 @@ export default function PaquetesPage() {
 
       {/* Notify arrival */}
       <div className="mx-5 mt-4">
-        <button className="flex w-full items-center gap-3 rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-4 text-left transition-colors hover:bg-gray-50">
+        <button className="flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-4 text-left transition-colors duration-200 hover:bg-gray-50 active:bg-gray-100">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-gray-200">
             <Plus className="h-5 w-5 text-gray-400" strokeWidth={1.5} />
           </div>

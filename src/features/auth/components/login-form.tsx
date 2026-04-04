@@ -33,9 +33,9 @@ export function LoginForm({ error }: { error?: string }) {
         </div>
       )}
 
-      {/* Login Card */}
+      {/* Login Card — glassmorphism: translucent white with blur */}
       <FadeInUp delay={0.2}>
-        <div className="mx-auto w-full max-w-sm rounded-3xl bg-white p-7 shadow-apple-lg">
+        <div className="mx-auto w-full max-w-sm rounded-3xl bg-white/80 backdrop-blur-xl p-7 shadow-apple-lg">
           <form action={loginWithEmail} className="space-y-4">
             {/* Email field */}
             <div>
@@ -107,16 +107,16 @@ export function LoginForm({ error }: { error?: string }) {
             <div className="flex items-center gap-3 pt-1">
               <button
                 type="submit"
-                className="h-14 flex-1 rounded-2xl bg-gradient-to-b from-gray-800 to-gray-900 text-base font-semibold text-white shadow-apple-sm transition-all hover:from-gray-700 hover:to-gray-800 active:from-gray-900 active:to-black"
+                className="h-14 flex-1 cursor-pointer rounded-xl bg-gradient-to-b from-gray-800 to-gray-900 text-base font-semibold text-white shadow-apple-sm transition-all duration-200 hover:from-gray-700 hover:to-gray-800 active:from-gray-900 active:to-black active:scale-[0.98]"
               >
                 Ingresar
               </button>
               <button
                 type="button"
-                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-apple-sm transition-colors hover:bg-amber-600 active:bg-amber-700"
+                className="flex h-14 w-14 shrink-0 cursor-pointer items-center justify-center rounded-full bg-amber-500 text-white shadow-apple-sm transition-all duration-200 hover:bg-amber-600 active:bg-amber-700 active:scale-95"
                 aria-label="Ingreso biometrico"
               >
-                <ScanFace className="h-6 w-6" />
+                <ScanFace className="h-7 w-7" />
               </button>
             </div>
           </form>
@@ -185,7 +185,7 @@ function QuickAccessButton({
   return (
     <button
       type="button"
-      className="flex flex-col items-center gap-2"
+      className="flex cursor-pointer flex-col items-center gap-2"
     >
       <div
         className={`flex h-14 w-14 items-center justify-center rounded-2xl ${bgColor}`}

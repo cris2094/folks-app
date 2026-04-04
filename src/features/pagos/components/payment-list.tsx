@@ -35,7 +35,7 @@ export function PaymentList({ payments }: { payments: PaymentWithUnit[] }) {
         return (
           <button
             key={p.id}
-            className="flex w-full items-center gap-3 rounded-[16px] p-4 text-left transition-colors hover:bg-gray-50 active:bg-gray-100"
+            className="flex w-full cursor-pointer items-center gap-3 rounded-[16px] p-4 text-left transition-colors duration-200 hover:bg-gray-50 active:bg-gray-100"
           >
             {/* Green circle icon */}
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-50 shadow-apple-sm">
