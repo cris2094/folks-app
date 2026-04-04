@@ -18,11 +18,11 @@ export default async function ComunicadosPage() {
   ]);
 
   return (
-    <div className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md px-4 pb-24">
       <FadeIn>
-        <header className="mb-6">
-          <h1 className="text-2xl font-bold">Comunicados</h1>
-          <p className="text-muted-foreground text-sm">
+        <header className="mb-6 pt-2">
+          <h1 className="text-[22px] font-bold tracking-tight text-gray-900">Comunicados</h1>
+          <p className="text-sm text-gray-500">
             Noticias y notificaciones del conjunto
           </p>
         </header>
@@ -30,8 +30,8 @@ export default async function ComunicadosPage() {
 
       <FadeInUp delay={0.1}>
       <Tabs defaultValue="actividad">
-        <TabsList className="w-full">
-          <TabsTrigger value="actividad" className="flex-1 gap-1.5">
+        <TabsList className="w-full rounded-full bg-gray-100/80 border border-gray-200 p-1 h-auto">
+          <TabsTrigger value="actividad" className="flex-1 gap-1.5 rounded-full py-2 text-[13px] font-medium data-active:bg-white data-active:shadow-sm data-active:text-gray-900 transition-all duration-200">
             <Bell className="h-3.5 w-3.5" />
             Actividad
             {unreadCount > 0 && (
@@ -43,7 +43,7 @@ export default async function ComunicadosPage() {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="anuncios" className="flex-1 gap-1.5">
+          <TabsTrigger value="anuncios" className="flex-1 gap-1.5 rounded-full py-2 text-[13px] font-medium data-active:bg-white data-active:shadow-sm data-active:text-gray-900 transition-all duration-200">
             <Megaphone className="h-3.5 w-3.5" />
             Anuncios ({announcements.length})
           </TabsTrigger>
@@ -101,9 +101,11 @@ export default async function ComunicadosPage() {
       </Tabs>
       </FadeInUp>
 
-      <p className="pb-2 pt-8 text-center text-[10px] font-medium tracking-wider text-gray-300">
-        POTENCIADO POR FOLKS
-      </p>
+      <div className="pb-2 pt-8 text-center">
+        <p className="text-[10px] font-medium tracking-wider text-gray-300">
+          POTENCIADO POR FOLKS
+        </p>
+      </div>
     </div>
   );
 }

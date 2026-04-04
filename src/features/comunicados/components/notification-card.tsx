@@ -55,11 +55,11 @@ export function NotificationCard({
   };
 
   return (
-    <Card className={!read ? "border-l-4 border-l-amber-500 bg-amber-50/20" : ""}>
+    <Card className={`shadow-sm transition-shadow duration-200 hover:shadow-md ${!read ? "border-l-4 border-l-amber-500 bg-amber-50/20" : ""}`}>
       <CardContent className="p-3">
         <div className="flex items-start gap-3">
           <div
-            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${t.bg}`}
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${t.bg}`}
           >
             <Icon className={`h-4 w-4 ${t.color}`} />
           </div>

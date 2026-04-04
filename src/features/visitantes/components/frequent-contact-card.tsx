@@ -18,10 +18,10 @@ export function FrequentContactCard({
     .toUpperCase();
 
   return (
-    <div className="flex flex-col items-center gap-2 rounded-2xl bg-white p-4 ring-1 ring-gray-100 shadow-sm">
+    <div className="flex flex-col items-center gap-2.5 rounded-2xl bg-white p-4 ring-1 ring-gray-100 shadow-sm transition-shadow duration-200 hover:shadow-md">
       {/* Avatar */}
       <div className="relative">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-amber-50 text-base font-bold text-amber-700">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-50 text-lg font-bold text-amber-700">
           {initials}
         </div>
         {contact.is_favorite && (
@@ -42,7 +42,7 @@ export function FrequentContactCard({
 
       <Link
         href={`/visitantes/autorizar?name=${encodeURIComponent(contact.name)}&document=${encodeURIComponent(contact.document ?? "")}&phone=${encodeURIComponent(contact.phone ?? "")}&relationship=${encodeURIComponent(contact.relationship ?? "")}`}
-        className="flex items-center gap-1 rounded-full bg-amber-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-amber-600"
+        className="flex items-center gap-1 rounded-full bg-amber-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-amber-600 active:bg-amber-700 active:scale-95"
       >
         <Zap className="h-3 w-3" />
         Autorizar

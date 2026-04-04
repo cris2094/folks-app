@@ -52,29 +52,32 @@ export default async function VisitantesPage() {
             <Plus className="h-4 w-4" strokeWidth={2} />
           </Link>
         </div>
+        <p className="px-5 pb-2 text-center text-[13px] text-gray-500">
+          Autoriza y gestiona el acceso de visitantes
+        </p>
       </header>
 
       <FadeInUp delay={0.1}>
       <div className="px-4 pt-2 pb-8">
         <Tabs defaultValue="autorizados">
-          <TabsList className="w-full rounded-full bg-gray-100 p-1">
+          <TabsList className="w-full rounded-full bg-gray-100/80 border border-gray-200 p-1 h-auto">
             <TabsTrigger
               value="autorizados"
-              className="flex-1 gap-1 rounded-full text-xs data-active:bg-white data-active:shadow-sm"
+              className="flex-1 gap-1.5 rounded-full py-2 text-[13px] font-medium data-active:bg-white data-active:shadow-sm data-active:text-gray-900 transition-all duration-200"
             >
               <Shield className="h-3.5 w-3.5" />
               Autorizados ({authorized.length})
             </TabsTrigger>
             <TabsTrigger
               value="favoritos"
-              className="flex-1 gap-1 rounded-full text-xs data-active:bg-white data-active:shadow-sm"
+              className="flex-1 gap-1.5 rounded-full py-2 text-[13px] font-medium data-active:bg-white data-active:shadow-sm data-active:text-gray-900 transition-all duration-200"
             >
               <Users className="h-3.5 w-3.5" />
               Favoritos ({favorites.length})
             </TabsTrigger>
             <TabsTrigger
               value="historial"
-              className="flex-1 gap-1 rounded-full text-xs data-active:bg-white data-active:shadow-sm"
+              className="flex-1 gap-1.5 rounded-full py-2 text-[13px] font-medium data-active:bg-white data-active:shadow-sm data-active:text-gray-900 transition-all duration-200"
             >
               <Clock className="h-3.5 w-3.5" />
               Historial
@@ -98,7 +101,7 @@ export default async function VisitantesPage() {
                 </div>
                 <Link
                   href="/visitantes/autorizar"
-                  className="mt-2 rounded-full bg-amber-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-amber-600"
+                  className="mt-2 rounded-full bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-amber-600 active:bg-amber-700 active:scale-95"
                 >
                   Autorizar visitante
                 </Link>

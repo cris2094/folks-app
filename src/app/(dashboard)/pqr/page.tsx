@@ -137,7 +137,7 @@ export default async function PqrPage() {
               Inicio
             </Link>
             <h1 className="text-[17px] font-bold tracking-tight text-gray-900">
-              Incidencias
+              PQR
             </h1>
             <Link
               href="/pqr/nueva"
@@ -146,6 +146,9 @@ export default async function PqrPage() {
               <Plus className="h-4 w-4" strokeWidth={2} />
             </Link>
           </div>
+          <p className="mt-1 px-5 text-[13px] text-gray-500">
+            Reporta y da seguimiento a tus solicitudes
+          </p>
         </header>
       </FadeIn>
 
@@ -160,10 +163,10 @@ export default async function PqrPage() {
                 <AlertTriangle className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
               </div>
               <p className="font-medium text-gray-700">
-                Sin incidencias abiertas
+                Sin PQR abiertas
               </p>
               <p className="text-[13px] text-gray-500">
-                Todas tus incidencias han sido atendidas
+                Todas tus solicitudes han sido atendidas
               </p>
             </div>
           ) : (
@@ -244,10 +247,10 @@ export default async function PqrPage() {
                 <CheckCircle className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
               </div>
               <p className="font-medium text-gray-700">
-                Sin incidencias cerradas
+                Sin PQR cerradas
               </p>
               <p className="text-[13px] text-gray-500">
-                Aun no se ha cerrado ninguna incidencia
+                Aun no se ha cerrado ninguna solicitud
               </p>
             </div>
           ) : (

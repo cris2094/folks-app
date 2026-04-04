@@ -63,6 +63,9 @@ export default function ZonasPage() {
             <CalendarDays className="h-[18px] w-[18px] text-gray-600" strokeWidth={1.5} />
           </Link>
         </header>
+        <p className="px-5 pb-2 text-[13px] text-gray-500 text-center">
+          Reserva espacios del conjunto
+        </p>
       </FadeIn>
 
       {/* Tabs pill */}

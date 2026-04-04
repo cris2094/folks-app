@@ -6,8 +6,8 @@ export function PaymentHeroCard({ summary }: { summary: PaymentSummary }) {
   const total = summary.totalPending + summary.totalOverdue;
 
   return (
-    <Card className="border-0 bg-gradient-to-br from-brand-dark to-brand-dark-lighter text-white shadow-lg">
-      <CardContent className="flex items-center justify-between p-4">
+    <Card className="border-0 rounded-3xl bg-gradient-to-br from-brand-dark to-brand-dark-lighter text-white shadow-lg">
+      <CardContent className="flex items-center justify-between p-5">
         <div>
           <p className="text-sm text-white/70">Total a pagar</p>
           <p className="text-3xl font-bold">

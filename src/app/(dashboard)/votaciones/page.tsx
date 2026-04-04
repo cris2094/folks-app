@@ -132,6 +132,9 @@ export default async function VotacionesPage() {
             </h1>
             <div className="w-8" />
           </div>
+          <p className="mt-1 text-center text-[13px] text-gray-500">
+            Participa en las decisiones del conjunto
+          </p>
         </header>
       </FadeIn>
 

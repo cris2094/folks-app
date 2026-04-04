@@ -79,7 +79,7 @@ export default async function HomePage() {
     <div className="mx-auto w-full max-w-md min-h-screen bg-[#F5F5F7]">
       {/* -- Header -- */}
       <FadeIn>
-        <div className="px-5 pb-3 pt-4 bg-white">
+        <div className="rounded-b-3xl bg-white px-5 pb-3 pt-4 shadow-sm">
           <div className="flex items-center justify-between">
             {/* Left: Avatar + greeting */}
             <div className="flex items-center gap-3">
@@ -119,8 +119,8 @@ export default async function HomePage() {
 
       {/* -- Payment Card (Dark gradient) -- */}
       <FadeInUp delay={0.1}>
-        <div className="px-5 pt-4 bg-white pb-5">
-          <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-[#2D2D2D] to-[#1A1A1A] p-5 shadow-apple">
+        <div className="px-5 pt-5 pb-5">
+          <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#2D2D2D] to-[#1A1A1A] p-5 shadow-apple">
             <div className="flex items-end justify-between">
               <div>
                 <p className="text-xs text-white/60">Total a pagar</p>
@@ -159,7 +159,7 @@ export default async function HomePage() {
                 href={action.href}
                 className="flex flex-col items-center gap-2 group"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white border border-gray-100 shadow-apple-sm transition-all duration-200 group-hover:shadow-apple group-active:scale-95">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white border border-gray-100 shadow-sm transition-all duration-200 group-hover:shadow-md group-active:scale-95">
                   <action.icon
                     className="h-6 w-6 text-gray-600"
                     strokeWidth={1.5}
@@ -205,7 +205,7 @@ export default async function HomePage() {
 
           {latestAnnouncement ? (
             <Link href={`/comunicados`} className="block group">
-              <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-apple-sm transition-shadow duration-200 group-hover:shadow-apple">
+              <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow duration-200 group-hover:shadow-md">
                 {/* Image placeholder - uses attachments or gradient fallback */}
                 <div className="relative h-40 w-full bg-gradient-to-br from-emerald-400 to-teal-500">
                   {latestAnnouncement.attachments?.[0] ? (
@@ -247,7 +247,7 @@ export default async function HomePage() {
               </div>
             </Link>
           ) : (
-            <div className="rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-apple-sm">
+            <div className="rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-sm">
               <p className="text-sm text-gray-400">No hay comunicados recientes</p>
             </div>
           )}

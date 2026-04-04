@@ -52,6 +52,9 @@ export default function FinanzasPage() {
         </h1>
         <div className="w-8" />
       </header>
+      <p className="mb-4 text-center text-[13px] text-gray-500">
+        Revisa tu estado de cuenta y pagos
+      </p>
 
       {/* Month label */}
       <FadeIn>

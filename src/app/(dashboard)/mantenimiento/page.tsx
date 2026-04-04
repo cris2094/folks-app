@@ -172,6 +172,9 @@ export default function MantenimientoPage() {
             </h1>
             <div className="w-8" />
           </div>
+          <p className="mt-1 text-center text-[13px] text-gray-500">
+            Estado de equipos y reportes de danos
+          </p>
         </header>
       </FadeIn>
 

@@ -64,11 +64,11 @@ export function VisitorCard({
   }
 
   return (
-    <Card className="ring-1 ring-gray-100">
+    <Card className="ring-1 ring-gray-100 shadow-sm transition-shadow duration-200 hover:shadow-md">
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
           {/* Avatar */}
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-50 text-sm font-bold text-amber-700">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber-50 text-sm font-bold text-amber-700">
             {initials}
           </div>
 
@@ -120,7 +120,7 @@ export function VisitorCard({
                 type="button"
                 onClick={handleRevoke}
                 disabled={isPending}
-                className="mt-2.5 flex items-center gap-1 rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50"
+                className="mt-2.5 flex items-center gap-1 rounded-full bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 active:bg-red-200 disabled:opacity-50"
               >
                 <ShieldX className="h-3 w-3" />
                 {isPending ? "Revocando..." : "Revocar"}

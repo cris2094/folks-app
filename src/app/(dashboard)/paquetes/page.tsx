@@ -74,6 +74,9 @@ export default function PaquetesPage() {
           <Package className="h-[18px] w-[18px] text-amber-600" strokeWidth={1.5} />
         </div>
       </header>
+      <p className="px-5 pb-2 text-[13px] text-gray-500">
+        Consulta y recoge tus paquetes
+      </p>
 
       {/* QR Code section */}
       <ScaleIn>

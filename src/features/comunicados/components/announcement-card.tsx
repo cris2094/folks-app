@@ -46,10 +46,10 @@ export function AnnouncementCard({
   };
 
   return (
-    <Card className={announcement.is_pinned ? "border-amber-200 bg-amber-50/30" : ""}>
+    <Card className={`shadow-sm transition-shadow duration-200 hover:shadow-md ${announcement.is_pinned ? "border-amber-200 bg-amber-50/30" : ""}`}>
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-50">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-50">
             <CatIcon className={`h-5 w-5 ${cat.color}`} />
           </div>
           <div className="min-w-0 flex-1">

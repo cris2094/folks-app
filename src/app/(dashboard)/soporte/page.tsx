@@ -32,7 +32,7 @@ export default function SoportePage() {
       {/* Admin Contact Card */}
       <FadeInUp delay={0.1}>
         <div className="px-5 pt-5">
-          <div className="overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm">
+          <div className="overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm transition-shadow duration-200 hover:shadow-md">
             <div className="p-5">
               <h2 className="text-[15px] font-semibold text-gray-900">
                 Administracion
@@ -108,7 +108,7 @@ export default function SoportePage() {
       <FadeInUp delay={0.15}>
         <div className="px-5 pt-4">
           <Link href="/folky" className="block group">
-            <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-[#2D2D2D] to-[#1A1A1A] p-5 shadow-sm transition-shadow group-hover:shadow-md">
+            <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#2D2D2D] to-[#1A1A1A] p-5 shadow-sm transition-shadow group-hover:shadow-md">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/10">
                   <Sparkles className="h-6 w-6 text-amber-400" strokeWidth={1.5} />
