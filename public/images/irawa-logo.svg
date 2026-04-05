@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" rx="40" fill="#D4A017"/>
+  <rect x="60" y="50" width="30" height="60" rx="4" fill="white" opacity="0.9"/>
+  <rect x="100" y="30" width="30" height="80" rx="4" fill="white" opacity="0.9"/>
+  <rect x="60" y="120" width="70" height="30" rx="4" fill="white" opacity="0.9"/>
+  <text x="100" y="178" text-anchor="middle" fill="white" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="700" letter-spacing="3">IRAWA</text>
+</svg>

@@ -12,6 +12,11 @@ export default function manifest(): MetadataRoute.Manifest {
     orientation: "portrait",
     icons: [
       {
+        src: "/images/irawa-logo.svg",
+        sizes: "any",
+        type: "image/svg+xml",
+      },
+      {
         src: "/images/irawa-logo.jpg",
         sizes: "192x192",
         type: "image/jpeg",

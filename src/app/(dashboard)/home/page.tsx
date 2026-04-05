@@ -172,19 +172,17 @@ export default async function HomePage() {
             </StaggerItem>
           ))}
         </StaggerContainer>
-        {hasMoreActions && (
-          <FadeIn delay={0.25}>
-            <div className="mt-4 flex justify-center">
-              <Link
-                href="/tools"
-                className="flex min-h-[44px] items-center gap-1 text-[13px] font-medium text-amber-600 hover:text-amber-700 transition-colors"
-              >
-                Ver mas
-                <ChevronRight className="h-3.5 w-3.5" strokeWidth={2} />
-              </Link>
-            </div>
-          </FadeIn>
-        )}
+        <FadeIn delay={0.25}>
+          <div className="mt-4 flex justify-center">
+            <Link
+              href="/tools"
+              className="flex min-h-[44px] items-center gap-1 text-[13px] font-medium text-amber-600 hover:text-amber-700 transition-colors"
+            >
+              Ver todas las aplicaciones
+              <ChevronRight className="h-3.5 w-3.5" strokeWidth={2} />
+            </Link>
+          </div>
+        </FadeIn>
       </div>
 
       {/* -- Comunicados -- */}

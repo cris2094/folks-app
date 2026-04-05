@@ -17,6 +17,7 @@ export interface PublicCommitment {
   status: CommitmentStatus;
   progress: number;
   due_date: string | null;
+  updated_at: string;
 }
 
 export interface PublicBudget {
@@ -76,7 +77,7 @@ export async function getPublicInfo(): Promise<PublicInfo> {
       // Active commitments (not completed)
       supabase
         .from("commitments")
-        .select("id, title, responsible, status, progress, due_date")
+        .select("id, title, responsible, status, progress, due_date, updated_at")
         .in("status", ["pending", "in_progress", "overdue"])
         .order("due_date", { ascending: true, nullsFirst: false })
         .limit(10),
@@ -118,6 +119,7 @@ export async function getPublicInfo(): Promise<PublicInfo> {
       status: c.status as CommitmentStatus,
       progress: c.progress as number,
       due_date: c.due_date as string | null,
+      updated_at: c.updated_at as string,
     }),
   );
 

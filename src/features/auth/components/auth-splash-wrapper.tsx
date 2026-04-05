@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 
 export function AuthSplashWrapper({
   children,
@@ -30,8 +29,9 @@ export function AuthSplashWrapper({
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <Image
-              src="/images/irawa-logo.jpg"
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/irawa-logo.svg"
               alt="Irawa"
               width={120}
               height={120}

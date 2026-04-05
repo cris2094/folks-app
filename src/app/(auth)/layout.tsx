@@ -52,13 +52,13 @@ export default function AuthLayout({
           {/* Top branding */}
           <div className="flex flex-col items-center pt-14 pb-5">
             <div className="shadow-apple-lg rounded-2xl overflow-hidden border-2 border-amber-400/30">
-              <Image
-                src="/images/irawa-logo.jpg"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/irawa-logo.svg"
                 alt="Irawa"
                 width={72}
                 height={72}
                 className="h-[72px] w-[72px] object-cover"
-                priority
               />
             </div>
             <h1 className="mt-5 text-[28px] text-apple-title text-gray-900 text-center">
