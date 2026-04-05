@@ -5,6 +5,7 @@ import { FadeIn, FadeInUp } from "@/components/motion";
 import { getMyVisitors } from "@/features/visitantes/queries/get-my-visitors";
 import { getFrequentContacts } from "@/features/visitantes/queries/get-frequent-contacts";
 import { getAccessLog } from "@/features/visitantes/queries/get-access-log";
+import { getMonthlyVisitorCount } from "@/features/visitantes/queries/get-monthly-visitor-count";
 import { VisitorCard } from "@/features/visitantes/components/visitor-card";
 import { AccessTimeline } from "@/features/visitantes/components/access-timeline";
 import { FrequentContactCard } from "@/features/visitantes/components/frequent-contact-card";
@@ -21,10 +22,11 @@ function isActive(v: {
 }
 
 export default async function VisitantesPage() {
-  const [visitors, contacts, accessLog] = await Promise.all([
+  const [visitors, contacts, accessLog, monthlyCount] = await Promise.all([
     getMyVisitors(),
     getFrequentContacts(),
     getAccessLog(),
+    getMonthlyVisitorCount(),
   ]);
 
   const authorized = visitors.filter((v) => isActive(v));
@@ -52,9 +54,22 @@ export default async function VisitantesPage() {
             <Plus className="h-4 w-4" strokeWidth={2} />
           </Link>
         </div>
-        <p className="px-5 pb-2 text-center text-[13px] text-gray-500">
+        <p className="px-5 pb-1 text-center text-[13px] text-gray-500">
           Autoriza y gestiona el acceso de visitantes
         </p>
+        <div className="mx-5 mb-2 flex items-center justify-center">
+          <span
+            className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${
+              monthlyCount >= 5
+                ? "bg-red-50 text-red-600"
+                : monthlyCount >= 4
+                  ? "bg-amber-50 text-amber-600"
+                  : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {monthlyCount}/5 visitantes este mes
+          </span>
+        </div>
       </header>
 
       <FadeInUp delay={0.1}>

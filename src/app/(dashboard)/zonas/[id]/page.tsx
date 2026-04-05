@@ -6,6 +6,7 @@ import { ArrowLeft, Clock, Users, DollarSign, Calendar } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FadeIn, FadeInUp } from "@/components/motion";
+import { ReservationForm } from "@/features/zonas/components/reservation-form";
 
 export default async function ZoneDetailPage({
   params,
@@ -121,9 +122,20 @@ export default async function ZoneDetailPage({
 
       <Separator className="my-4" />
 
-      <p className="text-center text-sm text-muted-foreground">
-        Formulario de reserva proximamente
-      </p>
+      {zone.is_active ? (
+        <ReservationForm
+          zoneId={zone.id}
+          zoneName={zone.name}
+          priceCop={Number(zone.price_cop)}
+          maxGuests={zone.max_guests}
+          maxDurationHours={zone.max_duration_hours}
+          schedule={zone.schedule}
+        />
+      ) : (
+        <p className="text-center text-sm text-muted-foreground">
+          Esta zona no esta disponible para reservas
+        </p>
+      )}
 
       <p className="pb-2 pt-8 text-center text-[10px] font-medium tracking-wider text-gray-300">
         POTENCIADO POR FOLKS

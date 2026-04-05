@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   title: "Irawa",
   description: "Gestión Residencial Inteligente",
   icons: {
-    icon: "/images/irawa-logo.jpg",
-    apple: "/images/irawa-logo.jpg",
+    icon: [{ url: "/images/irawa-logo.jpg", type: "image/jpeg" }],
+    apple: [{ url: "/images/irawa-logo.jpg" }],
   },
 };
 

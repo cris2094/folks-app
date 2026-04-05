@@ -136,6 +136,7 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "soporte",
     "citas",
     "tools",
+    "scanner",
   ],
   portero: [
     "home",
@@ -146,6 +147,7 @@ const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     "soporte",
     "citas",
     "tools",
+    "scanner",
   ],
 };
 

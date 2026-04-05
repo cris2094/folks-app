@@ -75,13 +75,13 @@ export default async function UnitDetailPage({
           </TabsTrigger>
         </TabsList>
         <TabsContent value="residentes" className="mt-4">
-          <ResidentList residents={residents} />
+          <ResidentList residents={residents} unitId={id} />
         </TabsContent>
         <TabsContent value="vehiculos" className="mt-4">
-          <VehicleList vehicles={vehicles} />
+          <VehicleList vehicles={vehicles} unitId={id} />
         </TabsContent>
         <TabsContent value="mascotas" className="mt-4">
-          <PetList pets={pets} />
+          <PetList pets={pets} unitId={id} />
         </TabsContent>
       </Tabs>
       </FadeInUp>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useMemo } from "react";
 import {
   Folder,
   FileText,
@@ -15,6 +15,7 @@ import {
   X,
   Download,
   Eye,
+  Search,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { StaggerContainer, StaggerItem } from "@/components/motion";
@@ -70,10 +71,22 @@ export function DocumentosClient({ isAdmin }: DocumentosClientProps) {
   const [files, setFiles] = useState<DocumentFile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewType, setPreviewType] = useState<"pdf" | "image" | null>(null);
+
+  const filteredFiles = useMemo(() => {
+    if (!searchQuery.trim()) return files;
+    const q = searchQuery.toLowerCase();
+    return files.filter((f) =>
+      f.name.replace(/^\d+_/, "").toLowerCase().includes(q)
+    );
+  }, [files, searchQuery]);
 
   async function openFolder(folder: FolderKey) {
     setCurrentFolder(folder);
     setIsLoading(true);
+    setSearchQuery("");
     try {
       const { getDocuments } = await import("../queries/get-documents");
       const docs = await getDocuments(folder);
@@ -87,6 +100,20 @@ export function DocumentosClient({ isAdmin }: DocumentosClientProps) {
   function goBack() {
     setCurrentFolder(null);
     setFiles([]);
+    setSearchQuery("");
+  }
+
+  function openPreview(file: DocumentFile) {
+    const isImage = file.mime_type.startsWith("image/");
+    const isPdf = file.mime_type.includes("pdf");
+    if (!isImage && !isPdf) return;
+    setPreviewUrl(file.url);
+    setPreviewType(isPdf ? "pdf" : "image");
+  }
+
+  function closePreview() {
+    setPreviewUrl(null);
+    setPreviewType(null);
   }
 
   return (
@@ -154,25 +181,39 @@ export function DocumentosClient({ isAdmin }: DocumentosClientProps) {
         ) : (
           /* File list */
           <div>
+            {/* Search input */}
+            <div className="relative mb-4">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar archivo..."
+                className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-amber-300 focus:outline-none focus:ring-1 focus:ring-amber-300"
+              />
+            </div>
+
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="h-6 w-6 animate-spin rounded-full border-2 border-amber-500 border-t-transparent" />
               </div>
-            ) : files.length === 0 ? (
+            ) : filteredFiles.length === 0 ? (
               <div className="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm">
                 <FolderOpen className="mx-auto h-12 w-12 text-gray-300" strokeWidth={1} />
                 <p className="mt-3 text-sm font-medium text-gray-500">
-                  Carpeta vacia
+                  {searchQuery ? "Sin resultados" : "Carpeta vacia"}
                 </p>
                 <p className="mt-1 text-xs text-gray-400">
-                  {isAdmin
-                    ? "Sube el primer archivo"
-                    : "No hay archivos disponibles"}
+                  {searchQuery
+                    ? "Intenta con otro termino de busqueda"
+                    : isAdmin
+                      ? "Sube el primer archivo"
+                      : "No hay archivos disponibles"}
                 </p>
               </div>
             ) : (
               <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm divide-y divide-gray-50">
-                {files.map((file) => {
+                {filteredFiles.map((file) => {
                   const FileIcon = getFileIcon(file.mime_type);
                   const isImage = file.mime_type.startsWith("image/");
                   const isPdf = file.mime_type.includes("pdf");
@@ -195,14 +236,12 @@ export function DocumentosClient({ isAdmin }: DocumentosClientProps) {
                       </div>
                       <div className="flex gap-1">
                         {(isImage || isPdf) && (
-                          <a
-                            href={file.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            onClick={() => openPreview(file)}
                             className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
                           >
                             <Eye className="h-4 w-4" />
-                          </a>
+                          </button>
                         )}
                         <a
                           href={file.url}
@@ -231,6 +270,48 @@ export function DocumentosClient({ isAdmin }: DocumentosClientProps) {
           </div>
         )}
       </div>
+
+      {/* Preview modal */}
+      <AnimatePresence>
+        {previewUrl && previewType && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+            onClick={closePreview}
+          >
+            <button
+              onClick={closePreview}
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="mx-4 w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
+              style={{ maxHeight: "85vh" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {previewType === "pdf" ? (
+                <iframe
+                  src={previewUrl}
+                  className="h-[80vh] w-full border-0"
+                  title="Vista previa PDF"
+                />
+              ) : (
+                <img
+                  src={previewUrl}
+                  alt="Vista previa"
+                  className="h-auto max-h-[80vh] w-full object-contain"
+                />
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Upload modal */}
       <AnimatePresence>

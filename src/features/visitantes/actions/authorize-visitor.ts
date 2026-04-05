@@ -20,6 +20,22 @@ export async function authorizeVisitor(formData: FormData) {
 
   if (!resident) return { error: "No tienes un residente vinculado" };
 
+  // Validate monthly limit (max 5 visitors per month per unit)
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).toISOString();
+
+  const { count: monthlyCount } = await supabase
+    .from("visitors")
+    .select("id", { count: "exact", head: true })
+    .eq("unit_id", resident.unit_id)
+    .gte("created_at", startOfMonth)
+    .lte("created_at", endOfMonth);
+
+  if ((monthlyCount ?? 0) >= 5) {
+    return { error: "Has alcanzado el limite de 5 visitantes este mes" };
+  }
+
   const parsed = authorizeVisitorSchema.safeParse({
     full_name: formData.get("full_name"),
     document_number: formData.get("document_number"),
